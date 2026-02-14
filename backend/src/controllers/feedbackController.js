@@ -1,4 +1,4 @@
-const Feedback = require("../models/Feedback.js");
+const Feedback = require("../models/feedback.js");
 
 function createFeedback(req, res) {
   const studentId = req.body.studentId;
