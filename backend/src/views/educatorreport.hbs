@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Reports Center</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-body: "Nunito", sans-serif;
+        --font-heading: "Plus Jakarta Sans", sans-serif;
+      }
+      body {
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+        background-color: #f8fafc;
+        overflow-x: hidden;
+      }
+      /* ANIMATED BACKGROUND */
+      .cinematic-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -50;
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(224, 231, 255, 0.4) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 10%,
+            rgba(255, 228, 230, 0.4) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(240, 249, 255, 0.5) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 90%,
+            rgba(220, 252, 231, 0.3) 0%,
+            transparent 40%
+          );
+        background-size: 150% 150%;
+        animation: breathe 15s ease-in-out infinite alternate;
+      }
+      .cinematic-grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -49;
+        background-image: radial-gradient(#6366f1 0.7px, transparent 0.7px);
+        background-size: 24px 24px;
+        opacity: 0.08;
+        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      }
+      /* GLASSMORPHISM UTILITIES */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow:
+          0 4px 20px -2px rgba(99, 102, 241, 0.05),
+          0 10px 40px -10px rgba(99, 102, 241, 0.05);
+      }
+      .glass-card-hover {
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .glass-card-hover:hover {
+        transform: translateY(-4px) scale(1.005);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.1);
+        border-color: rgba(255, 255, 255, 1);
+      }
+      /* KEYFRAMES */
+      @keyframes breathe {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.05);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0px rgba(99, 102, 241, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+        }
+      }
+      @keyframes slide-up-fade {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes gradient-x {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+      /* UTILITY CLASSES */
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      .animate-float-delayed {
+        animation: float 8s ease-in-out 1s infinite;
+      }
+      .animate-enter {
+        animation: slide-up-fade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        opacity: 0;
+      }
+      .animate-gradient {
+        animation: gradient-x 3s ease infinite;
+      }
+      .delay-100 {
+        animation-delay: 100ms;
+      }
+      .delay-200 {
+        animation-delay: 200ms;
+      }
+      .delay-300 {
+        animation-delay: 300ms;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
+      }
+      /* Toggle Switch */
+      .toggle-checkbox:checked {
+        right: 0;
+        border-color: #6366f1;
+      }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: #6366f1;
+      }
+      /* Report Specific */
+      .select-chevron {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-repeat: no-repeat;
+        background-size: 1.2em 1.2em;
+      }
+      /* Segmented Control Animation */
+      .segment-indicator {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* Hide scrollbar for clean look in lists */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="selection:bg-indigo-200 selection:text-indigo-900 pb-20 text-slate-600"
+  >
+    <!-- GLOBAL ATMOSPHERE -->
+    <div class="cinematic-bg"></div>
+    <div class="cinematic-grid"></div>
+
+    <!-- NAVIGATION -->
+    <nav
+      class="fixed top-0 w-full z-40 pt-4 pb-2 px-4 transition-all duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto glass-panel rounded-full px-4 py-3 flex items-center justify-between"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 bg-indigo-600 text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="hidden sm:block text-lg font-bold tracking-tight font-heading text-slate-800"
+            >EduQuest</span
+          >
+        </div>
+
+        <!-- Links (Educator Context) -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 rounded-full border bg-slate-100/50 border-slate-200/50"
+        >
+          <a
+            href="/educator/dashboard"
+            class="transition-all hover:text-indigo-600 hover:bg-white/60 text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Dashboard</a
+          >
+          <a
+            href="educator-class.html"
+            class="transition-all hover:text-indigo-600 hover:bg-white/60 text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >My Classes</a
+          >
+          <a
+            href="/educator/report"
+            class="text-sm font-bold text-indigo-600 bg-white border-slate-200/60 border rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+            >Reports</a
+          >
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 hover:text-indigo-500 transition-colors text-slate-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path
+                d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                class=""
+              ></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold font-heading text-slate-700"
+              >{{user.fullname}}</span
+            >
+            <span
+              class="text-[10px] font-bold text-indigo-500 rounded-full pt-0.5 pr-2 pb-0.5 pl-2 bg-indigo-50"
+              >Educator</span
+            >
+          </div>
+          <div
+            class="cursor-pointer transition-all hover:ring-indigo-100 bg-white w-10 h-10 border-indigo-100 border-2 ring-transparent ring-2 rounded-full pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href = '/educator/profile'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="w-full relative z-10">
+      <!-- 1. HEADER SECTION -->
+      <header class="relative pt-32 pb-24 overflow-hidden">
+        <!-- Background atmosphere -->
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-indigo-50/50 via-white to-transparent"
+        ></div>
+        <div
+          class="blur-[100px] animate-float bg-sky-200/20 w-[500px] h-[500px] rounded-full absolute top-20 right-0"
+        ></div>
+        <div
+          class="absolute bottom-0 left-10 w-[300px] h-[300px] bg-purple-200/20 rounded-full blur-[80px] animate-float-delayed"
+        ></div>
+
+        <div
+          class="flex flex-col md:flex-row animate-enter max-w-7xl z-10 mr-auto ml-auto pr-6 pl-6 relative gap-x-8 gap-y-8 items-end justify-between"
+        >
+          <div class="max-w-2xl">
+            <div
+              class="inline-flex text-[11px] uppercase font-extrabold text-indigo-600 tracking-widest bg-white/80 border-indigo-100 border rounded-full mb-6 pt-1.5 pr-3 pb-1.5 pl-3 shadow-sm backdrop-blur-sm gap-x-2 gap-y-2 items-center"
+            >
+              Reports Center
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                class="animate-pulse"
+              >
+                <path d="M12 2v20M2 12h20"></path>
+              </svg>
+            </div>
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight font-heading text-slate-900 mb-4 leading-[1.1]"
+            >
+              Reports Center
+            </h1>
+            <p
+              class="text-lg text-slate-500 font-medium max-w-lg leading-relaxed"
+            >
+              Generate insights for classes and individual students, then share
+              them when ready.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-4"></div>
+        </div>
+      </header>
+
+      <!-- 2. REPORT BUILDER PANEL -->
+      <section
+        class="max-w-7xl mx-auto px-6 -mt-10 relative z-20 animate-enter delay-100"
+      >
+        <div
+          class="glass-panel rounded-3xl p-8 border border-white shadow-2xl shadow-indigo-100/50 backdrop-blur-xl bg-white/70"
+        >
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <!-- Left: Configuration Form -->
+            <div class="lg:col-span-2 space-y-8">
+              <!-- Segmented Toggle (Class vs Student) -->
+              <div
+                class="relative w-full bg-slate-100/80 p-1.5 rounded-2xl flex border border-slate-200"
+              >
+                <!-- JS will move this pill -->
+                <div
+                  id="segment-pill"
+                  class="absolute top-1.5 left-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-xl shadow-sm border border-slate-100 segment-indicator z-0"
+                ></div>
+
+                <button
+                  id="btn-class"
+                  onclick="toggleReportType('class')"
+                  class="relative z-10 w-1/2 text-sm font-bold text-indigo-600 py-3 rounded-xl transition-colors focus:outline-none flex items-center justify-center gap-2"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  Class Report
+                </button>
+                <button
+                  id="btn-student"
+                  onclick="toggleReportType('student')"
+                  class="relative z-10 w-1/2 text-sm font-bold text-slate-500 hover:text-indigo-500 py-3 rounded-xl transition-colors focus:outline-none flex items-center justify-center gap-2"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                    
+                  </svg>
+                  Individual Student Report
+                </button>
+              </div>
+
+             <form id="class-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <!-- Report Type -->
+  <div class="space-y-2">
+    <label class="text-xs font-bold text-slate-600 ml-1">Report Type</label>
+    <select id="classReportType"
+      class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="overview">Overview & Summary</option>
+      <option value="quizPerformance">Quiz Performance</option>
+      <option value="challengePerformance">Challenge Performance</option>
+    </select>
+  </div>
+
+  <!-- Class Select -->
+  <div class="space-y-2">
+    <label class="text-xs font-bold text-slate-600 ml-1">Class</label>
+    <select id="classId"
+      class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="">-- Select Class --</option>
+    </select>
+  </div>
+
+  <!-- Time Range -->
+  <div class="md:col-span-2">
+    <label>Time Range</label>
+    <select id="classTimeRange"
+    class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="thisweek">This Week</option>
+      <option value="thismonth">This Month</option>
+      <option value="30days">Last 30 Days</option>
+      
+      <option value="custom">Custom</option>
+    </select>
+  </div>
+   <div class="row" id="classCustomDates" style="display:none;">
+      <div>
+        <label>Start Date</label>
+        <input type="date" id="classCustomStart" />
+      </div>
+      <div>
+        <label>End Date</label>
+        <input type="date" id="classCustomEnd" />
+      </div>
+    </div>
+
+  <div class="md:col-span-2">
+    <button type="submit"
+      class="w-full rounded-2xl bg-indigo-600 py-4 text-white font-bold">
+      Generate Class Report
+    </button>
+  </div>
+
+</form>
+<form id="student-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+
+  <!-- Report Type -->
+  <div class="space-y-2">
+    <label class="text-xs font-bold text-slate-600 ml-1">Report Type</label>
+    <select id="studentReportType"
+      class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="overview">Overview & Summary</option>
+      <option value="quizPerformance">Quiz Performance</option>
+      <option value="challengePerformance">Challenge Performance</option>
+    </select>
+  </div>
+
+  <!-- Class Select -->
+  <div class="space-y-2">
+    <label class="text-xs font-bold text-slate-600 ml-1">Class</label>
+    <select id="studentClassId"
+      class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="">-- Select Class --</option>
+    </select>
+  </div>
+
+  <!-- Student Select -->
+  <div class="md:col-span-2 space-y-2">
+    <label class="text-xs font-bold text-slate-600 ml-1">Student</label>
+    <select id="studentID"
+      class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      
+    </select>
+  </div>
+
+  <!-- Time Range -->
+  <div class="md:col-span-2">
+    <label>Time Range</label>
+    <select id="studentTimeRange"
+    class="select-chevron appearance-none w-full bg-white border border-slate-200 text-sm font-semibold rounded-xl px-4 py-3">
+      <option value="thisweek">This Week</option>
+      <option value="thismonth">This Month</option>
+      <option value="30days">Last 30 Days</option>
+      
+      <option value="custom">Custom</option>
+    </select>
+  </div>
+   <div class="row" id="studentCustomDates" style="display:none;">
+      <div>
+        <label>Start Date</label>
+        <input type="date" id="studentCustomStart" />
+      </div>
+      <div>
+        <label>End Date</label>
+        <input type="date" id="studentCustomEnd" />
+      </div>
+    </div>
+
+  <div class="md:col-span-2">
+    <button type="submit"
+      class="w-full rounded-2xl bg-violet-600 py-4 text-white font-bold">
+      Generate Student Report
+    </button>
+  </div>
+
+</form>
+
+      <div
+        class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto px-6 py-10 relative z-10"
+      >
+        <!-- 3. REPORT PREVIEW (Main Col) -->
+        <section class="flex-1 animate-enter delay-200">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-heading font-bold text-slate-800">
+              Report Preview
+            </h2>
+            <span
+              class="flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-extrabold uppercase tracking-wide"
+            >
+              <span
+                class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"
+              ></span>
+              Auto-Generated
+            </span>
+          </div>
+
+          <!-- Preview Paper -->
+          <div
+            class="bg-white border border-slate-200 shadow-lg rounded-3xl p-8 relative overflow-hidden transition-all duration-500"
+          >
+            <!-- Background pattern -->
+            <div
+              class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay pointer-events-none"
+            ></div>
+            <div
+              class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-50 to-transparent rounded-bl-full opacity-50"
+            ></div>
+
+            <!-- CLASS REPORT -->
+<div id="result-class" class="hidden">
+  <h3>Class Report</h3>
+  <img id="chartImg-class" />
+  <div id="metricsContainer-class"></div>
+</div>
+
+<!-- STUDENT REPORT -->
+<div id="result-student" class="hidden">
+  <h3>Student Report</h3>
+  <img id="chartImg-student" />
+  <div id="metricsContainer-student"></div>
+</div>
+
+  </div>
+
+        <!-- 4. SIDEBAR: SEND/EXPORT (Context Aware) -->
+        <aside class="w-full lg:w-80 space-y-6 animate-enter delay-300"></aside>
+         
+    <div
+      id="action-card-student"
+      class="bg-white border border-slate-200 shadow-md rounded-2xl p-6 hidden sticky top-20"
+    >
+
+              <button
+                onclick="SendReport()"
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+              >
+                <span>Send Report</span>
+                <svg
+                  class="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <line x1="22" x2="11" y1="2" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- 5. SAVED REPORTS LIBRARY -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="py-12 border-t mt-10 relative z-10 bg-slate-900 text-slate-300 border-slate-800"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-600 text-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold tracking-tight text-white"
+                >EduQuest</span
+              >
+            </div>
+            <p
+              class="text-xs leading-relaxed font-medium max-w-xs text-slate-400"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div class="">
+            <h4 class="font-bold mb-4 text-sm text-white">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li class="">
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Pricing</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-4 text-sm text-white">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Community</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-4 text-sm text-white">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Privacy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Terms</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t pt-6 flex justify-center border-slate-800">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+      
+    </footer>
+<script src="/js/global.js"></script>
+    <script>
+  // ------------------ ICONS ------------------
+  lucide.createIcons();
+  // ------------------ SendReport ------------------
+ async function SendReport() {
+  try {
+    const payload = {
+      classId: document.getElementById('studentClassId')?.value || document.getElementById('classId')?.value,
+      studentID: document.getElementById('studentID')?.value,
+      reportType: document.getElementById('studentReportType')?.value || document.getElementById('reportType')?.value,
+      timeRange: document.getElementById('studentTimeRange')?.value || document.getElementById('timeRange')?.value,
+      customStart: document.getElementById('studentCustomStart')?.value || document.getElementById('customStart')?.value || undefined,
+      customEnd: document.getElementById('studentCustomEnd')?.value || document.getElementById('customEnd')?.value || undefined
+    };
+
+    const res = await fetch("/educator/report/sendReport", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      showPopup(data.message || "Report sent successfully");
+    } else {
+      showPopup(data.message || "Failed to send report");
+    }
+
+  } catch (err) {
+    console.error("SEND REPORT ERROR:", err);
+    showPopup("Server error occurred");
+  }
+}
+ // ------------------ LOAD INFO ------------------
+  async function loadClasses() {
+  const classSelect = document.getElementById('classId');
+  const studentClassSelect = document.getElementById('studentClassId');
+
+  const res = await fetch('/educator/report/classes');
+  const classes = await res.json();
+
+  classes.forEach(c => {
+    const option1 = document.createElement('option');
+    option1.value = c._id;
+    option1.textContent = c.name;
+    classSelect.appendChild(option1);
+
+    const option2 = document.createElement('option');
+    option2.value = c._id;
+    option2.textContent = c.name;
+    studentClassSelect.appendChild(option2);
+  });
+}
+document.getElementById('studentClassId').addEventListener('change', async (e) => {
+  const classId = e.target.value;
+  const studentSelect = document.getElementById('studentID');
+
+  studentSelect.innerHTML = "";
+
+  try {
+    const res = await fetch(`/educator/report/students/${classId}`);
+    const students = await res.json(); // <-- this is already [{id, name}]
+
+    if (!students || students.length === 0) {
+      const option = document.createElement('option');
+      option.textContent = "No students found";
+      option.disabled = true;
+      studentSelect.appendChild(option);
+    } else {
+      students.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;      // ✅ correct
+        option.textContent = s.name; // ✅ correct
+        studentSelect.appendChild(option);
+      });
+    }
+
+    studentSelect.classList.remove("hidden");
+
+  } catch (err) {
+    console.error("Failed to load students:", err);
+  }
+});
+  // ------------------ TOGGLE REPORT TYPE ------------------
+  function toggleReportType(type) {
+  // ---------- UI Elements ----------
+  const pill = document.getElementById("segment-pill");
+  const btnClass = document.getElementById("btn-class");
+  const btnStudent = document.getElementById("btn-student");
+  
+  const classForm = document.getElementById("class-form");
+    const studentForm = document.getElementById("student-form");
+
+  
+
+  
+  const actionCardStudent = document.getElementById("action-card-student");
+
+  
+
+  const resultClass = document.getElementById("result-class");
+  const resultStudent = document.getElementById("result-student");
+
+  // ---------- Hide previous report results ----------
+  resultClass?.classList.add("hidden");
+  resultStudent?.classList.add("hidden");
+
+  // ---------- Toggle UI and Forms ----------
+  if (type === "class") {
+    // Pill & Buttons
+
+   // Pill & Buttons
+    
+    pill.style.transform = "translateX(0)";
+    btnStudent.classList.replace("text-slate-500", "text-indigo-600");
+    btnClass.classList.replace("text-indigo-600", "text-slate-500");
+    studentForm.classList.add("hidden");
+      classForm.classList.remove("hidden");
+      actionCardStudent.classList.add("hidden");
+
+    
+    
+
+  } else {
+     pill.style.transform = "translateX(100%)";
+    btnClass.classList.replace("text-slate-500", "text-indigo-600");
+    btnStudent.classList.replace("text-indigo-600", "text-slate-500");
+     classForm.classList.add("hidden");
+      studentForm.classList.remove("hidden");
+      actionCardStudent.classList.remove("hidden");
+
+    
+  }
+}
+
+  // ------------------ TIME RANGE ------------------
+  const classTimeRange = document.getElementById('classTimeRange');
+  const classCustomDates = document.getElementById('classCustomDates');
+
+  if (classTimeRange) {
+    classTimeRange.addEventListener('change', () => {
+      classCustomDates.style.display = classTimeRange.value === 'custom' ? 'grid' : 'none';
+    });
+  }
+
+  const studentTimeRange = document.getElementById('studentTimeRange');
+  const studentCustomDates = document.getElementById('studentCustomDates');
+
+  if (studentTimeRange) {
+    studentTimeRange.addEventListener('change', () => {
+      studentCustomDates.style.display = studentTimeRange.value === 'custom' ? 'grid' : 'none';
+    });
+  }
+
+  // ------------------ GENERATE REPORT ------------------
+  function generateReport(type) {
+    if (type === "student") {
+      document.getElementById("student-form").dispatchEvent(new Event("submit"));
+    } else {
+      document.getElementById("class-form").dispatchEvent(new Event("submit"));
+    }
+  }
+
+  // ------------------ CLASS REPORT ------------------
+  document.getElementById("class-form")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    try {
+      const payload = {
+        classId: document.getElementById('classId').value,
+        reportType: document.getElementById('classReportType')?.value || document.getElementById('reportType')?.value,
+        timeRange: document.getElementById('classTimeRange')?.value || document.getElementById('timeRange')?.value,
+        customStart: document.getElementById('classCustomStart')?.value || document.getElementById('customStart')?.value || undefined,
+        customEnd: document.getElementById('classCustomEnd')?.value || document.getElementById('customEnd')?.value || undefined
+      };
+
+      const res = await fetch("/educator/report/generateclass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Failed to generate class report");
+
+      const metricsContainer = document.getElementById('metricsContainer-class');
+      document.getElementById('result-class').classList.remove('hidden');
+      document.getElementById('chartImg-class').src = data.chart;
+      metricsContainer.innerHTML = "";
+
+      if (data.summary) {
+        for (const key in data.summary) {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100";
+          card.innerHTML = `
+            <span class="text-[10px] font-bold uppercase tracking-wider">
+              ${key.replace(/([A-Z])/g, ' $1')}
+            </span>
+            <div class="text-3xl font-extrabold mt-1">
+              ${data.summary[key]}
+            </div>
+          `;
+          metricsContainer.appendChild(card);
+        }
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error generating class report: " + err.message);
+    }
+  });
+
+  // ------------------ STUDENT REPORT ------------------
+  document.getElementById("student-form")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    try {
+      const payload = {
+        classId: document.getElementById('studentClassId')?.value || document.getElementById('classId')?.value,
+        studentID: document.getElementById('studentID').value,
+        reportType: document.getElementById('studentReportType')?.value || document.getElementById('reportType')?.value,
+        timeRange: document.getElementById('studentTimeRange')?.value || document.getElementById('timeRange')?.value,
+        customStart: document.getElementById('studentCustomStart')?.value || document.getElementById('customStart')?.value || undefined,
+        customEnd: document.getElementById('studentCustomEnd')?.value || document.getElementById('customEnd')?.value || undefined
+      };
+
+      const res = await fetch("/educator/report/generatestudent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Failed to generate student report");
+
+      const metricsContainer = document.getElementById('metricsContainer-student');
+      document.getElementById('result-student').classList.remove('hidden');
+      document.getElementById('chartImg-student').src = data.chart;
+      metricsContainer.innerHTML = "";
+
+      if (data.summary) {
+        for (const key in data.summary) {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100";
+          card.innerHTML = `
+            <span class="text-[10px] font-bold uppercase tracking-wider">
+              ${key.replace(/([A-Z])/g, ' $1')}
+            </span>
+            <div class="text-3xl font-extrabold mt-1">
+              ${data.summary[key]}
+            </div>
+          `;
+          metricsContainer.appendChild(card);
+        }
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error generating student report: " + err.message);
+    }
+  });
+  window.addEventListener('DOMContentLoaded', loadClasses);
+</script>
+
+
+  </body>
+</html>

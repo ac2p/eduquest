@@ -1,0 +1,2434 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Institution Admin Dashboard</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* EduQuest Atmosphere */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background:
+          radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      .hover-lift {
+        transition:
+          transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 0.2s;
+      }
+      .hover-lift:hover {
+        transform: translateY(-2px);
+      }
+      /* Animations */
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      .delay-100 {
+        animation-delay: 100ms;
+      }
+      .delay-200 {
+        animation-delay: 200ms;
+      }
+      .delay-300 {
+        animation-delay: 300ms;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      .dashed-border {
+        background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-newsreader"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-newsreader">
+      .font-newsreader {
+        font-family: "Newsreader", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-google-sans-flex"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-google-sans-flex">
+      .font-google-sans-flex {
+        font-family: "Google Sans Flex", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-oswald"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-oswald">
+      .font-oswald {
+        font-family: "Oswald", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-dm-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-dm-sans">
+      .font-dm-sans {
+        font-family: "DM Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-cormorant"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-cormorant">
+      .font-cormorant {
+        font-family: "Cormorant Garamond", serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12 overflow-x-hidden"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION (UNCHANGED) -->
+    <nav class="fixed top-0 w-full z-40 pt-4 pb-2 px-4">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+          >
+            EduQuest
+            <span class="text-sm font-medium text-slate-400 ml-1">
+              Institute
+            </span>
+          </span>
+        </div>
+
+        <!-- Links (Educator Context) -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="/edadmin/dashboard"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white border-slate-200/60 border rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+          >
+            Dashboard
+          </a>
+          <a
+            href="educatoradmin-subscriptionplan.html"
+            class="hover:text-indigo-600 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Subscription Plan
+          </a>
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">{{user.fullname}}</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2"
+            >
+              Educator Admin
+            </span>
+          </div>
+          <div
+            class="cursor-pointer hover:ring-indigo-100 transition-all bg-white w-10 h-10 border-indigo-100 border-2 rounded-full ring-transparent ring-2 pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href = '/edadmin/profile'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main
+      class="z-10 max-w-7xl mr-auto ml-auto pt-28 pr-6 pb-12 pl-6 relative space-y-10"
+    >
+      <!-- 1. HERO SECTION -->
+      <header
+        class="animate-enter relative bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-indigo-100/20 overflow-hidden group"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-violet-50/60 via-white to-blue-50/60"
+        ></div>
+        <div
+          class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl"
+        ></div>
+
+        <div
+          class="relative z-10 p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8"
+        >
+          <!-- Left: Title -->
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-3">
+              <div
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100/50 border border-indigo-100 text-indigo-600 text-[11px] font-extrabold uppercase tracking-wide"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-shield-check"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                Institution Admin
+              </div>
+            </div>
+            <h1
+              class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-2"
+            >
+              Admin Control Center
+            </h1>
+            <p class="text-base text-slate-500 font-medium">
+              Manage educators, students, classes, and institutional access.
+            </p>
+          </div>
+
+          <!-- Right: KPI Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
+            <!-- Stat: Educators -->
+            <div
+              class="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/60 border border-slate-200 shadow-sm backdrop-blur-sm"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-users"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div class="text-xl font-black text-slate-700">24</div>
+              <div
+                class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+              >
+                Educators
+              </div>
+            </div>
+
+            <!-- Stat: Students -->
+            <div
+              class="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/60 border border-slate-200 shadow-sm backdrop-blur-sm"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-graduation-cap"
+                >
+                  <path
+                    d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+                  ></path>
+                  <path d="M22 10v6"></path>
+                  <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                </svg>
+              </div>
+              <div class="text-xl font-black text-slate-700">109</div>
+              <div
+                class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+              >
+                Students
+              </div>
+            </div>
+
+            <!-- Stat: Classes -->
+            <div
+              class="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/60 border border-slate-200 shadow-sm backdrop-blur-sm"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-layout-grid"
+                >
+                  <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                  <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                  <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                  <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                </svg>
+              </div>
+              <div class="text-xl font-black text-slate-700">{{user.classlimit}}</div>
+              <div
+                class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+              >
+                Classes
+              </div>
+            </div>
+
+            <!-- Stat: Subscription -->
+            <div
+              class="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/60 border border-slate-200 shadow-sm backdrop-blur-sm"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-credit-card"
+                >
+                  <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                  <line x1="2" x2="22" y1="10" y2="10"></line>
+                </svg>
+              </div>
+              <div
+                class="text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100"
+              >
+                Active
+              </div>
+              <div
+                class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mt-1"
+              >
+                Renews Jan 12
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 2. QUICK ACTIONS SECTION -->
+      <section class="animate-enter delay-100">
+        <div class="mb-4">
+          <h2 class="text-xl font-bold text-slate-800">Quick Actions</h2>
+          <p class="text-sm text-slate-500 font-medium">
+            Fast setup for your institution.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Action A: Create Class -->
+          <div
+            class="group bg-gradient-to-br from-indigo-50/50 to-white rounded-2xl border border-indigo-100 shadow-sm p-6 hover-lift flex flex-col justify-between relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="80"
+                height="80"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-presentation"
+              >
+                <path d="M2 3h20" class=""></path>
+                <path
+                  d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"
+                  class=""
+                ></path>
+                <path d="m7 21 5-5 5 5"></path>
+              </svg>
+            </div>
+            <div class="">
+              <div
+                class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-indigo-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-plus-square"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                  <path d="M8 12h8"></path>
+                  <path d="M12 8v8"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">
+                Create New Class
+              </h3>
+              <p class="text-sm text-slate-500 leading-relaxed mb-4">
+                Set up a class, assign educators, enroll students, and generate
+                invite links.
+              </p>
+            </div>
+            <div class="">
+              <button
+                class="shadow-indigo-200 hover:shadow-lg hover:bg-indigo-700 transition-all flex text-sm font-bold text-white bg-indigo-600 w-full rounded-xl pt-2.5 pb-2.5 shadow-md gap-x-2 gap-y-2 items-center justify-center"
+                onclick="
+                  window.location.href = 'educator-manageclass.html';
+                  window.location.href = 'educatoradmin-createclass.html';
+                "
+                role="button"
+              >
+                Go to Create Class
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </button>
+              <p
+                class="text-[10px] text-indigo-400 font-semibold mt-3 text-center"
+              >
+                Only Institution Admin can create classes.
+              </p>
+            </div>
+          </div>
+
+          <!-- Action B: Generate Student ID -->
+          <div
+            class="group bg-gradient-to-br from-pink-50/50 to-white rounded-2xl border border-pink-100 shadow-sm p-6 hover-lift flex flex-col justify-between relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="80"
+                height="80"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-graduation-cap"
+              >
+                <path
+                  d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+                ></path>
+                <path d="M22 10v6"></path>
+                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+              </svg>
+            </div>
+            <div class="">
+              <div
+                class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-pink-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-plus"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <line x1="19" x2="19" y1="8" y2="14"></line>
+                  <line x1="22" x2="16" y1="11" y2="11"></line>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">
+                Create Student Account
+              </h3>
+              <p class="text-sm text-slate-500 leading-relaxed mb-4">
+                Register a new student, assign them to a class, and generate
+                their unique access credentials.
+              </p>
+            </div>
+            <div class="">
+              <button
+                class="shadow-pink-200 hover:shadow-lg hover:bg-pink-700 transition-all flex text-sm font-bold text-white bg-pink-600 w-full rounded-xl pt-2.5 pb-2.5 shadow-md gap-x-2 gap-y-2 items-center justify-center"
+                onclick="window.location='/edadmin/addStudent'"
+                role="button"
+              >
+                Add New Student
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </button>
+              <p
+                class="text-[10px] font-semibold text-pink-400 text-center mt-3"
+              ></p>
+            </div>
+          </div>
+
+          <!-- Action C: Generate Educator ID (Showing Generated State) -->
+             <div
+            class="group bg-gradient-to-br from-pink-50/50 to-white rounded-2xl border border-pink-100 shadow-sm p-6 hover-lift flex flex-col justify-between relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="80"
+                height="80"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-graduation-cap"
+              >
+                <path
+                  d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+                ></path>
+                <path d="M22 10v6"></path>
+                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+              </svg>
+            </div>
+            <div class="">
+              <div
+                class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-pink-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-plus"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <line x1="19" x2="19" y1="8" y2="14"></line>
+                  <line x1="22" x2="16" y1="11" y2="11"></line>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2">
+                Create Educator Account
+              </h3>
+              <p class="text-sm text-slate-500 leading-relaxed mb-4">
+                Register a new educator and generate
+                their unique access credentials.
+              </p>
+            </div>
+            <div class="">
+              <button
+                class="shadow-pink-200 hover:shadow-lg hover:bg-pink-700 transition-all flex text-sm font-bold text-white bg-pink-600 w-full rounded-xl pt-2.5 pb-2.5 shadow-md gap-x-2 gap-y-2 items-center justify-center"
+                onclick="window.location='/edadmin/addEducator'"
+                role="button"
+              >
+                Add New Educator
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </button>
+              <p
+                class="text-[10px] font-semibold text-pink-400 text-center mt-3"
+              ></p>
+            </div>
+          </div>
+      </section>
+
+      <!-- 3. MAIN MANAGEMENT SECTION -->
+      <section
+        class="animate-enter delay-200 grid grid-cols-1 lg:grid-cols-3 gap-8 gap-x-4 gap-y-4"
+      >
+        <!-- Left: Tabs + Table -->
+        <div class="lg:col-span-3 gap-x-4 gap-y-4">
+          <!-- Tabs Header -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center gap-4 mb-4 gap-x-4 gap-y-4 justify-between"
+          >
+            <div class="bg-slate-200/50 p-1 rounded-xl inline-flex self-start">
+              <button
+                id="tab-educators"
+                onclick="switchTab('educators')"
+                class="px-4 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold text-sm transition-all"
+              >
+                Educators
+              </button>
+             
+            </div>
+
+            <div class="flex gap-2">
+              <button
+                 onclick="window.location='/edadmin/addEducator'"
+                class="flex gap-2 hover:border-indigo-300 hover:text-indigo-600 hover:shadow-sm transition-all text-xs font-bold text-slate-600 bg-white border-slate-200 border rounded-xl pt-2 pr-4 pb-2 pl-4 gap-x-2 gap-y-2 items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-plus"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <line x1="19" x2="19" y1="8" y2="14"></line>
+                  <line x1="22" x2="16" y1="11" y2="11"></line>
+                </svg>
+                Add Educator
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Card -->
+          <div
+            class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col"
+          >
+            <div id="view-educators" class="flex flex-col w-full">
+              <div class="p-4 border-b border-slate-50 bg-slate-50/30">
+                <div class="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search educators by name or email..."
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="flex-1 overflow-x-auto">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/50 border-b border-slate-100">
+        <th class="px-6 py-4">Educator</th>
+        <th class="px-6 py-4">Subject</th>
+        <th class="px-6 py-4">Status</th>
+        <th class="px-6 py-4">ClassLimit</th>
+        <th class="px-6 py-4 text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {{#each educators}}
+      <tr class="group hover:bg-indigo-50/30 transition-colors">
+        <!-- Educator Info -->
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed={{displayname}}"
+              class="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100"
+              alt="Avatar"
+            />
+            <div>
+              <div class="text-sm font-bold text-slate-700 group-hover:text-indigo-700 transition-colors">
+                {{fullname}}
+              </div>
+              <div class="text-xs font-medium text-slate-400">
+                {{email}}
+              </div>
+            </div>
+          </div>
+        </td>
+
+        <!-- Subject -->
+        <td class="px-6 py-4">
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-slate-600">
+              {{subject}}
+            </span>
+           
+          </div>
+        </td>
+
+        <!-- Status -->
+        <td class="px-6 py-4">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            {{status}}
+          </span>
+        </td>
+
+         <!-- Status -->
+        <td class="px-6 py-4">
+          <div class="flex flex-col">
+  <span class="text-xs font-bold text-slate-600">
+                     {{classLimit}}
+  </span>
+  </div>
+  <div  class="text-[10px] font-medium text-slate-400">
+    {{classNumber}} Classes Assigned
+  </div>
+</td>
+        
+        <!-- Actions -->
+       
+        <td class="px-6 py-4 text-right">
+  <div class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+
+    <!-- Suspend button -->
+    <button 
+      type="button"
+      class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-white hover:shadow-sm transition-all"
+      title="Suspend"
+      onclick="suspendEducator('{{this._id}}')"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m4.9 4.9 14.2 14.2"></path>
+      </svg>
+    </button>
+
+    <!-- Activate button -->
+    <button 
+      type="button"
+      class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-white hover:shadow-sm transition-all"
+      title="Activate"
+      onclick="activateEducator('{{this._id}}')"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9 12l2 2 4-4"></path>
+      </svg>
+    </button>
+
+    <!-- Edit Class Limit button -->
+    <button
+      type="button"
+      class="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700"
+      title="Edit Limit"
+      onclick="openClassLimitModal('{{this._id}}', {{classLimit}})"
+    >
+      Edit Limit
+    </button>
+
+  </div>
+</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<div id="classLimitModal" class="fixed inset-0 bg-black bg-opacity-30 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-80">
+    <h3 class="text-sm font-bold mb-4">Update Class Limit</h3>
+    <input
+      type="number"
+      name="modalClassLimitInput"
+      id="modalClassLimitInput"
+      min="0"
+      class="w-full px-3 py-2 border rounded text-sm"
+    />
+    <div class="mt-4 flex justify-end gap-2">
+      <button
+        class="px-3 py-1 text-sm bg-gray-300 rounded hover:bg-gray-400"
+        onclick="closeClassLimitModal()"
+      >
+        Cancel
+      </button>
+      <button
+        class="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+        onclick="submitClassLimitUpdate()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+            <div id="view-students" class="flex flex-col w-full hidden">
+              <div class="p-4 border-b border-slate-50 bg-slate-50/30">
+                <div class="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search students by name or ID..."
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-100 focus:border-pink-300 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="flex-1 overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/50 border-b border-slate-100"
+                    >
+                      <th class="px-6 py-4">Student</th>
+                      <th class="px-6 py-4">Class / Grade</th>
+                      <th class="px-6 py-4">Status</th>
+                      <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="group hover:bg-pink-50/30 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img
+                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Timmy"
+                            class="w-9 h-9 rounded-full bg-pink-50 border border-pink-100"
+                            alt="Avatar"
+                          />
+                          <div>
+                            <div
+                              class="text-sm font-bold text-slate-700 group-hover:text-pink-700 transition-colors"
+                            >
+                              Timmy Turner
+                            </div>
+                            <div class="text-xs font-medium text-slate-400">
+                              ID: STU-8821
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                          <span class="text-xs font-bold text-slate-600">
+                            Grade 4 - Science A
+                          </span>
+                          <span class="text-[10px] font-medium text-slate-400">
+                            Ms. Frizzle
+                          </span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <span
+                          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase"
+                        >
+                          <span
+                            class="w-1.5 h-1.5 rounded-full bg-emerald-500"
+                          ></span>
+                          Active
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <div
+                          class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+                        >
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-key-round"
+                            >
+                              <path
+                                d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"
+                              ></path>
+                              <circle cx="16.5" cy="7.5" r=".5"></circle>
+                            </svg>
+                          </button>
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-pencil"
+                            >
+                              <path
+                                d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                              ></path>
+                              <path d="m15 5 4 4"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="group hover:bg-pink-50/30 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img
+                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jimmy"
+                            class="w-9 h-9 rounded-full bg-sky-50 border border-sky-100"
+                            alt="Avatar"
+                          />
+                          <div>
+                            <div
+                              class="text-sm font-bold text-slate-700 group-hover:text-pink-700 transition-colors"
+                            >
+                              Jimmy Neutron
+                            </div>
+                            <div class="text-xs font-medium text-slate-400">
+                              ID: STU-9942
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                          <span class="text-xs font-bold text-slate-600">
+                            Grade 5 - Math B
+                          </span>
+                          <span class="text-[10px] font-medium text-slate-400">
+                            Mr. Garrison
+                          </span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <span
+                          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase"
+                        >
+                          <span
+                            class="w-1.5 h-1.5 rounded-full bg-emerald-500"
+                          ></span>
+                          Active
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <div
+                          class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+                        >
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-key-round"
+                            >
+                              <path
+                                d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"
+                              ></path>
+                              <circle cx="16.5" cy="7.5" r=".5"></circle>
+                            </svg>
+                          </button>
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-pencil"
+                            >
+                              <path
+                                d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                              ></path>
+                              <path d="m15 5 4 4"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="group hover:bg-pink-50/30 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                          <img
+                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cindy"
+                            class="w-9 h-9 rounded-full bg-violet-50 border border-violet-100"
+                            alt="Avatar"
+                          />
+                          <div>
+                            <div
+                              class="text-sm font-bold text-slate-700 group-hover:text-pink-700 transition-colors"
+                            >
+                              Cindy Vortex
+                            </div>
+                            <div class="text-xs font-medium text-slate-400">
+                              ID: STU-1123
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                          <span class="text-xs font-bold text-slate-600">
+                            Grade 5 - Math B
+                          </span>
+                          <span class="text-[10px] font-medium text-slate-400">
+                            Mr. Garrison
+                          </span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <span
+                          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500 text-[10px] font-bold uppercase"
+                        >
+                          <span
+                            class="w-1.5 h-1.5 rounded-full bg-slate-400"
+                          ></span>
+                          Away
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <div
+                          class="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+                        >
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-key-round"
+                            >
+                              <path
+                                d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"
+                              ></path>
+                              <circle cx="16.5" cy="7.5" r=".5"></circle>
+                            </svg>
+                          </button>
+                          <button
+                            class="p-2 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-pencil"
+                            >
+                              <path
+                                d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                              ></path>
+                              <path d="m15 5 4 4"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Access Tokens List -->
+      </section>
+      <section class="animate-enter delay-150 mb-10">
+        <!-- Controls Row -->
+        <div
+          class="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-6"
+        >
+          <div class="flex-1">
+            <h2 class="text-xl font-bold text-slate-800">Manage Classes</h2>
+            <p class="text-sm text-slate-500 font-medium mt-1">
+              View, manage, and maintain the classes created under this
+              institution.
+            </p>
+          </div>
+
+          <div
+            class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto"
+          >
+            <!-- Search -->
+            <div class="relative w-full sm:w-auto flex-1 xl:flex-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search classes..."
+                class="w-full sm:w-64 pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all outline-none"
+              />
+            </div>
+
+            <!-- Filters -->
+            <div
+              class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full no-scrollbar"
+            >
+              <button
+                class="px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-bold text-slate-700 whitespace-nowrap"
+              >
+                All
+              </button>
+              <button
+                class="px-3 py-1.5 rounded-lg hover:bg-white hover:shadow-sm text-xs font-semibold text-slate-500 transition-all whitespace-nowrap"
+              >
+                Science
+              </button>
+              <button
+                class="px-3 py-1.5 rounded-lg hover:bg-white hover:shadow-sm text-xs font-semibold text-slate-500 transition-all whitespace-nowrap"
+              >
+                Math
+              </button>
+            </div>
+
+            <!-- Sort -->
+            <div class="relative">
+              <select
+                class="appearance-none pl-3 pr-8 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-600 focus:ring-2 focus:ring-indigo-100 outline-none cursor-pointer"
+              >
+                <option>Newest First</option>
+                <option>Oldest</option>
+                <option>Most Students</option>
+                <option>A–Z</option>
+              </select>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </div>
+
+            <!-- Create Button -->
+            <a
+              href="educatoradmin-createclass.html"
+              class="flex items-center gap-2 hover:bg-indigo-700 shadow-indigo-200 transition-all whitespace-nowrap text-xs font-bold text-white bg-indigo-600 rounded-xl pt-2 pr-4 pb-2 pl-4 shadow-lg"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-plus"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              New Class
+            </a>
+          </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <div
+            id="card-class-1"
+            class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden"
+          >
+            <!-- Header -->
+            <div
+              class="h-28 bg-gradient-to-br from-violet-50 to-indigo-50/50 p-5 relative"
+            >
+              <div class="absolute top-4 right-4 flex gap-2">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-violet-600 border border-violet-100/50 shadow-sm"
+                >
+                  Science
+                </span>
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-slate-500 border border-slate-100/50 shadow-sm"
+                >
+                  Term 1
+                </span>
+              </div>
+              <div class="absolute -bottom-6 left-6">
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white border-2 border-white shadow-md flex items-center justify-center text-indigo-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-rocket"
+                  >
+                    <path
+                      d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                    ></path>
+                    <path
+                      d="m12 15-3-3a22 22 0 0 1 2-12 9.5 9.5 0 0 1 1.586 1.586"
+                    ></path>
+                    <circle cx="11" cy="11" r="2"></circle>
+                    <path d="m21 21-8.19-8.19"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="pt-9 px-6 pb-5 flex-1 flex flex-col">
+              <h3
+                class="text-lg font-bold text-slate-800 mb-1 group-hover:text-indigo-700 transition-colors"
+              >
+                Class 3A – Space Explorers
+              </h3>
+
+              <div class="flex items-center gap-3 mt-3 mb-5">
+                <div class="flex -space-x-2">
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle"
+                    alt="Educator"
+                    class="w-6 h-6 rounded-full border-2 border-white bg-indigo-50"
+                    title="Ms. Frizzle"
+                  />
+                </div>
+                <span class="text-xs font-semibold text-slate-400">
+                  Ms. Frizzle • 24 Students
+                </span>
+              </div>
+
+              <div class="mt-auto space-y-4">
+                <!-- Status & Invite -->
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase tracking-wide"
+                  >
+                    <span
+                      class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+                    ></span>
+                    Active
+                  </span>
+                  <div
+                    class="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-link text-indigo-400"
+                    >
+                      <path
+                        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                      ></path>
+                      <path
+                        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                      ></path>
+                    </svg>
+                    Invite Active
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div
+                  class="pt-4 border-t border-slate-50 flex items-center gap-2"
+                >
+                  <button
+                    class="flex-1 hover:bg-slate-100 hover:text-indigo-700 transition-all hover:border-indigo-100 text-xs font-bold text-slate-600 bg-slate-50 border-slate-100 border rounded-xl pt-2.5 pb-2.5"
+                  >
+                    Edit Class
+                  </button>
+                  <button
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+                    title="Copy Invite Link"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-copy"
+                    >
+                      <rect
+                        width="14"
+                        height="14"
+                        x="8"
+                        y="8"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <path
+                        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    onclick="confirmDeleteClass('card-class-1')"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                    title="Delete Class"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-trash-2"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div
+            id="card-class-2"
+            class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-orange-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden"
+          >
+            <!-- Header -->
+            <div
+              class="h-28 bg-gradient-to-br from-orange-50 to-amber-50/50 p-5 relative"
+            >
+              <div class="absolute top-4 right-4 flex gap-2">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-orange-600 border border-orange-100/50 shadow-sm"
+                >
+                  Math
+                </span>
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-slate-500 border border-slate-100/50 shadow-sm"
+                >
+                  Term 2
+                </span>
+              </div>
+              <div class="absolute -bottom-6 left-6">
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white border-2 border-white shadow-md flex items-center justify-center text-orange-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-calculator"
+                  >
+                    <rect width="16" height="20" x="4" y="2" rx="2"></rect>
+                    <line x="8" x2="16" y1="6" y2="6"></line>
+                    <line x="16" x2="16" y1="14" y2="18"></line>
+                    <path d="M16 10h.01"></path>
+                    <path d="M12 10h.01"></path>
+                    <path d="M8 10h.01"></path>
+                    <path d="M12 14h.01"></path>
+                    <path d="M8 14h.01"></path>
+                    <path d="M12 18h.01"></path>
+                    <path d="M8 18h.01"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="pt-9 px-6 pb-5 flex-1 flex flex-col">
+              <h3
+                class="text-lg font-bold text-slate-800 mb-1 group-hover:text-orange-700 transition-colors"
+              >
+                Grade 5 – Advanced Math
+              </h3>
+
+              <div class="flex items-center gap-3 mt-3 mb-5">
+                <div class="flex -space-x-2">
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Garrison"
+                    alt="Educator"
+                    class="w-6 h-6 rounded-full border-2 border-white bg-orange-50"
+                  />
+                </div>
+                <span class="text-xs font-semibold text-slate-400">
+                  Mr. Garrison • 18 Students
+                </span>
+              </div>
+
+              <div class="mt-auto space-y-4">
+                <!-- Status & Invite -->
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold uppercase tracking-wide"
+                  >
+                    <span
+                      class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+                    ></span>
+                    Active
+                  </span>
+                  <div
+                    class="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-link text-indigo-400"
+                    >
+                      <path
+                        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                      ></path>
+                      <path
+                        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                      ></path>
+                    </svg>
+                    Invite Active
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div
+                  class="pt-4 border-t border-slate-50 flex items-center gap-2"
+                >
+                  <button
+                    class="flex-1 hover:bg-slate-100 hover:text-orange-700 transition-all hover:border-orange-100 text-xs font-bold text-slate-600 bg-slate-50 border-slate-100 border rounded-xl pt-2.5 pb-2.5"
+                  >
+                    Edit Class
+                  </button>
+                  <button
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-orange-600 hover:bg-orange-50 transition-all"
+                    title="Copy Invite Link"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-copy"
+                    >
+                      <rect
+                        width="14"
+                        height="14"
+                        x="8"
+                        y="8"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <path
+                        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    onclick="confirmDeleteClass('card-class-2')"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                    title="Delete Class"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-trash-2"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            id="card-class-3"
+            class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden opacity-90"
+          >
+            <!-- Header -->
+            <div
+              class="h-28 bg-gradient-to-br from-slate-100 to-slate-200/50 p-5 relative grayscale"
+            >
+              <div class="absolute top-4 right-4 flex gap-2">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-slate-500 border border-slate-100/50 shadow-sm"
+                >
+                  English
+                </span>
+                <span
+                  class="px-2.5 py-1 rounded-md bg-white/70 backdrop-blur-sm text-[10px] font-bold text-slate-400 border border-slate-100/50 shadow-sm"
+                >
+                  Term 1
+                </span>
+              </div>
+              <div class="absolute -bottom-6 left-6">
+                <div
+                  class="w-14 h-14 rounded-2xl bg-white border-2 border-white shadow-md flex items-center justify-center text-slate-400"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-book-open"
+                  >
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="pt-9 px-6 pb-5 flex-1 flex flex-col">
+              <h3 class="text-lg font-bold text-slate-700 mb-1">
+                English Literature 101
+              </h3>
+
+              <div class="flex items-center gap-3 mt-3 mb-5">
+                <div class="flex -space-x-2">
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hoover"
+                    alt="Educator"
+                    class="w-6 h-6 rounded-full border-2 border-white bg-blue-50"
+                  />
+                </div>
+                <span class="text-xs font-semibold text-slate-400">
+                  Ms. Hoover • 30 Students
+                </span>
+              </div>
+
+              <div class="mt-auto space-y-4">
+                <!-- Status & Invite -->
+                <div class="flex items-center justify-between">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500 text-[10px] font-bold uppercase tracking-wide"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                    Archived
+                  </span>
+                  <div
+                    class="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 bg-white px-2.5 py-1 rounded-full border border-slate-100"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-link-2-off"
+                    >
+                      <path d="M9 17H7A5 5 0 0 1 7 7"></path>
+                      <path d="M15 7h2a5 5 0 0 1 4 3.6"></path>
+                      <line x="8" x2="8" y1="8" y2="8"></line>
+                    </svg>
+                    Link Expired
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div
+                  class="pt-4 border-t border-slate-50 flex items-center gap-2"
+                >
+                  <button
+                    class="flex-1 hover:bg-slate-100 transition-all text-xs font-bold text-slate-500 bg-slate-50 border-slate-100 border rounded-xl pt-2.5 pb-2.5"
+                  >
+                    Restore
+                  </button>
+                  <button
+                    onclick="confirmDeleteClass('card-class-3')"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                    title="Delete Class"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-trash-2"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- HIDDEN MODAL STRUCTURE (Reference for Prompt Requirements) -->
+    <div
+      id="create-student-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
+      <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm"></div>
+      <div
+        class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 animate-enter"
+      >
+        <h3 class="text-lg font-bold text-slate-800 mb-1">
+          Create Student Record
+        </h3>
+        <p class="text-sm text-slate-500 mb-4">
+          Add a new student to your institution.
+        </p>
+        <div class="space-y-3">
+          <input
+            type="text"
+            placeholder="Full Name"
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
+          />
+          <select
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-500 focus:ring-2 focus:ring-indigo-500 outline-none"
+          >
+            <option>Select Class...</option>
+          </select>
+          <div class="flex items-center gap-3 pt-2">
+            <button
+              class="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-200"
+            >
+              Create &amp; Generate ID
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER (Standardized) -->
+    <footer
+      class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800 mt-12 relative z-10"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight">
+                EduQuest
+              </span>
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Terms
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+    </script>
+<script>
+ 
+let currentEducatorId = null;
+
+function openClassLimitModal(educatorId, currentLimit) {
+  currentEducatorId = educatorId;
+  document.getElementById('modalClassLimitInput').value = currentLimit;
+  document.getElementById('classLimitModal').classList.remove('hidden');
+  document.getElementById('classLimitModal').classList.add('flex');
+}
+
+function closeClassLimitModal() {
+  document.getElementById('classLimitModal').classList.add('hidden');
+  document.getElementById('classLimitModal').classList.remove('flex');
+  currentEducatorId = null;
+}
+
+function submitClassLimitUpdate() {
+  if (!currentEducatorId) return alert("No educator selected");
+
+  const newLimit = document.getElementById('modalClassLimitInput').value;
+
+  fetch(`/edadmin/dashboard/updateClassLimit/${currentEducatorId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ classLimit: newLimit }) // must match controller
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message); // show success or error
+    if (data.success) {
+      closeClassLimitModal();
+      location.reload();
+    }
+  })
+  .catch(err => console.error(err));
+}
+</script>
+    <script>
+      function switchTab(tab) {
+        const btnEducators = document.getElementById("tab-educators");
+        const btnStudents = document.getElementById("tab-students");
+        const viewEducators = document.getElementById("view-educators");
+        const viewStudents = document.getElementById("view-students");
+
+        if (tab === "educators") {
+          btnEducators.className =
+            "px-4 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold text-sm transition-all";
+          btnStudents.className =
+            "px-4 py-2 rounded-lg text-slate-500 font-semibold text-sm hover:text-slate-700 hover:bg-slate-200/50 transition-all";
+          viewEducators.classList.remove("hidden");
+          viewStudents.classList.add("hidden");
+        } else {
+          btnStudents.className =
+            "px-4 py-2 rounded-lg bg-white shadow-sm text-pink-700 font-bold text-sm transition-all";
+          btnEducators.className =
+            "px-4 py-2 rounded-lg text-slate-500 font-semibold text-sm hover:text-slate-700 hover:bg-slate-200/50 transition-all";
+          viewStudents.classList.remove("hidden");
+          viewEducators.classList.add("hidden");
+        }
+      }
+    </script>
+
+    <div
+      id="delete-class-modal"
+      class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 transition-all duration-300 opacity-0 scale-95"
+      role="dialog"
+    >
+      <div
+        class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        onclick="closeDeleteModal()"
+      ></div>
+      <div
+        class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 sm:p-8 transform transition-all"
+      >
+        <div
+          class="w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mb-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-alert-triangle"
+          >
+            <path
+              d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+            ></path>
+            <path d="M12 9v4"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">
+          Delete this class?
+        </h3>
+        <p class="text-sm text-slate-500 leading-relaxed mb-6">
+          This will remove the class from the institution and disconnect
+          enrolled students and educators. This action
+          <span class="font-bold text-slate-700">cannot be undone</span>
+          .
+        </p>
+
+        <div class="mb-6">
+          <label
+            class="flex items-start gap-3 p-3 rounded-xl border border-rose-100 bg-rose-50/50 cursor-pointer hover:bg-rose-50 transition-colors"
+          >
+            <input
+              type="checkbox"
+              id="delete-confirm-check"
+              class="mt-1 w-4 h-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+            />
+            <span class="text-xs font-bold text-rose-700 select-none">
+              I understand the consequences of deleting this class.
+            </span>
+          </label>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="closeDeleteModal()"
+            class="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onclick="performDelete()"
+            id="btn-delete-confirm"
+            class="flex-1 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-lg shadow-rose-200 opacity-50 cursor-not-allowed transition-all"
+            disabled=""
+          >
+            Delete Class
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="toast-container"
+      class="fixed bottom-6 right-6 z-[70] flex flex-col gap-2 pointer-events-none"
+    ></div>
+
+<script src="/js/global.js"></script>
+    <script>
+
+       function suspendEducator(id) {
+  fetch(`/edadmin/dashboard/removeEducator/${id}`, { method: "POST" }) // or "POST" depending on your router
+    .then(res => res.json())
+    .then(data => {
+      showPopup(data.message);
+      if (data.success) {
+        // Optionally refresh page or update status dynamically
+        setTimeout(() => location.reload(), 1000);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      showPopup("Something went wrong");
+    });
+}
+
+function activateEducator(id) {
+  fetch(`/edadmin/dashboard/activeEducator/${id}`, { method: "POST" }) // or "POST"
+    .then(res => res.json())
+    .then(data => {
+      showPopup(data.message);
+      if (data.success) {
+        // Optionally refresh page or update status dynamically
+        setTimeout(() => location.reload(), 1000);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      showPopup("Something went wrong");
+    });
+}
+
+      let targetCardId = null;
+
+      function confirmDeleteClass(cardId) {
+        targetCardId = cardId;
+        const modal = document.getElementById("delete-class-modal");
+        const checkbox = document.getElementById("delete-confirm-check");
+        const btn = document.getElementById("btn-delete-confirm");
+
+        // Reset state
+        checkbox.checked = false;
+        btn.disabled = true;
+        btn.classList.add("opacity-50", "cursor-not-allowed");
+
+        // Checkbox listener
+        checkbox.onchange = () => {
+          if (checkbox.checked) {
+            btn.disabled = false;
+            btn.classList.remove("opacity-50", "cursor-not-allowed");
+          } else {
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+          }
+        };
+
+        modal.classList.remove("hidden");
+        // small delay for transition
+        requestAnimationFrame(() => {
+          modal.classList.remove("opacity-0", "scale-95");
+          modal.classList.add("opacity-100", "scale-100");
+        });
+      }
+
+      function closeDeleteModal() {
+        const modal = document.getElementById("delete-class-modal");
+        modal.classList.remove("opacity-100", "scale-100");
+        modal.classList.add("opacity-0", "scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 300);
+        targetCardId = null;
+      }
+
+      function performDelete() {
+        if (!targetCardId) return;
+
+        const card = document.getElementById(targetCardId);
+        if (card) {
+          // Fade out
+          card.style.transition = "all 0.5s ease";
+          card.style.opacity = "0";
+          card.style.transform = "scale(0.9)";
+          setTimeout(() => {
+            card.remove();
+          }, 500);
+
+          // Toast
+          showToast("Class deleted successfully.");
+        }
+        closeDeleteModal();
+      }
+
+      function showToast(message) {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className =
+          "bg-slate-800 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transform transition-all duration-300 translate-y-10 opacity-0 min-w-[200px]";
+        toast.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle text-emerald-400"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              <span class="text-sm font-bold">${message}</span>
+          `;
+
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.remove("translate-y-10", "opacity-0");
+        });
+
+        setTimeout(() => {
+          toast.classList.add("translate-y-10", "opacity-0");
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Re-init icons to capture new dynamic content
+      setTimeout(() => lucide.createIcons(), 100);
+    </script>
+    
+  </body>
+</html>

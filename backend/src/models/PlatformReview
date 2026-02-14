@@ -1,0 +1,12 @@
+const mongoose = require("mongoose");
+
+const PlatformReviewSchema = new mongoose.Schema({
+  Id: { type: mongoose.Schema.Types.ObjectId },
+  fullname:String,
+  rating: Number,
+  content: String,
+  isApproved: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model("PlatformReview", PlatformReviewSchema);

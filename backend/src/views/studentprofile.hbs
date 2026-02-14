@@ -1,0 +1,1696 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Student Profile</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* Subtle Pastel Background */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background:
+          radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      /* Micro pattern for texture */
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .animate-float {
+        animation: float 5s ease-in-out infinite;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      /* Progress Bar Stripe Animation */
+      @keyframes progress-stripe {
+        from {
+          background-position: 1rem 0;
+        }
+        to {
+          background-position: 0 0;
+        }
+      }
+      .animate-stripe {
+        background-size: 1rem 1rem;
+        animation: progress-stripe 1s linear infinite;
+      }
+      /* Star Rating Logic */
+      .star-rating input {
+        display: none;
+      }
+      .star-rating label {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #cbd5e1;
+      }
+      .star-rating:hover label {
+        color: #fcd34d;
+      } /* Amber-300 */
+      .star-rating label:hover ~ label {
+        color: #cbd5e1;
+      }
+      .star-rating input:checked ~ label {
+        color: #fbbf24;
+      } /* Amber-400 */
+      .star-rating label:hover,
+      .star-rating input:checked + label {
+        color: #fbbf24;
+        filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
+        transform: scale(1.1);
+      }
+      .tag-checkbox:checked + div {
+        background-color: #e0e7ff; /* Indigo-100 */
+        color: #4338ca; /* Indigo-700 */
+        border-color: #c7d2fe; /* Indigo-200 */
+      }
+    </style>
+    <style>
+      .animate-tab {
+        animation: tabEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes tabEnter {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-newsreader"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-newsreader">
+      .font-newsreader {
+        font-family: "Newsreader", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-google-sans-flex"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-google-sans-flex">
+      .font-google-sans-flex {
+        font-family: "Google Sans Flex", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-oswald"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-oswald">
+      .font-oswald {
+        font-family: "Oswald", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-dm-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-dm-sans">
+      .font-dm-sans {
+        font-family: "DM Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-cormorant"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-cormorant">
+      .font-cormorant {
+        font-family: "Cormorant Garamond", serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 pt-4 pb-2 px-4">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+          >
+            EduQuest
+          </span>
+        </div>
+
+        <!-- Links -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="/student/dashboard"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Home
+          </a>
+          <a
+            href="/student-class"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            My Classes
+          </a>
+          <a
+            href="student-shop.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Shop
+          </a>
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">{{student.fullname}}</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full"
+            >
+              Lvl 12
+            </span>
+          </div>
+          <div
+            class="cursor-pointer hover:ring-indigo-100 transition-all bg-white w-10 h-10 border-indigo-100 border-2 rounded-full ring-transparent ring-2 pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href = '/student/profile'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT - STUDENT PROFILE -->
+    <main class="max-w-7xl mx-auto pt-28 pb-12 px-6">
+      <!-- TOP HERO: PROFILE OVERVIEW -->
+      <section
+        class="relative w-full rounded-[2.5rem] bg-white border border-white shadow-xl shadow-indigo-100/30 overflow-hidden mb-8 animate-enter group"
+      >
+        <!-- Background Elements -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-violet-50/50 via-white to-sky-50/50 opacity-80"
+        ></div>
+        <div
+          class="absolute top-0 right-0 w-64 h-64 bg-indigo-100/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 w-64 h-64 bg-amber-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"
+        ></div>
+
+        <!-- Content -->
+        <div
+          class="relative z-10 p-8 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8"
+        >
+          <!-- Left: Avatar & Main Info -->
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-6 flex-1 text-center md:text-left"
+          >
+            <div class="relative">
+              <!-- Glow -->
+              <div
+                class="absolute inset-0 bg-indigo-400 blur-xl opacity-20 rounded-full"
+              ></div>
+              <!-- Avatar -->
+              <div
+                class="relative w-24 h-24 rounded-full p-1 bg-white border-2 border-indigo-50 shadow-lg"
+              >
+                <img
+                  src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=e0e7ff"
+                  class="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <!-- Edit Button -->
+              <button
+                class="absolute bottom-0 right-0 p-1.5 bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 rounded-full shadow-sm hover:shadow-md transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-camera"
+                >
+                  <path
+                    d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"
+                  ></path>
+                  <circle cx="12" cy="13" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+
+            <div class="pt-1">
+              <div
+                class="flex items-center justify-center md:justify-start gap-2 mb-1"
+              >
+                <h1
+                  class="text-3xl font-extrabold text-slate-800 tracking-tight"
+                >
+                  {{student.fullname}}
+                </h1>
+                
+            </div>
+          </div>
+
+          <!-- Right: Quick Stats -->
+          <div
+            class="flex items-center gap-4 bg-white/60 backdrop-blur-sm p-2 rounded-2xl border border-white shadow-sm"
+          >
+            
+            <!-- Stat 2 -->
+            <div
+              class="px-4 py-2 text-center border-r border-slate-100 last:border-0"
+            >
+              <div
+                class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1"
+              >
+                Total XP
+              </div>
+              <div
+                class="flex items-center justify-center gap-1 text-xl font-black text-amber-500"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  stroke="none"
+                  class="animate-pulse"
+                >
+                  <path
+                    d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+                  ></path>
+                </svg>
+                {{student.totalxp}}
+              </div>
+            </div>
+            
+      </section>
+
+      <!-- LAYOUT GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- LEFT COLUMN: NAVIGATION & QUICK LINKS -->
+        <aside
+          class="lg:col-span-3 space-y-6 lg:sticky lg:top-28 animate-enter"
+          style="animation-delay: 100ms"
+        >
+          <!-- Navigation Tabs -->
+          <div
+            class="bg-white rounded-[1.5rem] border border-slate-100 shadow-lg shadow-indigo-100/40 p-2 overflow-hidden"
+          >
+            <nav class="space-y-1">
+              <button
+                type="button"
+                onclick="switchTab('details')"
+                id="nav-details"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-sm shadow-sm transition-all text-left"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Personal Details
+              </button>
+              <button
+                type="button"
+                onclick="switchTab('stats')"
+                id="nav-stats"
+                class="flex hover:text-indigo-600 hover:bg-slate-50 transition-all text-sm font-bold text-slate-500 text-left bg-white w-full rounded-xl pt-3 pr-4 pb-3 pl-4 gap-x-3 gap-y-3 items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-star"
+                >
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                  ></polygon>
+                </svg>
+                Platform Review
+              </button>
+              <button
+                type="button"
+                onclick="switchTab('reports')"
+                class="flex gap-3 hover:text-indigo-600 hover:bg-slate-50 transition-all text-sm font-bold text-slate-500 text-left bg-white w-full rounded-xl pt-3 pr-4 pb-3 pl-4 gap-x-3 gap-y-3 items-center"
+                id="nav-reports"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-file-text w-[18px] h-[18px]"
+                >
+                  <path
+                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                  ></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Reports
+              </button>
+            </nav>
+          </div>
+
+          <!-- Quick Links Card -->
+          <div
+            class="bg-white/60 border-white/60 border rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-sm backdrop-blur-sm"
+          >
+            <h3
+              class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-4 px-1"
+            >
+              Shortcuts
+            </h3>
+            <div class="space-y-2">
+              <button
+                class="flex hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer bg-white w-full border-slate-100 border rounded-xl pt-3 pr-3 pb-3 pl-3 items-center justify-between"
+                onclick="window.location.href = 'student-inventory.html'"
+                role="button"
+              >
+                <span
+                  class="text-xs font-bold text-slate-600 group-hover:text-indigo-600"
+                >
+                  Inventory
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-backpack text-slate-400 group-hover:text-indigo-500"
+                >
+                  <path
+                    d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                  ></path>
+                  <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+                  <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"></path>
+                  <path d="M8 10h8"></path>
+                  <path d="M9 18h6"></path>
+                </svg>
+              </button>
+              <button
+                class="flex hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer bg-white w-full border-slate-100 border rounded-xl pt-3 pr-3 pb-3 pl-3 items-center justify-between"
+                onclick="window.location.href = '/student-class'"
+                role="button"
+              >
+                <span
+                  class="group-hover:text-indigo-600 text-xs font-bold text-slate-600"
+                  style=""
+                >
+                  Class
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-swords text-slate-400 group-hover:text-indigo-500"
+                >
+                  <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"></polyline>
+                  <line x1="13" x2="19" y1="19" y2="13"></line>
+                  <line x1="16" x2="20" y1="16" y2="20"></line>
+                  <line x1="19" x2="21" y1="21" y2="19"></line>
+                  <polyline
+                    points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"
+                  ></polyline>
+                  <line x1="5" x2="9" y1="14" y2="18"></line>
+                  <line x1="7" x2="4" y1="17" y2="20"></line>
+                  <line x1="3" x2="5" y1="19" y2="21"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- RIGHT COLUMN: CONTENT SECTIONS -->
+        <div class="lg:col-span-9 animate-enter" style="animation-delay: 200ms">
+         <!-- SECTION 1: PERSONAL DETAILS -->
+<section
+  id="details"
+  class="tab-content relative bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-indigo-100/20 p-8 md:p-12 overflow-hidden transition-all duration-300 ease-in-out"
+
+>
+  <div
+    class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-[4rem] -z-0"
+  ></div>
+
+  <div class="relative z-10">
+    <div class="flex items-center justify-between mb-6">
+      <h2
+        class="text-xl font-extrabold text-slate-800 flex items-center gap-2"
+      >
+        <span
+          class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-user"
+          >
+            <path
+              d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+            ></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </span>
+        Personal Details
+      </h2>
+      <span
+        class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md border border-slate-100"
+      >
+        🔒 Account Email cannot be changed
+      </span>
+    </div>
+
+    <form
+      id="updateCredentialForm"
+      class="p-8 md:p-10 pb-20 relative z-10"
+    >
+
+      <!-- Full Name -->
+      <div class="space-y-1.5">
+        <label
+          class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1"
+        >
+          Full Name
+        </label>
+        <input
+          type="text"
+          name="fullname"
+          value="{{student.fullname}}"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-300"
+        />
+      </div>
+
+      <!-- Display Name -->
+      <div class="space-y-1.5">
+        <label
+          class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1"
+        >
+          Display Name
+        </label>
+        <input
+          type="text"
+          name="displayname"
+          value="{{student.displayname}}"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-300"
+        />
+      </div>
+
+      <!-- Email (Read Only) -->
+      <div class="space-y-1.5 opacity-70">
+        <label
+          class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1"
+        >
+          Email Address
+        </label>
+        <div class="relative">
+          <input
+            type="email"
+            value="{{student.email}}"
+            readonly
+            class="w-full px-4 py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 font-bold text-sm cursor-not-allowed"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-lock absolute right-4 top-3.5 text-slate-400"
+          >
+            <rect
+              width="18"
+              height="11"
+              x="3"
+              y="11"
+              rx="2"
+              ry="2"
+            ></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Subject (your field, replacing Institution) -->
+      <div class="space-y-1.5">
+        <label
+          class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1"
+        >
+          Parents Email
+        </label>
+        <input
+          type="text"
+          name="subject"
+          value="{{student.parents}}"
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 focus:bg-white transition-all"
+        />
+      </div>
+
+      <div class="space-y-1.5">
+        <label
+          class="text-xs font-bold text-slate-500 uppercase tracking-wide ml-1"
+        >
+          Password
+        </label>
+        <input
+          type="text"
+          name="password"
+          
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 focus:bg-white transition-all"
+        />
+      </div>
+
+       <!-- Save Button -->
+  <div class="flex justify-between mt-16">
+
+  <!-- Logout Button (Left) -->
+  <a
+    href="/student/logout"
+    class="bg-red-500 hover:bg-red-600 text-white font-bold text-sm px-8 py-3 rounded-xl shadow-lg shadow-red-200 transition-all transform hover:scale-[1.02] active:scale-95"
+  >
+    Logout
+  </a>
+
+  <!-- Save Button (Right) -->
+  <button
+    type="submit"
+    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-8 py-3 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:scale-[1.02] active:scale-95"
+  >
+    Save Changes
+  </button>
+
+    </form>
+  </div>
+</section>
+
+          <!-- SECTION 3: PLATFORM REVIEW -->
+          <section
+  id="stats"
+  class="tab-content hidden opacity-0 transition-all duration-300 ease-in-out"
+>
+  <div
+    class="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-indigo-100/20 p-8 md:p-12 relative overflow-hidden"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-10">
+      <div>
+        <h2
+          class="text-3xl font-extrabold text-slate-800 tracking-tight mb-2"
+        >
+          Platform Review
+        </h2>
+        <p class="text-slate-500 font-medium text-sm">
+          Help us improve EduQuest. Your rating takes 10 seconds.
+        </p>
+      </div>
+      <div
+        class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-message-square"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <form  id="platformReviewForm">
+      <input type="hidden" name="rating" id="ratingInput" value="0" />
+      <input type="hidden" name="tags" id="tagsInput" value="[]" />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <div class="lg:col-span-7 space-y-8">
+         <!-- Star Rating -->
+<div>
+  <label
+    class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block"
+    >Rate your experience</label
+  >
+  <div class="flex gap-2" id="star-container">
+    <button
+      type="button"
+      class="star-btn group transition-transform active:scale-95 focus:outline-none"
+      data-star="1"
+    >
+      <svg
+        id="star-1"
+        class="w-10 h-10 text-slate-200 fill-transparent hover:text-amber-400 transition-colors"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon
+          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        ></polygon>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="star-btn group transition-transform active:scale-95 focus:outline-none"
+      data-star="2"
+    >
+      <svg
+        id="star-2"
+        class="w-10 h-10 text-slate-200 fill-transparent hover:text-amber-400 transition-colors"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon
+          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        ></polygon>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="star-btn group transition-transform active:scale-95 focus:outline-none"
+      data-star="3"
+    >
+      <svg
+        id="star-3"
+        class="w-10 h-10 text-slate-200 fill-transparent hover:text-amber-400 transition-colors"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon
+          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        ></polygon>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="star-btn group transition-transform active:scale-95 focus:outline-none"
+      data-star="4"
+    >
+      <svg
+        id="star-4"
+        class="w-10 h-10 text-slate-200 fill-transparent hover:text-amber-400 transition-colors"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon
+          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        ></polygon>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="star-btn group transition-transform active:scale-95 focus:outline-none"
+      data-star="5"
+    >
+      <svg
+        id="star-5"
+        class="w-10 h-10 text-slate-200 fill-transparent hover:text-amber-400 transition-colors"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon
+          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+        ></polygon>
+      </svg>
+    </button>
+  </div>
+  <p
+    id="rating-text"
+    class="h-5 text-sm font-bold text-indigo-600 mt-3 ml-1 transition-opacity opacity-0 transform translate-y-2"
+  >
+    Excellent!
+  </p>
+</div>
+
+ 
+          <!-- Feedback -->
+          <div>
+            <label
+              class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block"
+              >Feedback</label
+            >
+            <div class="relative">
+              <textarea
+                name="content"
+                maxlength="200"
+                class="w-full bg-[#F8FAFC] border border-slate-200/60 rounded-xl p-4 h-32 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none transition-all placeholder:text-slate-400"
+                placeholder="Tell us what to improve (optional)..."
+              ></textarea>
+              <span
+                id="charCount"
+                class="absolute bottom-4 right-4 text-[10px] font-bold text-slate-400"
+                >0/200</span
+              >
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="bg-violet-600 hover:bg-violet-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-violet-200"
+          >
+            Submit Review
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+              
+
+                    <div class="mt-8 flex justify-center">
+                      <div
+                        class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-400 animate-pulse"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-sparkles"
+                        >
+                          <path
+                            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <script>
+                function updateReviewState(val) {
+                  const badge = document.getElementById("review-badge");
+                  badge.classList.remove("opacity-0");
+
+                  if (val >= 5) {
+                    badge.innerText = "Awesome!";
+                    badge.className =
+                      "transition-all duration-300 bg-emerald-100 text-emerald-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide";
+                  } else if (val >= 4) {
+                    badge.innerText = "Good";
+                    badge.className =
+                      "transition-all duration-300 bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide";
+                  } else if (val >= 3) {
+                    badge.innerText = "Okay";
+                    badge.className =
+                      "transition-all duration-300 bg-amber-100 text-amber-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide";
+                  } else {
+                    badge.innerText = "Needs Work";
+                    badge.className =
+                      "transition-all duration-300 bg-rose-100 text-rose-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide";
+                  }
+                }
+
+                // Chip selection logic
+                document
+                  .querySelectorAll(".group.relative button")
+                  .forEach((btn) => {
+                    btn.addEventListener("click", function () {
+                      this.classList.toggle("bg-indigo-50");
+                      this.classList.toggle("border-indigo-200");
+                      this.classList.toggle("text-indigo-600");
+                      this.classList.toggle("bg-white");
+                      this.classList.toggle("border-slate-200");
+                      this.classList.toggle("text-slate-600");
+                    });
+                  });
+              </script>
+            </div>
+          </section>
+
+          <!-- SECTION 4: REPORTS -->
+<!-- SECTION 4: REPORTS (Compact Inputs) -->
+<section
+  id="reports"
+  class="tab-content hidden opacity-0 transition-all duration-300 ease-in-out"
+>
+  <div
+    class="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-indigo-100/20 p-6 max-w-3xl mx-auto relative overflow-hidden"
+  >
+    <form id="student-form" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+      <!-- Report Type -->
+      <div class="space-y-1">
+        <label class="text-xs font-bold text-slate-600 ml-1">Report Type</label>
+        <select id="studentReportType"
+          class="w-full bg-white border border-slate-200 text-sm rounded-xl px-2 py-1">
+          <option value="overview">Overview & Summary</option>
+          <option value="quizPerformance">Quiz Performance</option>
+          <option value="challengePerformance">Challenge Performance</option>
+        </select>
+      </div>
+
+      <!-- Class Select -->
+      <div class="space-y-1">
+        <label class="text-xs font-bold text-slate-600 ml-1">Class</label>
+        <select id="studentClassId"
+          class="w-full bg-white border border-slate-200 text-sm rounded-xl px-2 py-1">
+          <option value="">-- Select Class --</option>
+        </select>
+      </div>
+
+      <!-- Student Select -->
+      <div class="md:col-span-2 space-y-1">
+  <label class="text-xs font-bold text-slate-600 ml-1">Student</label>
+  <div class="w-full bg-white border border-slate-200 text-sm rounded-xl px-2 py-1">
+    {{student.fullname}} <!-- or whatever you want to display -->
+  </div>
+  <input type="hidden" name="studentId" id="studentID" value="{{student.id}}" />
+</div>
+
+      <!-- Time Range -->
+      <div class="md:col-span-2 space-y-1">
+        <label class="text-xs font-bold text-slate-600 ml-1">Time Range</label>
+        <select id="studentTimeRange"
+          class="w-full bg-white border border-slate-200 text-sm rounded-xl px-2 py-1">
+          <option value="thisweek">This Week</option>
+          <option value="thismonth">This Month</option>
+          <option value="30days">Last 30 Days</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+
+      <div class="row md:col-span-2 flex gap-2" id="studentCustomDates" style="display:none;">
+        <div class="flex-1">
+          <label class="text-xs font-semibold">Start Date</label>
+          <input type="date" id="studentCustomStart" class="border border-slate-200 rounded-xl px-2 py-1 w-full"/>
+        </div>
+        <div class="flex-1">
+          <label class="text-xs font-semibold">End Date</label>
+          <input type="date" id="studentCustomEnd" class="border border-slate-200 rounded-xl px-2 py-1 w-full"/>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="md:col-span-2">
+        <button type="submit"
+          class="w-full rounded-2xl bg-violet-600 py-2 text-white font-bold text-sm">
+          Generate Student Report
+        </button>
+      </div>
+
+    </form>
+
+    <!-- Report Preview -->
+    <div class="mt-4">
+      <h3 class="text-sm font-bold text-slate-800 mb-1">Report Preview</h3>
+      <div id="result-student" class="hidden bg-white border border-slate-200 rounded-2xl p-4">
+        <img id="chartImg-student" class="mb-2" />
+        <div id="metricsContainer-student" class="text-xs"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight">
+                EduQuest
+              </span>
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Terms
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-500 opacity-0 translate-y-10 z-50 pointer-events-none"
+    >
+      <div
+        class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-black"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <span class="text-sm font-bold">Thanks for your feedback! ✨</span>
+    </div>
+
+    <script src="/js/global.js"></script>
+   <script>
+  lucide.createIcons();
+  
+    document.getElementById("updateCredentialForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const formData = Object.fromEntries(new FormData(this));
+
+  fetch("/student/profile/updateCredential", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  })
+  .then(res => res.json())
+  .then(data => {
+    showPopup(data.message);  // popup message
+    if (data.success) {
+      // optionally reload or update navbar dynamically
+      setTimeout(() => location.reload(), 1000);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    showPopup("Something went wrong");
+  });
+});
+
+document.getElementById("platformReviewForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const formData = Object.fromEntries(new FormData(this));
+
+  fetch("/student/profile/platformReview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  })
+  .then(res => res.json())
+  .then(data => {
+    showPopup(data.message);
+    if (data.success) {
+      // Optionally clear the form after success
+      this.reset();
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    showPopup("Something went wrong");
+  });
+});
+  // === TAB SWITCHING ===
+  function switchTab(e) {
+        const t = ["details", "stats", "reports"];
+        t.forEach((s) => {
+          const a = document.getElementById(s);
+          s === e
+            ? (a.classList.remove("hidden"),
+              a.classList.remove("animate-tab"),
+              void a.offsetWidth,
+              a.classList.add("animate-tab"))
+            : (a.classList.add("hidden"), a.classList.remove("animate-tab"));
+          const l = document.getElementById("nav-" + s);
+          let n =
+            "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ";
+          ((n +=
+            s === e
+              ? "bg-indigo-50 text-indigo-700 shadow-sm"
+              : "bg-white text-slate-500 hover:text-indigo-600 hover:bg-slate-50"),
+            (l.className = n));
+        });
+      }
+  function switchTab(id) {
+    const activeClass =
+      "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-50 text-indigo-600 font-bold text-sm shadow-sm transition-all text-left group";
+    const inactiveClass =
+      "w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 text-slate-500 hover:text-indigo-600 transition-all font-semibold text-sm text-left group";
+
+    const navIds = ["details", "account", "security", "stats"];
+
+    navIds.forEach((tab) => {
+      const el = document.getElementById("nav-" + tab);
+      if (el) {
+        el.className = tab === id ? activeClass : inactiveClass;
+        const icon = el.querySelector("svg");
+        if (icon) {
+          if (tab === id) {
+            icon.classList.remove("text-slate-400");
+          } else {
+            icon.classList.add("text-slate-400");
+          }
+        }
+      }
+    });
+
+    const current = document.querySelector(".tab-content:not(.hidden)");
+    const next = document.getElementById(id);
+
+    if (current && current !== next) {
+      current.classList.replace("opacity-100", "opacity-0");
+      setTimeout(() => {
+        current.classList.add("hidden");
+        if (next) {
+          next.classList.remove("hidden");
+          setTimeout(() => {
+            next.classList.replace("opacity-0", "opacity-100");
+          }, 50);
+        }
+      }, 300);
+    } else if (!current && next) {
+      next.classList.remove("hidden");
+      setTimeout(() => {
+        next.classList.replace("opacity-0", "opacity-100");
+      }, 50);
+    }
+  }
+
+  // === STAR RATING ===
+  let selectedRating = 0;
+  const starTexts = ["Poor", "Fair", "Good", "Very Good", "Excellent!"];
+  const textEl = document.getElementById("rating-text");
+
+  document.querySelectorAll(".star-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const n = parseInt(btn.dataset.star);
+      selectedRating = n;
+      document.getElementById("ratingInput").value = n;
+
+      if (textEl) {
+        textEl.innerText = starTexts[n - 1];
+        textEl.style.opacity = "1";
+      }
+
+      // Update stars
+      for (let i = 1; i <= 5; i++) {
+        const star = document.getElementById("star-" + i);
+        if (star) {
+          if (i <= n) {
+            star.classList.add("text-amber-400", "fill-amber-400");
+            star.classList.remove("text-slate-200", "fill-transparent");
+          } else {
+            star.classList.remove("text-amber-400", "fill-amber-400");
+            star.classList.add("text-slate-200", "fill-transparent");
+          }
+        }
+      }
+    });
+  });
+
+  // === TAG SELECTION ===
+  let selectedTags = [];
+  document.querySelectorAll(".tag-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tag = btn.innerText;
+      const input = document.getElementById("tagsInput");
+      if (selectedTags.includes(tag)) {
+        selectedTags = selectedTags.filter(t => t !== tag);
+        btn.classList.remove("bg-indigo-100", "text-indigo-600");
+      } else {
+        selectedTags.push(tag);
+        btn.classList.add("bg-indigo-100", "text-indigo-600");
+      }
+      if (input) input.value = JSON.stringify(selectedTags);
+    });
+  });
+
+  // === CHARACTER COUNTER ===
+  const textarea = document.querySelector("textarea[name='content']");
+  const counter = document.getElementById("charCount");
+  if (textarea && counter) {
+    textarea.addEventListener("input", () => {
+      counter.innerText = `${textarea.value.length}/200`;
+    });
+  }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const studentId = "{{student.id}}"; // HBS variable for the current student
+  const classSelect = document.getElementById("studentClassId");
+
+  try {
+    const res = await fetch(`/student/profile/${studentId}/classes`);
+    const classes = await res.json(); // [{id, name}, ...]
+
+    // Remove duplicates by ID
+    const uniqueClasses = Array.from(new Map(classes.map(c => [c.id, c])).values());
+
+    classSelect.innerHTML = ""; // clear existing options
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "-- Select Class --";
+    classSelect.appendChild(defaultOption);
+
+    if (!uniqueClasses || uniqueClasses.length === 0) {
+      const option = document.createElement("option");
+      option.textContent = "No classes found";
+      option.disabled = true;
+      classSelect.appendChild(option);
+    } else {
+      uniqueClasses.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c.id;
+        option.textContent = c.name;
+        classSelect.appendChild(option);
+      });
+    }
+  } catch (err) {
+    console.error("Failed to load classes:", err);
+  }
+});
+  // ------------------ TIME RANGE ------------------
+  const classTimeRange = document.getElementById('classTimeRange');
+  const classCustomDates = document.getElementById('classCustomDates');
+
+  if (classTimeRange) {
+    classTimeRange.addEventListener('change', () => {
+      classCustomDates.style.display = classTimeRange.value === 'custom' ? 'grid' : 'none';
+    });
+  }
+
+  const studentTimeRange = document.getElementById('studentTimeRange');
+  const studentCustomDates = document.getElementById('studentCustomDates');
+
+  if (studentTimeRange) {
+    studentTimeRange.addEventListener('change', () => {
+      studentCustomDates.style.display = studentTimeRange.value === 'custom' ? 'grid' : 'none';
+    });
+  }
+document.getElementById("student-form")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    try {
+      const payload = {
+        classId: document.getElementById('studentClassId')?.value || document.getElementById('classId')?.value,
+        studentID: document.getElementById('studentID').value,
+        reportType: document.getElementById('studentReportType')?.value || document.getElementById('reportType')?.value,
+        timeRange: document.getElementById('studentTimeRange')?.value || document.getElementById('timeRange')?.value,
+        customStart: document.getElementById('studentCustomStart')?.value || document.getElementById('customStart')?.value || undefined,
+        customEnd: document.getElementById('studentCustomEnd')?.value || document.getElementById('customEnd')?.value || undefined
+      };
+
+      const res = await fetch("/student/profile/generatestudent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Failed to generate student report");
+
+      const metricsContainer = document.getElementById('metricsContainer-student');
+      document.getElementById('result-student').classList.remove('hidden');
+      document.getElementById('chartImg-student').src = data.chart;
+      metricsContainer.innerHTML = "";
+
+      if (data.summary) {
+        for (const key in data.summary) {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100";
+          card.innerHTML = `
+            <span class="text-[10px] font-bold uppercase tracking-wider">
+              ${key.replace(/([A-Z])/g, ' $1')}
+            </span>
+            <div class="text-3xl font-extrabold mt-1">
+              ${data.summary[key]}
+            </div>
+          `;
+          metricsContainer.appendChild(card);
+        }
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error generating student report: " + err.message);
+    }
+  });
+</script>
+  </body>
+</html>

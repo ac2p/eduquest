@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Create Challenge</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* Subtle Pastel Background */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background:
+          radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      /* Micro pattern for texture */
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      /* Custom Inputs */
+      .input-magic:focus {
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        border-color: #818cf8;
+      }
+      .input-magic {
+        transition: all 0.2s ease;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-newsreader"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-newsreader">
+      .font-newsreader {
+        font-family: "Newsreader", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-google-sans-flex"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-google-sans-flex">
+      .font-google-sans-flex {
+        font-family: "Google Sans Flex", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-oswald"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-oswald">
+      .font-oswald {
+        font-family: "Oswald", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-dm-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-dm-sans">
+      .font-dm-sans {
+        font-family: "DM Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-cormorant"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-cormorant">
+      .font-cormorant {
+        font-family: "Cormorant Garamond", serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION (UNCHANGED) -->
+    <nav class="fixed z-50 w-full pt-4 pr-4 pb-2 pl-4 top-0">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+          >
+            EduQuest
+          </span>
+        </div>
+
+        <!-- Links -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="educator-dashboard.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Home
+          </a>
+          <a
+            href="educator-class.html"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+          >
+            My Classes
+          </a>
+          <a
+            href="educator-reports.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Reports
+          </a>
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">Ms.Frizzle</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2"
+            >
+              Educator
+            </span>
+          </div>
+          <div
+            class="bg-white w-10 h-10 border-indigo-100 border-2 rounded-full pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href = 'educator-profile.html'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mr-auto ml-auto pt-28 pr-6 pb-12 pl-6">
+      <!-- HEADER -->
+      <div class="mb-8 animate-enter">
+        <div class="flex items-center gap-5 mb-8">
+          <a
+            href="educator-manageclass.html"
+            class="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-400 shadow-sm transition-all hover:border-indigo-200 hover:text-indigo-600 hover:shadow-md hover:shadow-indigo-100/50 active:scale-95"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            ></div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-left relative z-10 w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1"
+            >
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+          </a>
+          <div class="space-y-1">
+            <div class="flex items-center gap-3">
+              <h1
+                class="font-bricolage text-3xl font-semibold tracking-tight text-slate-900"
+              >
+                Create Challenge
+              </h1>
+              <span
+                class="inline-flex items-center text-[10px] uppercase select-none font-bold text-indigo-600 tracking-wider bg-indigo-50 border-indigo-100 border rounded-full pt-0.5 pr-2.5 pb-0.5 pl-2.5"
+              >
+                Draft
+              </span>
+            </div>
+            <p class="font-jakarta text-sm font-medium text-slate-500">
+              Design a new learning adventure for your students
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- LEFT COLUMN: CONTENT BUILDER -->
+        <div
+          class="lg:col-span-8 animate-enter space-y-6"
+          style="animation-delay: 100ms"
+        >
+          <!-- Type Selector (Moved from Center to Top Left) -->
+          <div
+            id="type-selector-wrapper"
+            class="bg-white rounded-2xl border border-slate-200 p-1.5 inline-flex shadow-sm"
+          >
+            <button
+              id="btn-individual"
+              onclick="switchType('individual')"
+              class="px-6 py-2.5 rounded-xl bg-indigo-50 text-indigo-600 shadow-sm border border-indigo-100 text-sm font-bold transition-all flex items-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-user w-4 h-4"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Individual
+            </button>
+            <button
+              onclick="switchType('group')"
+              class="hover:text-slate-700 hover:bg-slate-50 transition-all flex text-sm font-bold text-slate-500 border-transparent border rounded-xl pt-2.5 pr-6 pb-2.5 pl-6 gap-x-2 gap-y-2 items-center"
+              id="btn-group"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-users w-4 h-4"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+              Group Challenge
+            </button>
+          </div>
+          <div
+            id="section-group-project"
+            class="hidden bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 animate-enter"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <h3
+                class="text-lg font-bold text-slate-800 flex items-center gap-3"
+              >
+                <span
+                  class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-users w-5 h-5"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                Group Member Selection
+              </h3>
+              <span
+                class="flex items-center gap-1.5 text-[10px] font-bold text-rose-500 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100 uppercase tracking-wide"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-asterisk"
+                >
+                  <path d="M12 6v12"></path>
+                  <path d="M17.196 9 6.804 15"></path>
+                  <path d="m6.804 9 10.392 6"></path>
+                </svg>
+                Required
+              </span>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Search -->
+              <div class="relative group">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-search absolute left-4 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search students by name..."
+                  class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:bg-white focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 focus:outline-none transition-all"
+                />
+              </div>
+
+              <!-- Chips -->
+              <div class="flex flex-wrap gap-2 min-h-[36px]">
+                <div
+                  class="animate-enter flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-full pl-1 pr-3 py-1 shadow-sm"
+                >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix"
+                    alt="Felix"
+                    class="w-6 h-6 rounded-full bg-white object-cover"
+                  />
+                  <span class="text-xs font-bold text-indigo-700">
+                    Felix J.
+                  </span>
+                  <button
+                    class="text-indigo-300 hover:text-rose-500 hover:bg-rose-50 rounded-full p-0.5 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-x"
+                    >
+                      <path d="M18 6 6 18"></path>
+                      <path d="m6 6 12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  class="animate-enter flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-full pl-1 pr-3 py-1 shadow-sm"
+                >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Sarah"
+                    alt="Sarah"
+                    class="w-6 h-6 rounded-full bg-white object-cover"
+                  />
+                  <span class="text-xs font-bold text-indigo-700">
+                    Sarah S.
+                  </span>
+                  <button
+                    class="text-indigo-300 hover:text-rose-500 hover:bg-rose-50 rounded-full p-0.5 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-x"
+                    >
+                      <path d="M18 6 6 18"></path>
+                      <path d="m6 6 12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- List -->
+              <div class="border border-slate-100 rounded-2xl overflow-hidden">
+                <div
+                  class="max-h-60 overflow-y-auto p-2 space-y-1 custom-scrollbar"
+                >
+                  <label
+                    class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group select-none bg-slate-50/50"
+                  >
+                    <div class="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked=""
+                        class="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:border-indigo-500 checked:bg-indigo-500 transition-all"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none scale-75 peer-checked:scale-100 transition-all"
+                      >
+                        <path d="M20 6 9 17l-5-5"></path>
+                      </svg>
+                    </div>
+                    <img
+                      src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix"
+                      class="w-8 h-8 rounded-full bg-white border border-slate-100"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-bold text-slate-700">
+                        Felix Johnson
+                      </p>
+                    </div>
+                  </label>
+                  <label
+                    class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group select-none bg-slate-50/50"
+                  >
+                    <div class="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked=""
+                        class="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:border-indigo-500 checked:bg-indigo-500 transition-all"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none scale-75 peer-checked:scale-100 transition-all"
+                      >
+                        <path d="M20 6 9 17l-5-5"></path>
+                      </svg>
+                    </div>
+                    <img
+                      src="https://api.dicebear.com/7.x/notionists/svg?seed=Sarah"
+                      class="w-8 h-8 rounded-full bg-white border border-slate-100"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-bold text-slate-700">
+                        Sarah Smith
+                      </p>
+                    </div>
+                  </label>
+                  <label
+                    class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group select-none"
+                  >
+                    <div class="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        class="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:border-indigo-500 checked:bg-indigo-500 transition-all"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none scale-75 peer-checked:scale-100 transition-all"
+                      >
+                        <path d="M20 6 9 17l-5-5"></path>
+                      </svg>
+                    </div>
+                    <img
+                      src="https://api.dicebear.com/7.x/notionists/svg?seed=Marcus"
+                      class="w-8 h-8 rounded-full bg-white border border-slate-100"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-bold text-slate-700">Marcus Lee</p>
+                    </div>
+                  </label>
+                  <label
+                    class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group select-none"
+                  >
+                    <div class="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        class="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:border-indigo-500 checked:bg-indigo-500 transition-all"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check absolute text-white opacity-0 peer-checked:opacity-100 pointer-events-none scale-75 peer-checked:scale-100 transition-all"
+                      >
+                        <path d="M20 6 9 17l-5-5"></path>
+                      </svg>
+                    </div>
+                    <img
+                      src="https://api.dicebear.com/7.x/notionists/svg?seed=Jessica"
+                      class="w-8 h-8 rounded-full bg-white border border-slate-100"
+                    />
+                    <div class="flex-1">
+                      <p class="text-sm font-bold text-slate-700">
+                        Jessica Wong
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenge Details -->
+          <div
+            class="overflow-hidden group bg-white border-slate-100 border rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative shadow-sm"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-[4rem] -z-0 transition-transform group-hover:scale-110 duration-700"
+            ></div>
+
+            <div class="relative z-10">
+              <label
+                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1"
+              >
+                Challenge Name
+              </label>
+              <input
+                type="text"
+                value="Maths Weekly Challenge"
+                class="input-magic w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-lg font-semibold text-slate-800 placeholder:text-slate-300 focus:bg-white focus:outline-none mb-6 transition-all"
+                placeholder="Enter a catchy title..."
+              />
+
+              <div class="space-y-6">
+                <div>
+                  <label
+                    class="block text-xs font-bold text-slate-500 mb-2 ml-1"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    class="input-magic w-full rounded-2xl border border-slate-200 bg-slate-50/50 p-4 text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:bg-white focus:outline-none resize-none h-28"
+                    placeholder="What is the goal of this challenge?"
+                  ></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-500 ml-1">
+                      Subject Area
+                    </label>
+                    <div class="relative">
+                      <select
+                        class="input-magic w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-semibold text-slate-700 focus:bg-white focus:outline-none appearance-none cursor-pointer"
+                      >
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>History</option>
+                      </select>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        data-lucide="chevron-down"
+                        class="lucide lucide-chevron-down absolute right-4 top-3.5 w-4 h-4 text-slate-400 pointer-events-none"
+                      >
+                        <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-500 ml-1">
+                      Target Class
+                    </label>
+                    <div class="relative">
+                      <div
+                        class="flex items-center gap-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
+                      >
+                        <div
+                          class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600"
+                        >
+                          4A
+                        </div>
+                        <span class="text-sm font-bold text-slate-600">
+                          Grade 4 - Science A
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mission Steps -->
+          <div
+            class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <h3
+                class="text-lg font-bold text-slate-800 flex items-center gap-3"
+              >
+                <span
+                  class="w-8 h-8 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="list-todo"
+                    class="lucide lucide-list-todo w-5 h-5"
+                  >
+                    <path d="M13 5h8"></path>
+                    <path d="M13 12h8"></path>
+                    <path d="M13 19h8"></path>
+                    <path d="m3 17 2 2 4-4"></path>
+                    <rect x="3" y="4" width="6" height="6" rx="1"></rect>
+                  </svg>
+                </span>
+                Mission Steps
+              </h3>
+              <button
+                class="text-xs font-bold text-indigo-500 hover:text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-lg transition-all"
+              >
+                + Bulk Import
+              </button>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Step 1 -->
+              <div
+                class="group relative flex gap-4 p-4 rounded-2xl border border-slate-200 bg-white hover:shadow-md hover:border-indigo-200 transition-all"
+              >
+                <div
+                  class="flex flex-col items-center gap-2 pt-2 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-400"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="grip-vertical"
+                    class="lucide lucide-grip-vertical w-4 h-4"
+                  >
+                    <circle cx="9" cy="12" r="1"></circle>
+                    <circle cx="9" cy="5" r="1"></circle>
+                    <circle cx="9" cy="19" r="1"></circle>
+                    <circle cx="15" cy="12" r="1"></circle>
+                    <circle cx="15" cy="5" r="1"></circle>
+                    <circle cx="15" cy="19" r="1"></circle>
+                  </svg>
+                  <span
+                    class="w-6 h-6 rounded-lg bg-slate-100 text-slate-500 text-xs font-bold flex items-center justify-center border border-slate-200"
+                  >
+                    1
+                  </span>
+                </div>
+                <div class="flex-1 space-y-2">
+                  <input
+                    type="text"
+                    value="Locate Orion's Belt"
+                    class="w-full text-sm font-bold text-slate-700 border-none bg-transparent p-0 focus:ring-0 placeholder:text-slate-300"
+                    placeholder="Step Title"
+                  />
+                  <input
+                    type="text"
+                    value="Find the three stars in a row using the simulator."
+                    class="w-full text-xs font-medium text-slate-400 border-none bg-transparent p-0 focus:ring-0 placeholder:text-slate-200"
+                    placeholder="Step description"
+                  />
+                </div>
+                <button
+                  class="text-slate-300 hover:text-rose-500 transition-colors self-center p-2 rounded-lg hover:bg-rose-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="trash-2"
+                    class="lucide lucide-trash-2 w-4 h-4"
+                  >
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Step 2 -->
+              <div
+                class="group relative flex gap-4 p-4 rounded-2xl border border-slate-200 bg-white hover:shadow-md hover:border-indigo-200 transition-all"
+              >
+                <div
+                  class="flex flex-col items-center gap-2 pt-2 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-400"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="grip-vertical"
+                    class="lucide lucide-grip-vertical w-4 h-4"
+                  >
+                    <circle cx="9" cy="12" r="1"></circle>
+                    <circle cx="9" cy="5" r="1"></circle>
+                    <circle cx="9" cy="19" r="1"></circle>
+                    <circle cx="15" cy="12" r="1"></circle>
+                    <circle cx="15" cy="5" r="1"></circle>
+                    <circle cx="15" cy="19" r="1"></circle>
+                  </svg>
+                  <span
+                    class="w-6 h-6 rounded-lg bg-slate-100 text-slate-500 text-xs font-bold flex items-center justify-center border border-slate-200"
+                  >
+                    2
+                  </span>
+                </div>
+                <div class="flex-1 space-y-2">
+                  <input
+                    type="text"
+                    value="Identify the North Star"
+                    class="w-full text-sm font-bold text-slate-700 border-none bg-transparent p-0 focus:ring-0 placeholder:text-slate-300"
+                    placeholder="Step Title"
+                  />
+                  <input
+                    type="text"
+                    value="Use the Big Dipper pointer stars."
+                    class="w-full text-xs font-medium text-slate-400 border-none bg-transparent p-0 focus:ring-0 placeholder:text-slate-200"
+                    placeholder="Step description"
+                  />
+                </div>
+                <button
+                  class="text-slate-300 hover:text-rose-500 transition-colors self-center p-2 rounded-lg hover:bg-rose-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="trash-2"
+                    class="lucide lucide-trash-2 w-4 h-4"
+                  >
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Add New -->
+              <button
+                class="w-full py-4 rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 font-bold text-sm hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 group"
+              >
+                <span
+                  class="w-6 h-6 rounded-full bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500 flex items-center justify-center transition-colors"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="plus"
+                    class="lucide lucide-plus w-3.5 h-3.5 stroke-[3]"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5v14"></path>
+                  </svg>
+                </span>
+                Add New Step
+              </button>
+            </div>
+          </div>
+
+          <!-- Rewards -->
+          <div
+            class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8"
+          >
+            <h3
+              class="text-lg font-bold text-slate-800 flex items-center gap-3 mb-6"
+            >
+              <span
+                class="w-8 h-8 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  data-lucide="trophy"
+                  class="lucide lucide-trophy w-5 h-5"
+                >
+                  <path
+                    d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"
+                  ></path>
+                  <path
+                    d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"
+                  ></path>
+                  <path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path>
+                  <path d="M4 22h16"></path>
+                  <path
+                    d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"
+                  ></path>
+                  <path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path>
+                </svg>
+              </span>
+              Rewards &amp; Loot
+            </h3>
+            <div class="grid grid-cols-2 gap-6">
+              <div
+                class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex items-center gap-4"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="zap"
+                    class="lucide lucide-zap w-5 h-5 fill-indigo-600 stroke-none"
+                  >
+                    <path
+                      d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <p
+                    class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider"
+                  >
+                    Experience
+                  </p>
+                  <input
+                    type="number"
+                    value="100"
+                    class="bg-transparent border-none p-0 text-xl font-black text-indigo-900 w-16 focus:ring-0"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-4 rounded-2xl bg-amber-50/50 border border-amber-100 flex items-center gap-4"
+              >
+                <div
+                  class="w-10 h-10 rounded-full bg-amber-100 text-amber-500 flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="circle-dollar-sign"
+                    class="lucide lucide-circle-dollar-sign w-5 h-5"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                    <path d="M12 18V6"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p
+                    class="text-[10px] font-bold text-amber-400 uppercase tracking-wider"
+                  >
+                    Coins
+                  </p>
+                  <input
+                    type="number"
+                    value="50"
+                    class="bg-transparent border-none p-0 text-xl font-black text-amber-900 w-16 focus:ring-0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: SETTINGS PANEL -->
+        <div
+          class="lg:col-span-4 space-y-6 animate-enter"
+          style="animation-delay: 200ms"
+        >
+          <!-- SCHEDULING CARD (Redesigned per request) -->
+          <div
+            class="shadow-slate-200/50 bg-white border-slate-100 border rounded-[2rem] pt-6 pr-6 pb-6 pl-6 shadow-lg"
+          >
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  data-lucide="calendar-clock"
+                  class="lucide lucide-calendar-clock w-5 h-5"
+                >
+                  <path d="M16 14v2.2l1.6 1"></path>
+                  <path d="M16 2v4"></path>
+                  <path
+                    d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"
+                  ></path>
+                  <path d="M3 10h5"></path>
+                  <path d="M8 2v4"></path>
+                  <circle cx="16" cy="16" r="6"></circle>
+                </svg>
+              </div>
+              <h2 class="text-lg font-bold text-slate-800">Scheduling</h2>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Start Date -->
+              <div class="">
+                <label
+                  class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2"
+                >
+                  Start Date &amp; Time
+                </label>
+                <div class="relative group">
+                  <input
+                    id="startAt"
+                    type="datetime-local"
+                  
+                    class="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-10 text-sm font-bold text-slate-600 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all cursor-pointer hover:border-indigo-200"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="calendar"
+                    class="lucide lucide-calendar absolute right-4 top-3.5 w-4 h-4 text-slate-400 group-hover:text-indigo-400 transition-colors"
+                  >
+                    <path d="M8 2v4"></path>
+                    <path d="M16 2v4"></path>
+                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- End Date -->
+              <div class="">
+                <label
+                  class="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2"
+                >
+                  End Date &amp; Time
+                </label>
+                <div class="relative group">
+                  <input
+                    
+                    id="endAt"
+                   type="datetime-local"
+                    class="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-10 text-sm font-bold text-slate-600 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all cursor-pointer hover:border-indigo-200"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="calendar"
+                    class="lucide lucide-calendar absolute right-4 top-3.5 w-4 h-4 text-slate-400 group-hover:text-indigo-400 transition-colors"
+                  >
+                    <path d="M8 2v4"></path>
+                    <path d="M16 2v4"></path>
+                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
+            
+         
+
+          <!-- Actions -->
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button
+              class="col-span-2 py-4 rounded-2xl bg-slate-900 text-white font-bold text-sm shadow-xl shadow-slate-200 hover:shadow-slate-300 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center justify-center gap-2"
+            >
+              Publish Challenge
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-lucide="rocket"
+                class="lucide lucide-rocket w-4 h-4"
+              >
+                <path
+                  d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                ></path>
+                <path
+                  d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+                ></path>
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+              </svg>
+            </button>
+            <button
+              class="py-3 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all"
+            >
+              Save Draft
+            </button>
+            <button
+              class="py-3 rounded-xl bg-white border border-slate-200 text-rose-500 font-bold text-sm hover:bg-rose-50 hover:border-rose-200 transition-all"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER (UNCHANGED) -->
+    <footer
+      class="text-slate-300 bg-slate-900 border-slate-800 border-t pt-12 pb-12"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight">
+                EduQuest
+              </span>
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Terms
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+    </script>
+
+    <script>
+      function switchType(type) {
+        const iBtn = document.getElementById("btn-individual");
+        const gBtn = document.getElementById("btn-group");
+        const gSec = document.getElementById("section-group-project");
+
+        if (type === "group") {
+          gSec.classList.remove("hidden");
+          gBtn.classList.remove(
+            "text-slate-500",
+            "hover:text-slate-700",
+            "hover:bg-slate-50",
+            "border-transparent",
+          );
+          gBtn.classList.add(
+            "bg-indigo-50",
+            "text-indigo-600",
+            "shadow-sm",
+            "border-indigo-100",
+          );
+          iBtn.classList.remove(
+            "bg-indigo-50",
+            "text-indigo-600",
+            "shadow-sm",
+            "border-indigo-100",
+          );
+          iBtn.classList.add(
+            "text-slate-500",
+            "hover:text-slate-700",
+            "hover:bg-slate-50",
+            "border-transparent",
+          );
+        } else {
+          gSec.classList.add("hidden");
+          iBtn.classList.remove(
+            "text-slate-500",
+            "hover:text-slate-700",
+            "hover:bg-slate-50",
+            "border-transparent",
+          );
+          iBtn.classList.add(
+            "bg-indigo-50",
+            "text-indigo-600",
+            "shadow-sm",
+            "border-indigo-100",
+          );
+          gBtn.classList.remove(
+            "bg-indigo-50",
+            "text-indigo-600",
+            "shadow-sm",
+            "border-indigo-100",
+          );
+          gBtn.classList.add(
+            "text-slate-500",
+            "hover:text-slate-700",
+            "hover:bg-slate-50",
+            "border-transparent",
+          );
+        }
+      }
+    </script>
+    <script>
+async function createAndScheduleChallenge(e) {
+  e.preventDefault(); // prevent default form submission
+
+  // 1️⃣ Get challenge input values
+  const title = document.getElementById("challengeTitle").value.trim();
+  const description = document.getElementById("challengeDescription").value.trim();
+  const startAt = document.getElementById("startAt").value;
+  const endAt = document.getElementById("endAt").value;
+
+  // Basic validation
+  if (!title || !description || !startAt || !endAt) {
+    popshow("Please fill in all fields", "error");
+    return;
+  }
+
+  try {
+    // 2️⃣ Create the challenge first
+    const createRes = await fetch("/educator/challenge/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description })
+    });
+    const challenge = await createRes.json();
+
+    if (!createRes.ok || !challenge._id) {
+      popshow(challenge.message || "Failed to create challenge", "error");
+      return;
+    }
+
+    // 3️⃣ Schedule the challenge using the returned _id
+    const scheduleRes = await fetch("/educator/scheduleChallenge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        challengeId: challenge._id,
+        startAt,
+        endAt
+      })
+    });
+
+    const scheduleData = await scheduleRes.json();
+
+    if (scheduleRes.ok) {
+      popshow(scheduleData.message || "Challenge created and scheduled successfully!", "success");
+
+      // Clear inputs
+      document.getElementById("challengeTitle").value = "";
+      document.getElementById("challengeDescription").value = "";
+      document.getElementById("startAt").value = "";
+      document.getElementById("endAt").value = "";
+    } else {
+      popshow(scheduleData.message || "Failed to schedule challenge", "error");
+    }
+  } catch (err) {
+    console.error("Error creating or scheduling challenge:", err);
+    popshow("Server error", "error");
+  }
+}
+
+// Attach to your button
+document.getElementById("scheduleBtn").addEventListener("click", createAndScheduleChallenge);
+</script>
+  </body>
+</html>

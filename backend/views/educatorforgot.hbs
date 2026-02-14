@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Forgot Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Nunito', sans-serif;
+        background: #f8fafc;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 2rem;
+        padding: 3rem;
+        max-width: 400px;
+        margin: auto;
+        margin-top: 10vh;
+      }
+      .input-field:focus {
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        border-color: #818cf8;
+      }
+      .input-label {
+        font-size: 0.875rem;
+        color: #94a3b8;
+        transition: all 0.2s;
+      }
+      .input-field:focus + .input-label,
+      .input-field:not(:placeholder-shown) + .input-label {
+        font-size: 0.75rem;
+        color: #6366f1;
+        transform: translateY(-1.2rem);
+      }
+    </style>
+  </head>
+  <body class="flex justify-center items-center min-h-screen">
+
+    <div class="glass-card shadow-lg">
+      <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center">
+       Educator Forgot Password
+      </h2>
+      <p class="text-sm text-slate-500 mb-6 text-center">
+        Enter your email to reset your password.
+      </p>
+
+      <form id="forgotForm" class="space-y-4">
+        <div class="relative">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email Address"
+            class="input-field w-full border border-slate-200 rounded-xl px-4 py-3 outline-none placeholder-transparent"
+            required
+          />
+          
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold hover:from-indigo-500 hover:to-violet-500 transition-all"
+        >
+          Send Reset Link
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-slate-400">
+        <a href="/educator/login" class="text-indigo-600 font-bold hover:underline">
+          Back to Login
+        </a>
+      </div>
+    </div>
+
+  </body>
+  <script src="/js/global.js"></script>
+  <script>
+  const form = document.getElementById("forgotForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    try {
+      const response = await fetch("/educator/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message); 
+        form.reset();
+      } else {
+        alert(data.message);
+      }
+
+    } catch (err) {
+      alert("Something went wrong ❌");
+      console.error(err);
+    }
+  });
+</script>
+</html>

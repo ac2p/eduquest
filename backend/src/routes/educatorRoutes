@@ -1,0 +1,67 @@
+
+
+const express = require("express");
+const router = express.Router();
+const educatorController = require("../controllers/EducatorController");
+
+router.get("/login", (req, res) => {
+  res.render("educatorlogin");
+});
+router.post("/login", educatorController.login);
+
+router.get("/forgot-password", (req, res) => {
+  res.render("educatorforgot");
+});
+router.post("/forgot-password", educatorController.forgotPassword);
+
+router.get("/reset-password/:token", (req, res) => {
+  const { token } = req.params;
+  res.render("educatorreset", { token }); // pass token to template
+});
+router.post("/reset-password/:token", educatorController.resetPassword);
+
+router.get("/logout", educatorController.logout);
+// ===== PROFILE =====
+
+router.get("/profile", educatorController.profile); 
+
+router.post("/profile/updateCredential", educatorController.updateCredential);
+
+
+router.post("/profile/platformReview", educatorController.platformReview);
+
+// ===== DASHBOARD =====
+router.get("/dashboard", educatorController.info);
+
+router.get("/dashboard/feedback", educatorController.getFeedbacks);
+router.post("/dashboard/replyFeedback/:feedbackId", educatorController.replyFeedback);
+
+router.post("/dashboard/manageClass", educatorController.manageClass);
+
+// ===== REPORT ===== not done 
+router.get("/report", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/educator/login");
+  }
+
+  res.render("educatorreport", {
+    user: req.session.user
+  });
+});
+
+
+router.post("/report/generatestudent",educatorController.generateStudentReport);
+router.post("/report/generateclass", educatorController.generateClassReport);
+router.post("/report/sendReport", educatorController.sendReportEmail);
+router.get('/report/students/:classId', educatorController.getStudent);
+router.get('/report/classes', educatorController.getClass);
+
+
+// ===== CHALLENGE =====
+router.get("/scheduleChallenge", (req, res) => {
+  res.render("scheduleChallenge");
+});
+router.post("/scheduleChallenge", educatorController.scheduleChallenge);
+
+
+module.exports = router;
