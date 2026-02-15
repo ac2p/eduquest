@@ -810,7 +810,7 @@
 
                 <div class="flex items-center justify-center gap-3">
   <a
-    href="/educator/login"
+    href="/educator/educator-login.html"
     class="flex items-center justify-center gap-2 hover:text-slate-600 transition-colors group text-xs font-bold text-slate-400"
   >
     Log in as Educator
@@ -819,7 +819,7 @@
   <span class="hidden sm:inline w-1 h-1 bg-slate-300 rounded-full"></span>
 
   <a
-    href="/edadmin/login"
+    href="/edadmin/educatoradmin-login.html"
     class="flex items-center justify-center gap-2 hover:text-slate-600 transition-colors group text-xs font-bold text-slate-400"
   >
     Log in as Educator Admin
@@ -831,38 +831,68 @@
         </div>
       </main>
     </div>
+
 <script src="/js/global.js"></script>
-    <script>
-      lucide.createIcons();
+<script>
+  lucide.createIcons();
 
-      document.getElementById("loginForm").addEventListener("submit", function(e) {
-  e.preventDefault(); // stop default form submit
+  document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // stop default form submit
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  fetch("/student/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      showPopup(data.message); // popup success
-      // redirect after 1 second
-      setTimeout(() => {
-        window.location.href = "/student/dashboard";
-      }, 1000);
-    } else {
-      showPopup(data.message); // popup error
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    showPopup("Something went wrong");
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<span class="z-10 relative">Logging in...</span> <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+    submitBtn.disabled = true;
+
+    fetch("https://eduquest-api-o6t7.onrender.com/api/students/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Store user data in session/local storage if needed
+        if (data.token) {
+          localStorage.setItem('studentToken', data.token);
+        }
+        if (data.user) {
+          localStorage.setItem('studentUser', JSON.stringify(data.user));
+        }
+        
+        showPopup("Login successful! Redirecting...");
+        // redirect after 1 second
+        setTimeout(() => {
+          window.location.href = "/student/student-dashboard.html";
+        }, 1000);
+      } else {
+        showPopup(data.message || "Invalid email or password");
+        // Reset button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      showPopup("Connection error. Please try again.");
+      // Reset button
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    });
   });
-});
-    </script>
+
+  // Simple popup function (you can replace with a nicer toast)
+  function showPopup(message) {
+    const popup = document.createElement('div');
+    popup.className = 'fixed top-5 right-5 bg-white border-l-4 border-violet-600 text-slate-700 px-6 py-3 rounded-xl shadow-xl z-50 animate-enter';
+    popup.innerHTML = message;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 3000);
+  }
+</script>
   </body>
 </html>
