@@ -394,18 +394,29 @@
         </div>
 
         <div class="flex items-center gap-4">
-          <a
-            href="/student-login.html"
-            class="hidden md:block font-bold text-navy hover:text-sky transition-colors"
-            >Log In</a
-          >
-          <a
-            href="/student-signup.html"
-            class="bg-navy hover:bg-sky text-white px-6 py-2.5 rounded-full font-bold transition-all duration-300 shadow-lg shadow-navy/20 hover:shadow-sky/40 hover:-translate-y-0.5"
-            >Get Started</a
-          >
-        </div>
-      </div>
+  <div class="hidden md:flex items-center gap-2">
+    <a
+      href="/student/student-login.html"
+      class="font-bold text-navy hover:text-sky transition-colors px-3 py-2"
+      >Student Login</a
+    >
+    <a
+      href="/educator/educator-login.html"
+      class="font-bold text-navy hover:text-sky transition-colors px-3 py-2"
+      >Educator Login</a
+    >
+    <a
+      href="/educatoradmin/educatoradmin-login.html"
+      class="font-bold text-navy hover:text-sky transition-colors px-3 py-2"
+      >Admin Login</a
+    >
+  </div>
+  <a
+    href="/student/student-signup.html"
+    class="bg-navy hover:bg-sky text-white px-6 py-2.5 rounded-full font-bold transition-all duration-300 shadow-lg shadow-navy/20 hover:shadow-sky/40 hover:-translate-y-0.5"
+    >Get Started</a
+  >
+</div>
     </nav>
 
     <!-- Parallax Hero Section (Kept as is) -->
@@ -2561,7 +2572,7 @@ class StatisticsManager {
 document.addEventListener('DOMContentLoaded', () => {
     // First, modify your HTML to add IDs to the statistic elements
     // This assumes you'll add these IDs to your existing HTML
-    const statsManager = new StatisticsManager('http://localhost:3000/api/statistics');
+    const statsManager = new StatisticsManager('https://eduquest-api-o6t7.onrender.com/api/statistics');
     
     // Update statistics immediately
     statsManager.updateDisplay();
