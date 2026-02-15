@@ -1031,7 +1031,7 @@ scaleY(var(--tw-scale-y, 1))
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  fetch("/educator/login", {
+  fetch("https://eduquest-api-o6t7.onrender.com/api/educators/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -1042,7 +1042,7 @@ scaleY(var(--tw-scale-y, 1))
       showPopup(data.message); // popup success
       // redirect after 1 second
       setTimeout(() => {
-        window.location.href = "/educator/dashboard";
+        window.location.href = "/educator/educator-dashboard.html";
       }, 1000);
     } else {
       showPopup(data.message); // popup error
