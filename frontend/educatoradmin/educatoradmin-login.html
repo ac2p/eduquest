@@ -847,7 +847,7 @@
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  fetch("/edadmin/login", {
+  fetch("https://eduquest-api-o6t7.onrender.com/api/educator-admins/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -858,7 +858,7 @@
       showPopup(data.message); // popup success
       // redirect after 1 second
       setTimeout(() => {
-        window.location.href = "/edadmin/dashboard";
+        window.location.href = "/educatoradmin/educatoradmin-dashboard.html";
       }, 1000);
     } else {
       showPopup(data.message); // popup error
