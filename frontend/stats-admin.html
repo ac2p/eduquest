@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Statistics - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8 bg-gray-50">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
+        <h1 class="text-2xl font-bold mb-6 text-center">Update Platform Statistics</h1>
+        
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+            <h2 class="font-bold mb-2">Current Stats:</h2>
+            <div id="current-stats" class="text-sm">
+                Loading...
+            </div>
+        </div>
+        
+        <form id="stats-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Active Classrooms</label>
+                <input type="number" id="activeClassrooms" 
+                       class="w-full p-2 border rounded" 
+                       placeholder="10000" min="0">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Quests Completed</label>
+                <input type="number" id="questsCompleted" 
+                       class="w-full p-2 border rounded" 
+                       placeholder="1000000" min="0">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Student Engagement (%)</label>
+                <input type="number" id="studentEngagement" 
+                       class="w-full p-2 border rounded" 
+                       placeholder="94" min="0" max="100">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Teacher Rating (0-5)</label>
+                <input type="number" id="teacherRating" 
+                       class="w-full p-2 border rounded" 
+                       placeholder="5" min="0" max="5" step="0.1">
+            </div>
+            
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white py-3 rounded font-medium hover:bg-blue-700">
+                Update Statistics
+            </button>
+        </form>
+        
+        <div id="message" class="mt-4 p-3 rounded hidden"></div>
+    </div>
+
+    <script>
+        // Load current stats
+        async function loadCurrentStats() {
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('current-stats').innerHTML = `
+                        <p>Active Classrooms: <strong>${stats.activeClassrooms.toLocaleString()}</strong></p>
+                        <p>Quests Completed: <strong>${stats.questsCompleted.toLocaleString()}</strong></p>
+                        <p>Student Engagement: <strong>${stats.studentEngagement}%</strong></p>
+                        <p>Teacher Rating: <strong>${stats.teacherRating}/5</strong></p>
+                        <p class="text-xs text-gray-500">Last updated: ${new Date(stats.lastUpdated).toLocaleString()}</p>
+                    `;
+                    
+                    // Pre-fill form with current values
+                    document.getElementById('activeClassrooms').value = stats.activeClassrooms;
+                    document.getElementById('questsCompleted').value = stats.questsCompleted;
+                    document.getElementById('studentEngagement').value = stats.studentEngagement;
+                    document.getElementById('teacherRating').value = stats.teacherRating;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Update stats
+        document.getElementById('stats-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                activeClassrooms: parseInt(document.getElementById('activeClassrooms').value) || 0,
+                questsCompleted: parseInt(document.getElementById('questsCompleted').value) || 0,
+                studentEngagement: parseInt(document.getElementById('studentEngagement').value) || 0,
+                teacherRating: parseFloat(document.getElementById('teacherRating').value) || 0
+            };
+            
+            try {
+                const response = await fetch('/api/statistics', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                const messageEl = document.getElementById('message');
+                if (result.success) {
+                    messageEl.className = 'mt-4 p-3 rounded bg-green-100 text-green-800';
+                    messageEl.textContent = '✅ Statistics updated successfully!';
+                    loadCurrentStats(); // Refresh current stats
+                } else {
+                    messageEl.className = 'mt-4 p-3 rounded bg-red-100 text-red-800';
+                    messageEl.textContent = `❌ ${result.message}`;
+                }
+                messageEl.classList.remove('hidden');
+                
+                // Clear message after 5 seconds
+                setTimeout(() => {
+                    messageEl.classList.add('hidden');
+                }, 5000);
+                
+            } catch (error) {
+                const messageEl = document.getElementById('message');
+                messageEl.className = 'mt-4 p-3 rounded bg-red-100 text-red-800';
+                messageEl.textContent = '❌ Error updating statistics';
+                messageEl.classList.remove('hidden');
+            }
+        });
+        
+        // Load stats on page load
+        document.addEventListener('DOMContentLoaded', loadCurrentStats);
+    </script>
+</body>
+</html>

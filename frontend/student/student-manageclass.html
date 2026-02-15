@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Class 3A Space Explorers</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* Subtle Pastel Background */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background: radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      /* Micro pattern for texture */
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      .hero-gradient {
+        background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 pt-4 pb-2 px-4">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+            >EduQuest</span
+          >
+        </div>
+
+        <!-- Links -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="student-dashboard.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Home</a
+          >
+          <a
+            href="student-class.html"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+            >My Classes</a
+          >
+          <a
+            href="student-shop.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Shop</a
+          >
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path
+                d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                class=""
+              ></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">Alex Explorer</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2"
+              >Student</span
+            >
+          </div>
+          <div
+            class="bg-white w-10 h-10 border-indigo-100 border-2 rounded-full pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href='student-profile.html'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto pt-28 pb-12 px-6">
+      <!-- 1. CLASS HERO SECTION -->
+      <section class="mb-8 animate-enter relative group">
+        <div
+          class="relative w-full bg-white rounded-[2rem] border border-white shadow-xl shadow-indigo-100/40 overflow-hidden"
+        >
+          <!-- Decorative Background -->
+          <div class="absolute inset-0 hero-gradient opacity-80"></div>
+          <div
+            class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute left-10 bottom-0 w-32 h-32 bg-purple-200/20 rounded-full blur-2xl"
+          ></div>
+
+          <!-- Tiny decorations -->
+          <div class="absolute top-6 right-10 text-indigo-200 opacity-60">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              ></path>
+            </svg>
+          </div>
+          <div class="absolute bottom-8 left-[20%] text-violet-200 opacity-60">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-4 h-4"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+
+          <div
+            class="relative z-10 p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-8"
+          >
+            <!-- Text Content -->
+            <div class="space-y-4 max-w-2xl">
+              <!-- Breadcrumb/Back -->
+              <a
+                href="student-class.html"
+                class="inline-flex items-center gap-1.5 hover:text-indigo-600 transition-colors uppercase text-xs font-bold text-slate-400 tracking-wider mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-left"
+                >
+                  <path d="m12 19-7-7 7-7"></path>
+                  <path d="M19 12H5"></path>
+                </svg>
+                Back to All Classes
+              </a>
+
+              <div class="">
+                <div class="flex items-center gap-3 mb-2">
+                  <span
+                    class="bg-indigo-100 text-indigo-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wide"
+                    >Science • Grade 4</span
+                  >
+                  <span
+                    class="flex items-center gap-1 text-[11px] font-bold text-slate-500"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-users"
+                    >
+                      <path
+                        d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                      ></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    24 Students
+                  </span>
+                </div>
+                <h1
+                  class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight leading-tight"
+                >
+                  Class 3A – Space Explorers
+                </h1>
+                <p class="text-base text-slate-500 font-medium mt-2 max-w-xl">
+                  Join us as we travel through the solar system! This term
+                  covers gravity, planetary motion, and the history of space
+                  travel.
+                </p>
+              </div>
+
+              <!-- Teacher Info -->
+              <div class="flex items-center gap-3 pt-2">
+                <img
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=MrTan&amp;backgroundColor=c7d2fe"
+                  alt="Teacher"
+                  class="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+                />
+                <div>
+                  <p
+                    class="text-xs text-slate-400 font-bold uppercase tracking-wider"
+                  >
+                    Taught by
+                  </p>
+                  <p class="text-sm font-bold text-slate-700">Mr. Tan</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Class Code -->
+            <div class="flex flex-col items-start md:items-end gap-3">
+              <div
+                class="bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/60 shadow-lg shadow-indigo-100/20"
+              >
+                <label
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 block"
+                  >Class Code</label
+                >
+                <div
+                  class="flex items-center gap-2 bg-indigo-50/50 rounded-lg px-3 py-2 border border-indigo-100 group/code cursor-pointer hover:bg-indigo-50 transition-colors"
+                >
+                  <span
+                    class="text-lg font-mono font-bold text-indigo-600 tracking-widest"
+                    >X4J7K2</span
+                  >
+                  <button
+                    class="text-indigo-400 group-hover/code:text-indigo-600 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-copy"
+                    >
+                      <rect
+                        width="14"
+                        height="14"
+                        x="8"
+                        y="8"
+                        rx="2"
+                        ry="2"
+                        class=""
+                      ></rect>
+                      <path
+                        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. STATS STRIP -->
+      <section
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 animate-enter"
+        style="animation-delay: 100ms"
+      >
+        <!-- Stat 1 -->
+        <div
+          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300"
+        >
+          <div
+            class="w-10 h-10 rounded-xl bg-violet-50 text-violet-500 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-zap"
+            >
+              <path
+                d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              My Class XP
+            </p>
+            <p class="text-lg font-extrabold text-slate-700">1,250</p>
+          </div>
+        </div>
+        <!-- Stat 2 -->
+        <div
+          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300"
+        >
+          <div
+            class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-target"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+          </div>
+          <div class="">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              Class Avg
+            </p>
+            <p class="text-lg font-extrabold text-slate-700">980 XP</p>
+          </div>
+        </div>
+        <!-- Stat 3 -->
+        <div
+          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300"
+        >
+          <div
+            class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-scroll-text"
+            >
+              <path
+                d="M8 21h12a2 2 0 0 0 2-2v-2a10 10 0 0 0-10-10 10 10 0 0 0-10 10v2a2 2 0 0 0 2 2h2"
+              ></path>
+              <path d="M8 21v-4a2 2 0 0 1 2-2h2.5" class=""></path>
+              <path d="M7 3L2 8l5 5"></path>
+              <path d="M12 3a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </div>
+          <div class="">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              Active Quests
+            </p>
+            <p class="text-lg font-extrabold text-slate-700">3 Pending</p>
+          </div>
+        </div>
+        <!-- Stat 4 -->
+        <div
+          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300"
+        >
+          <div
+            class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-trophy"
+            >
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path
+                d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+              ></path>
+              <path
+                d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+              ></path>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+              Class Rank
+            </p>
+            <p class="text-lg font-extrabold text-slate-700">#4</p>
+          </div>
+        </div>
+      </section>
+      
+<!--View quizzes section -->
+      <!-- 3. MAIN CONTENT GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- LEFT COLUMN: Quizzes & Challenges (Span 8) -->
+        <div
+          class="lg:col-span-8 space-y-10 animate-enter"
+          style="animation-delay: 200ms"
+        >
+          <!-- QUIZZES SECTION -->
+          <section class="">
+            <div class="flex items-center justify-between mb-5">
+              <h2
+                class="text-xl font-bold text-slate-800 flex items-center gap-2"
+              >
+                <span class="w-2 h-6 bg-indigo-500 rounded-full"></span>
+                Quizzes for This Class
+              </h2>
+            </div>
+
+            <div class="space-y-4">
+                  <p id="quizMsg" class="text-sm font-semibold text-slate-400 mt-2"></p>
+                  <div id="quizList" class="space-y-4"></div>
+            </div>
+
+          </section>
+<!---->
+          <!-- CHALLENGES SECTION -->
+          <section class="">
+            <div class="flex items-center justify-between mb-5">
+              <h2
+                class="text-xl font-bold text-slate-800 flex items-center gap-2"
+              >
+                <span class="w-2 h-6 bg-rose-400 rounded-full"></span>
+                Challenges for This Class
+              </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Challenge Card 1 -->
+              <div
+                class="bg-gradient-to-br from-white to-orange-50/50 rounded-2xl p-5 border border-orange-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 right-0 p-3 opacity-10 text-orange-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="60"
+                    height="60"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class=""
+                  >
+                    <path
+                      d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07 2.28-3 3-3 3a2.5 2.5 0 0 0 2.5 2.5z"
+                    ></path>
+                    <path
+                      d="M15.5 14.5A2.5 2.5 0 0 0 18 12c0-1.38-.5-2-1-3-1.07 2.28-3 3-3 3a2.5 2.5 0 0 0 2.5 2.5z"
+                    ></path>
+                    <path
+                      d="M12 22a6 6 0 0 0 6-6c0-4.41-3-7-6-13-3 6-6 8.59-6 13a6 6 0 0 0 6 6z"
+                      class=""
+                    ></path>
+                  </svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4">
+                  <span
+                    class="text-[10px] uppercase font-bold text-orange-500 bg-white border-orange-100 border rounded pt-0.5 pr-2 pb-0.5 pl-2 shadow-sm"
+                    >New Challenges</span
+                  >
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-1">
+                  Start a new Challenge
+                </h3>
+                <p class="text-xs font-medium text-slate-500 mb-4">
+                 Weekly
+                </p>
+
+                <!-- Progress Bar -->
+
+                <div class="flex items-center justify-between">
+                  <button
+                    class="hover:text-orange-500 transition-colors text-xs font-bold text-slate-400"
+                    onclick="window.location.href='student-pickchallenge.html' "
+                    role="button"
+                  >
+                    Start Now
+                  </button>
+                </div>
+              </div>
+
+              <!-- Challenge Card 2 -->
+              <div
+                class="bg-gradient-to-br from-white to-blue-50/50 rounded-2xl p-5 border border-blue-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 right-0 p-3 opacity-10 text-blue-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="60"
+                    height="60"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-telescope"
+                  >
+                    <path
+                      d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.536c-.17-.806.328-1.582 1.108-1.748l6.18-1.318"
+                    ></path>
+                    <path
+                      d="m13.523 18.9 3.873-1.835c.812-.384 1.157-1.374.773-2.186l-4.274-9.042c-.384-.81-1.374-1.154-2.186-.77l-3.873 1.835"
+                      class=""
+                    ></path>
+                    <path d="m12.994 17.783 2.537 2.536" class=""></path>
+                    <path d="M11 21v-3"></path>
+                  </svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4">
+                  <span
+                    class="text-[10px] uppercase font-bold text-blue-500 bg-white border-blue-100 border rounded pt-0.5 pr-2 pb-0.5 pl-2 shadow-sm"
+                    >My Quest Logs</span
+                  >
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-1">
+                  Accepted Challenges
+                </h3>
+                <p class="text-xs font-medium text-slate-500 mb-4">
+                  All the Challenges Daily, Weekly, Monthly that you have
+                  accepted
+                </p>
+
+                <!-- Progress Bar -->
+
+                <div class="flex items-center justify-between">
+                  <button
+                    class="hover:text-blue-600 transition-colors text-xs font-bold text-blue-500"
+                    onclick="window.location.href='student-acceptedchallenge.html'"
+                    role="button"
+                  >
+                    View my challenges
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN: Leaderboard (Span 4) -->
+        <aside
+          class="lg:col-span-4 animate-enter"
+          style="animation-delay: 300ms"
+        >
+          <div
+            class="bg-white rounded-[1.5rem] border border-slate-100 shadow-lg shadow-indigo-100/30 overflow-hidden sticky top-32"
+          >
+            <!-- Leaderboard Header -->
+            <div
+              class="p-5 bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-indigo-50/50 flex justify-between items-center"
+            >
+              <div class="flex items-center gap-2">
+                <div
+                  class="p-1.5 bg-white rounded-lg text-indigo-500 shadow-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-crown"
+                  >
+                    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
+                  </svg>
+                </div>
+                <h3 class="font-bold text-slate-700">Class Leaderboard</h3>
+              </div>
+              <span
+                class="text-[10px] font-bold text-indigo-400 bg-white px-2 py-0.5 rounded-full border border-indigo-100"
+                >Top 5</span
+              >
+            </div>
+
+            <!-- List -->
+            <div class="p-2 space-y-1">
+              <!-- Rank 1 -->
+              <div
+                class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="font-bold text-amber-400 w-4 text-center"
+                    >1</span
+                  >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Sara&amp;backgroundColor=ffedd5"
+                    class="w-8 h-8 rounded-full border border-slate-100"
+                    alt="Avatar"
+                  />
+                  <span class="text-sm font-bold text-slate-700">Sara M.</span>
+                </div>
+                <span
+                  class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-md"
+                  >1,850 XP</span
+                >
+              </div>
+
+              <!-- Rank 2 -->
+              <div
+                class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="font-bold text-slate-400 w-4 text-center"
+                    >2</span
+                  >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=John&amp;backgroundColor=e0f2fe"
+                    class="w-8 h-8 rounded-full border border-slate-100"
+                    alt="Avatar"
+                  />
+                  <span class="text-sm font-bold text-slate-700">John D.</span>
+                </div>
+                <span class="text-xs font-bold text-slate-500">1,620 XP</span>
+              </div>
+
+              <!-- Rank 3 -->
+              <div
+                class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="font-bold text-amber-700/50 w-4 text-center"
+                    >3</span
+                  >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Emma&amp;backgroundColor=fce7f3"
+                    class="w-8 h-8 rounded-full border border-slate-100"
+                    alt="Avatar"
+                  />
+                  <span class="text-sm font-bold text-slate-700">Emma W.</span>
+                </div>
+                <span class="text-xs font-bold text-slate-500">1,450 XP</span>
+              </div>
+
+              <!-- Current User (Rank 4) -->
+              <div
+                class="flex items-center justify-between p-3 rounded-xl bg-indigo-50 border border-indigo-100 relative overflow-hidden"
+              >
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500 rounded-l-xl"
+                ></div>
+                <div class="flex items-center gap-3 pl-2">
+                  <span class="font-bold text-indigo-600 w-4 text-center"
+                    >4</span
+                  >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=c7d2fe"
+                    class="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                    alt="Avatar"
+                  />
+                  <span class="text-sm font-extrabold text-indigo-900"
+                    >You</span
+                  >
+                </div>
+                <span class="text-xs font-bold text-indigo-600">1,250 XP</span>
+              </div>
+
+              <!-- Rank 5 -->
+              <div
+                class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="font-bold text-slate-400 w-4 text-center"
+                    >5</span
+                  >
+                  <img
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Leo&amp;backgroundColor=dcfce7"
+                    class="w-8 h-8 rounded-full border border-slate-100"
+                    alt="Avatar"
+                  />
+                  <span class="text-sm font-bold text-slate-700">Leo K.</span>
+                </div>
+                <span class="text-xs font-bold text-slate-500">1,100 XP</span>
+              </div>
+            </div>
+
+            <div class="p-3 border-t border-slate-50 text-center">
+              <a
+                href="student-leaderboard.html"
+                class="text-[11px] hover:text-indigo-500 transition-colors uppercase font-bold text-slate-400 tracking-wide"
+                >View full leaderboard</a
+              >
+            </div>
+          </div>
+
+          <!-- Teacher Note -->
+        </aside>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight"
+                >EduQuest</span
+              >
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div class="">
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li class="">
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Pricing</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="">
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li class="">
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Help Center</a
+                >
+              </li>
+              <li class="">
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Community</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Privacy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Terms</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="frontend/JS/viewQuizzes.js"> </script>
+      
+    
+      
+    </script>
+  </body>
+</html>

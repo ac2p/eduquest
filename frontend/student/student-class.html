@@ -1,0 +1,1897 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - My Classes</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #f8fafc;
+        background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+        background-size: 24px 24px;
+        overflow-x: hidden;
+      }
+      .font-eduquest {
+        font-family: var(--font-family) !important;
+      }
+      /* --- ANIMATIONS --- */
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pop-in {
+        0% {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes float-slow {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(0, 10px);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        opacity: 0;
+      }
+      .animate-float {
+        animation: float-slow 4s ease-in-out infinite alternate;
+      }
+      .stagger-1 {
+        animation-delay: 100ms;
+      }
+      .stagger-2 {
+        animation-delay: 200ms;
+      }
+      .stagger-3 {
+        animation-delay: 300ms;
+      }
+      /* --- UTILITIES --- */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.1);
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+      .glass-dark {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(99, 102, 241, 0.3);
+        border-radius: 10px;
+      }
+      .modal-overlay {
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+      }
+      .modal-overlay.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .modal-content {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .modal-overlay.hidden .modal-content {
+        transform: scale(0.95) translateY(10px);
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-newsreader"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-newsreader">
+      .font-newsreader {
+        font-family: "Newsreader", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-google-sans-flex"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-google-sans-flex">
+      .font-google-sans-flex {
+        font-family: "Google Sans Flex", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-oswald"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-oswald">
+      .font-oswald {
+        font-family: "Oswald", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-dm-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-dm-sans">
+      .font-dm-sans {
+        font-family: "DM Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-cormorant"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-cormorant">
+      .font-cormorant {
+        font-family: "Cormorant Garamond", serif !important;
+      }
+    </style>
+
+    <script>
+      // Configure Tailwind to include our custom 3D transform utilities
+      tailwind.config = {
+        theme: {
+          extend: {
+            // Add any custom theme extensions here if needed
+          },
+        },
+        plugins: [
+          function ({ addUtilities }) {
+            const rotateXUtilities = {};
+            const rotateYUtilities = {};
+            const rotateZUtilities = {};
+            const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+            // Generate rotate-x utilities
+            rotateValues.forEach((value) => {
+              rotateXUtilities[`.rotate-x-${value}`] = {
+                "--tw-rotate-x": `${value}deg`,
+                transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                  .replace(/\\s+/g, " ")
+                  .trim(),
+              };
+              if (value !== 0) {
+                rotateXUtilities[`.-rotate-x-${value}`] = {
+                  "--tw-rotate-x": `-${value}deg`,
+                  transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                    .replace(/\\s+/g, " ")
+                    .trim(),
+                };
+              }
+            });
+            // Generate rotate-y utilities
+            rotateValues.forEach((value) => {
+              rotateYUtilities[`.rotate-y-${value}`] = {
+                "--tw-rotate-y": `${value}deg`,
+                transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                  .replace(/\\s+/g, " ")
+                  .trim(),
+              };
+              if (value !== 0) {
+                rotateYUtilities[`.-rotate-y-${value}`] = {
+                  "--tw-rotate-y": `-${value}deg`,
+                  transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                    .replace(/\\s+/g, " ")
+                    .trim(),
+                };
+              }
+            });
+            // Generate rotate-z utilities
+            rotateValues.forEach((value) => {
+              rotateZUtilities[`.rotate-z-${value}`] = {
+                "--tw-rotate-z": `${value}deg`,
+                transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                  .replace(/\\s+/g, " ")
+                  .trim(),
+              };
+              if (value !== 0) {
+                rotateZUtilities[`.-rotate-z-${value}`] = {
+                  "--tw-rotate-z": `-${value}deg`,
+                  transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`
+                    .replace(/\\s+/g, " ")
+                    .trim(),
+                };
+              }
+            });
+            // Perspective utilities
+            const perspectiveUtilities = {
+              ".perspective-none": { perspective: "none" },
+              ".perspective-dramatic": { perspective: "100px" },
+              ".perspective-near": { perspective: "300px" },
+              ".perspective-normal": { perspective: "500px" },
+              ".perspective-midrange": { perspective: "800px" },
+              ".perspective-distant": { perspective: "1200px" },
+            };
+            // Transform style utilities
+            const transformStyleUtilities = {
+              ".transform-style-preserve-3d": {
+                "transform-style": "preserve-3d",
+              },
+              ".transform-style-flat": { "transform-style": "flat" },
+            };
+            addUtilities({
+              ...rotateXUtilities,
+              ...rotateYUtilities,
+              ...rotateZUtilities,
+              ...perspectiveUtilities,
+              ...transformStyleUtilities,
+            });
+          },
+        ],
+      };
+    </script>
+  </head>
+  <body class="text-slate-600">
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 pt-4 pr-4 pb-2 pl-4 top-0">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/20"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              data-lucide="compass"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+          >
+            EduQuest
+          </span>
+        </div>
+
+        <!-- Links -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="student-dashboard.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Home
+          </a>
+          <a
+            href="student-manageclass.html"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+          >
+            My Classes
+          </a>
+          <a
+            href="student-shop.html"
+            class="hover:text-indigo-500 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+          >
+            Shop
+          </a>
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">Alex Explorer</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2"
+            >
+              Student
+            </span>
+          </div>
+          <div
+            class="bg-white w-10 h-10 border-indigo-100 border-2 rounded-full pt-0.5 pr-0.5 pb-0.5 pl-0.5 cursor-pointer hover:scale-105 transition-transform"
+            onclick="window.location.href = '/student-profile'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FULL WIDTH HERO HEADER -->
+    <div
+      class="relative w-full h-[600px] lg:h-[650px] overflow-hidden rounded-b-[20px]"
+    >
+      <!-- Greenhouse Background Image -->
+      <div class="absolute inset-0 z-0">
+        <img
+          src="./hero-bg.jpg"
+          alt="EduQuest Hero"
+          class="w-full h-full object-cover object-center"
+          style="filter: brightness(1.08) saturate(1.1)"
+        />
+        <!-- Enhanced Gradient for better text visibility -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-slate-50/70 via-slate-50/45 to-slate-50/5 sm:to-transparent"
+        ></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-slate-50/55 via-transparent to-transparent"
+        ></div>
+      </div>
+
+      <!-- Hero Content -->
+      <div
+        class="absolute inset-0 z-10 h-full w-full flex items-center justify-center"
+      >
+        <div
+          class="w-full max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 pt-20"
+        >
+          <!-- Left: Typography -->
+          <div
+            class="flex-1 max-w-2xl flex flex-col items-center md:items-start text-center md:text-left space-y-8 animate-enter z-20 font-eduquest"
+          >
+            <!-- Heading -->
+            <h1
+              class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[0.95] drop-shadow-sm"
+            >
+              Grow your
+              <br class="hidden md:block" />
+              <span
+                class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 italic pr-1 pb-2"
+              >
+                Knowledge Garden
+                <svg
+                  class="absolute -bottom-2 left-0 w-full h-3 text-emerald-300/40 -z-10"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M0 5 Q 50 10 100 5"
+                    stroke="currentColor"
+                    stroke-width="8"
+                    fill="none"
+                  ></path>
+                </svg>
+              </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p
+              class="text-lg md:text-xl font-semibold text-slate-700 max-w-lg leading-relaxed"
+            >
+              Step into your learning sanctuary. Tend to your assignments,
+              nurture your skills, and watch your achievements
+              <span class="text-emerald-600 font-bold">bloom</span>
+              .
+            </p>
+
+            <!-- Buttons -->
+            <div
+              class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center md:justify-start pt-2"
+            >
+              <button
+                onclick="toggleModal('joinClassModal')"
+                class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-full bg-slate-900 px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-emerald-900/10 transition-all hover:-translate-y-1 hover:bg-slate-800 hover:shadow-2xl overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+                ></div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-sprout text-emerald-400"
+                >
+                  <path d="M7 20h10"></path>
+                  <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
+                  <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.6"></path>
+                  <path
+                    d="M4.1 9.6C3 9.6 2.5 10.1 2.5 11c0 2.6 3 5.5 9 5.5 2.8 0 6-2.4 6-5.5 0-2.7-1.7-5.5-5.5-5.5-1.4 0-2.8.3-4.1.9"
+                  ></path>
+                  <path
+                    d="M15.7 6.3c-.9-.4-2-.6-3-.6-3.8 0-5.5 2.8-5.5 5.5 0 2.6 3 5.5 9 5.5 3.1 0 5.5-2.6 5.5-5.5 0-1.4-.6-2.8-1.7-3.7"
+                  ></path>
+                </svg>
+                <span>Join New Class</span>
+              </button>
+              <button
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-slate-600 shadow-md ring-1 ring-slate-100 transition-all hover:bg-slate-50 hover:text-indigo-600 hover:ring-indigo-100 hover:shadow-lg"
+              >
+                View Schedule
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Upcoming Due Card (moved from sidebar) -->
+          <div
+            class="relative w-full max-w-[380px] perspective-1000 animate-enter stagger-1 z-30 mr-4"
+          >
+            <!-- Floating Decoration -->
+            <div
+              class="absolute -top-16 -right-16 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-300/30 to-teal-300/30 blur-3xl animate-float pointer-events-none"
+            ></div>
+
+            <!-- Main Card -->
+            <div
+              class="relative overflow-hidden rounded-[2.5rem] bg-white/90 backdrop-blur-xl border border-white/70 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.55)] px-8 py-7 ring-1 ring-white/60"
+            >
+              <!-- Decorative Pattern -->
+              <svg
+                class="absolute top-0 right-0 w-32 h-32 text-emerald-50 -z-10 transform translate-x-8 -translate-y-8"
+                viewBox="0 0 100 100"
+                fill="currentColor"
+              >
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+
+              <!-- Header -->
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-11 h-11 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center shadow-sm border border-rose-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="calendar-clock"
+                    class="lucide lucide-calendar-clock w-5 h-5"
+                  >
+                    <path d="M16 14v2.2l1.6 1"></path>
+                    <path d="M16 2v4"></path>
+                    <path
+                      d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"
+                    ></path>
+                    <path d="M3 10h5"></path>
+                    <path d="M8 2v4"></path>
+                    <circle cx="16" cy="16" r="6"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="font-extrabold text-slate-900 text-lg tracking-tight"
+                  >
+                    Upcoming Due
+                  </h3>
+                  <p class="text-xs font-semibold text-slate-400">
+                    Stay ahead of your next assignments.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Upcoming items -->
+              <div class="space-y-5">
+                <div
+                  class="flex items-start gap-4 relative pb-5 border-b border-dashed border-slate-100 last:border-0 last:pb-0 group"
+                >
+                  <div
+                    class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0 border border-orange-100 group-hover:scale-105 transition-transform"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      data-lucide="calculator"
+                      class="lucide lucide-calculator w-6 h-6 stroke-[1.5]"
+                    >
+                      <rect width="16" height="20" x="4" y="2" rx="2"></rect>
+                      <line x1="8" x2="16" y1="6" y2="6"></line>
+                      <line x1="16" x2="16" y1="14" y2="18"></line>
+                      <path d="M16 10h.01"></path>
+                      <path d="M12 10h.01"></path>
+                      <path d="M8 10h.01"></path>
+                      <path d="M12 14h.01"></path>
+                      <path d="M8 14h.01"></path>
+                      <path d="M12 18h.01"></path>
+                      <path d="M8 18h.01"></path>
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0 pt-0.5">
+                    <div class="flex justify-between items-start mb-1">
+                      <h4
+                        class="text-sm font-bold text-slate-700 truncate group-hover:text-indigo-600 transition-colors"
+                      >
+                        Algebra Quiz
+                      </h4>
+                      <span
+                        class="text-[11px] font-bold text-rose-500 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-100 shadow-sm"
+                      >
+                        Today
+                      </span>
+                    </div>
+                    <p
+                      class="text-xs font-semibold text-slate-400 truncate mb-1"
+                    >
+                      Math Wizards
+                    </p>
+                    <p class="text-[10px] font-bold text-slate-300">
+                      ~ 15 mins estimated
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="flex items-start gap-4 relative pb-1 last:border-0 last:pb-0 group"
+                >
+                  <div
+                    class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center flex-shrink-0 border border-indigo-100 group-hover:scale-105 transition-transform"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      data-lucide="rocket"
+                      class="lucide lucide-rocket w-6 h-6 stroke-[1.5]"
+                    >
+                      <path
+                        d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                      ></path>
+                      <path
+                        d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+                      ></path>
+                      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0 pt-0.5">
+                    <div class="flex justify-between items-start mb-1">
+                      <h4
+                        class="text-sm font-bold text-slate-700 truncate group-hover:text-indigo-600 transition-colors"
+                      >
+                        Solar System Project
+                      </h4>
+                      <span
+                        class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
+                      >
+                        2d
+                      </span>
+                    </div>
+                    <p
+                      class="text-xs font-semibold text-slate-400 truncate mb-1"
+                    >
+                      Space Explorers
+                    </p>
+                    <p class="text-[10px] font-bold text-slate-300">
+                      Research Required
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-6 pb-20 mt-0 relative z-20">
+      <!-- 2. SEARCH & FILTERS -->
+      <section class="mt-8 md:mt-12 mb-10 animate-enter stagger-1">
+        <div
+          class="glass-card rounded-2xl p-2 flex flex-col lg:flex-row items-center justify-between gap-4"
+        >
+          <!-- Search -->
+          <div class="relative w-full lg:w-96 group">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              data-lucide="search"
+              class="lucide lucide-search absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+            >
+              <path d="m21 21-4.34-4.34"></path>
+              <circle cx="11" cy="11" r="8"></circle>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search by class, subject, or teacher..."
+              class="w-full bg-slate-50/50 border border-transparent rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-700 placeholder-slate-400 focus:bg-white focus:border-indigo-200 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+            />
+          </div>
+
+          <!-- Filters -->
+          <div
+            class="flex items-center gap-2 overflow-x-auto w-full lg:w-auto no-scrollbar pb-1 lg:pb-0 px-1"
+          >
+            <button
+              class="whitespace-nowrap px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold shadow-lg shadow-slate-300/50"
+            >
+              All Subjects
+            </button>
+            <button
+              class="whitespace-nowrap px-4 py-2 rounded-xl bg-white/50 border border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-white transition-colors text-xs font-bold"
+            >
+              Science
+            </button>
+            <button
+              class="whitespace-nowrap px-4 py-2 rounded-xl bg-white/50 border border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-white transition-colors text-xs font-bold"
+            >
+              Mathematics
+            </button>
+            <button
+              class="whitespace-nowrap px-4 py-2 rounded-xl bg-white/50 border border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-white transition-colors text-xs font-bold"
+            >
+              English
+            </button>
+          </div>
+
+          <!-- Sort -->
+          <div class="relative w-full lg:w-auto min-w-[160px]">
+            <button
+              class="w-full flex items-center justify-between px-4 py-2.5 bg-white/50 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:border-indigo-300 hover:bg-white transition-colors"
+            >
+              <span>Sort: Newest First</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-lucide="chevron-down"
+                class="lucide lucide-chevron-down w-3 h-3 text-slate-400"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MAIN GRID + SIDE PANEL -->
+      <div class="flex flex-col xl:flex-row gap-8 items-start">
+        <!-- LEFT: CLASS GRID -->
+        <div class="flex-1 w-full">
+          <!-- Grid Layout -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-enter stagger-2"
+          >
+            <!-- CARD 1: SCIENCE -->
+            <article
+              class="group glass-card rounded-[2rem] p-6 hover:shadow-xl hover:shadow-indigo-200/25 hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden"
+            >
+              <div
+                class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-50/50 rounded-full blur-2xl group-hover:bg-indigo-100/60 transition-colors"
+              ></div>
+
+              <!-- Header -->
+              <div class="relative z-10 flex items-start gap-5 mb-6">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-white border border-white shadow-lg shadow-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="rocket"
+                    class="lucide lucide-rocket w-7 h-7 stroke-[1.5]"
+                  >
+                    <path
+                      d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                    ></path>
+                    <path
+                      d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+                    ></path>
+                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                  </svg>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3
+                    class="text-xl font-bold tracking-tight text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors"
+                  >
+                    Space Explorers
+                  </h3>
+                  <div class="flex items-center gap-2 mt-2">
+                    <span
+                      class="text-[10px] font-bold uppercase tracking-wider text-indigo-500 bg-indigo-50/80 px-2 py-0.5 rounded border border-indigo-100"
+                    >
+                      Science
+                    </span>
+                    <span class="text-[10px] font-semibold text-slate-400">
+                      Term 2
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="text-right">
+                    <p class="text-xs font-bold text-slate-700">Mr. Tan</p>
+                    <p class="text-[10px] font-medium text-slate-400">Lead</p>
+                  </div>
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=MrTan"
+                    class="w-9 h-9 rounded-full border-2 border-white shadow-sm bg-slate-100"
+                  />
+                </div>
+              </div>
+
+              <!-- Mini Stats Grid -->
+              <div class="grid grid-cols-4 gap-3 mb-6">
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    XP
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">2.4k</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Rank
+                  </span>
+                  <span class="text-xs font-bold text-amber-500">#5</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Quiz
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">12</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Done
+                  </span>
+                  <span class="text-xs font-bold text-teal-500">8</span>
+                </div>
+              </div>
+
+              <!-- Next Up -->
+              <div
+                class="flex items-center gap-3 p-3 rounded-xl bg-indigo-50/40 border border-indigo-100/60 mb-6"
+              >
+                <div
+                  class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-indigo-500 shadow-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="zap"
+                    class="lucide lucide-zap w-4 h-4 fill-indigo-500"
+                  >
+                    <path
+                      d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <span
+                    class="block text-[10px] font-bold text-indigo-400 uppercase tracking-wide"
+                  >
+                    Up Next
+                  </span>
+                  <span class="text-xs font-bold text-indigo-900 line-clamp-1">
+                    Mars Rover Challenge
+                  </span>
+                </div>
+                <span
+                  class="text-[10px] font-bold text-white bg-indigo-400 px-2.5 py-1 rounded-lg shadow-sm"
+                >
+                  2 days
+                </span>
+              </div>
+
+              <!-- Footer Actions -->
+              <div class="flex items-center gap-3 pt-2">
+                <button
+                  onclick="window.location.href='student-manageclass.html'"
+                  class="flex-1 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-200 hover:shadow-xl hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-2 group/btn"
+                >
+                  Open Class
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="arrow-right"
+                    class="lucide lucide-arrow-right w-4 h-4 group-hover/btn:translate-x-1 transition-transform"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+                <button
+                  class="p-3 rounded-xl border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-white transition-all"
+                  title="Leaderboard"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="trophy"
+                    class="lucide lucide-trophy w-5 h-5 stroke-[1.5]"
+                  >
+                    <path
+                      d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"
+                    ></path>
+                    <path
+                      d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"
+                    ></path>
+                    <path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path
+                      d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"
+                    ></path>
+                    <path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path>
+                  </svg>
+                </button>
+              </div>
+            </article>
+
+            <!-- CARD 2: MATH -->
+            <article
+              class="group glass-card rounded-[2rem] p-6 hover:shadow-2xl hover:shadow-orange-200/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+            >
+              <div
+                class="absolute -top-10 -right-10 w-40 h-40 bg-orange-50/50 rounded-full blur-2xl group-hover:bg-orange-100/60 transition-colors"
+              ></div>
+
+              <div class="relative z-10 flex items-start gap-5 mb-6">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-50 to-white border border-white shadow-lg shadow-orange-100 flex items-center justify-center text-orange-500 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="calculator"
+                    class="lucide lucide-calculator w-7 h-7 stroke-[1.5]"
+                  >
+                    <rect width="16" height="20" x="4" y="2" rx="2"></rect>
+                    <line x1="8" x2="16" y1="6" y2="6"></line>
+                    <line x1="16" x2="16" y1="14" y2="18"></line>
+                    <path d="M16 10h.01"></path>
+                    <path d="M12 10h.01"></path>
+                    <path d="M8 10h.01"></path>
+                    <path d="M12 14h.01"></path>
+                    <path d="M8 14h.01"></path>
+                    <path d="M12 18h.01"></path>
+                    <path d="M8 18h.01"></path>
+                  </svg>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3
+                    class="text-xl font-bold tracking-tight text-slate-800 leading-tight group-hover:text-orange-600 transition-colors"
+                  >
+                    Math Wizards
+                  </h3>
+                  <div class="flex items-center gap-2 mt-2">
+                    <span
+                      class="text-[10px] font-bold uppercase tracking-wider text-orange-500 bg-orange-50/80 px-2 py-0.5 rounded border border-orange-100"
+                    >
+                      Math
+                    </span>
+                    <span class="text-[10px] font-semibold text-slate-400">
+                      Grade 3
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="text-right">
+                    <p class="text-xs font-bold text-slate-700">Ms. Lee</p>
+                    <p class="text-[10px] font-medium text-slate-400">
+                      Teacher
+                    </p>
+                  </div>
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=MsLee"
+                    class="w-9 h-9 rounded-full border-2 border-white shadow-sm bg-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-4 gap-3 mb-6">
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    XP
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">1.2k</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Rank
+                  </span>
+                  <span class="text-xs font-bold text-amber-500">#12</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Quiz
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">8</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Done
+                  </span>
+                  <span class="text-xs font-bold text-teal-500">4</span>
+                </div>
+              </div>
+
+              <div
+                class="flex items-center gap-3 p-3 rounded-xl bg-orange-50/40 border border-orange-100/60 mb-6"
+              >
+                <div
+                  class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-orange-500 shadow-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="alert-circle"
+                    class="lucide lucide-alert-circle w-4 h-4 fill-orange-500 text-white"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" x2="12" y1="8" y2="12"></line>
+                    <line x1="12" x2="12.01" y1="16" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <span
+                    class="block text-[10px] font-bold text-orange-400 uppercase tracking-wide"
+                  >
+                    Due Soon
+                  </span>
+                  <span class="text-xs font-bold text-orange-900 line-clamp-1">
+                    Algebra Basics Quiz
+                  </span>
+                </div>
+                <span
+                  class="text-[10px] font-bold text-white bg-rose-500 px-2.5 py-1 rounded-lg shadow-sm shadow-rose-200"
+                >
+                  Today
+                </span>
+              </div>
+
+              <div class="flex items-center gap-3 pt-2">
+                <button
+                  class="flex-1 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-200 hover:shadow-xl hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-2 group/btn"
+                >
+                  Open Class
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="arrow-right"
+                    class="lucide lucide-arrow-right w-4 h-4 group-hover/btn:translate-x-1 transition-transform"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+                <button
+                  class="p-3 rounded-xl border border-slate-200 text-slate-400 hover:text-orange-600 hover:border-orange-200 hover:bg-white transition-all"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="trophy"
+                    class="lucide lucide-trophy w-5 h-5 stroke-[1.5]"
+                  >
+                    <path
+                      d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"
+                    ></path>
+                    <path
+                      d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"
+                    ></path>
+                    <path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path
+                      d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"
+                    ></path>
+                    <path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path>
+                  </svg>
+                </button>
+              </div>
+            </article>
+
+            <!-- CARD 3: ENGLISH -->
+            <article
+              class="group glass-card rounded-[2rem] p-6 hover:shadow-2xl hover:shadow-teal-200/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+            >
+              <div
+                class="absolute -top-10 -right-10 w-40 h-40 bg-teal-50/50 rounded-full blur-2xl group-hover:bg-teal-100/60 transition-colors"
+              ></div>
+
+              <div class="relative z-10 flex items-start gap-5 mb-6">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-50 to-white border border-white shadow-lg shadow-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="book-open"
+                    class="lucide lucide-book-open w-7 h-7 stroke-[1.5]"
+                  >
+                    <path d="M12 7v14"></path>
+                    <path
+                      d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3
+                    class="text-xl font-bold tracking-tight text-slate-800 leading-tight group-hover:text-teal-600 transition-colors"
+                  >
+                    Storytellers
+                  </h3>
+                  <div class="flex items-center gap-2 mt-2">
+                    <span
+                      class="text-[10px] font-bold uppercase tracking-wider text-teal-500 bg-teal-50/80 px-2 py-0.5 rounded border border-teal-100"
+                    >
+                      English
+                    </span>
+                    <span class="text-[10px] font-semibold text-slate-400">
+                      Term 2
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="text-right">
+                    <p class="text-xs font-bold text-slate-700">Mr. Johnson</p>
+                    <p class="text-[10px] font-medium text-slate-400">
+                      Teacher
+                    </p>
+                  </div>
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=MrJohnson"
+                    class="w-9 h-9 rounded-full border-2 border-white shadow-sm bg-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-4 gap-3 mb-6">
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    XP
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">850</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Rank
+                  </span>
+                  <span class="text-xs font-bold text-amber-500">#8</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Quiz
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">5</span>
+                </div>
+                <div
+                  class="text-center p-2.5 rounded-xl bg-slate-50/80 border border-slate-100"
+                >
+                  <span
+                    class="block text-[10px] font-bold text-slate-400 mb-0.5"
+                  >
+                    Done
+                  </span>
+                  <span class="text-xs font-bold text-teal-500">2</span>
+                </div>
+              </div>
+
+              <div
+                class="flex items-center gap-3 p-3 rounded-xl bg-teal-50/40 border border-teal-100/60 mb-6"
+              >
+                <div
+                  class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-teal-500 shadow-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="feather"
+                    class="lucide lucide-feather w-4 h-4 fill-teal-500"
+                  >
+                    <path
+                      d="M12.67 19a2 2 0 0 0 1.416-.588l6.154-6.172a6 6 0 0 0-8.49-8.49L5.586 9.914A2 2 0 0 0 5 11.328V18a1 1 0 0 0 1 1z"
+                    ></path>
+                    <path d="M16 8 2 22"></path>
+                    <path d="M17.5 15H9"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <span
+                    class="block text-[10px] font-bold text-teal-400 uppercase tracking-wide"
+                  >
+                    Up Next
+                  </span>
+                  <span class="text-xs font-bold text-teal-900 line-clamp-1">
+                    Creative Writing Draft
+                  </span>
+                </div>
+                <span
+                  class="text-[10px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-lg shadow-sm border border-slate-100"
+                >
+                  Fri
+                </span>
+              </div>
+
+              <div class="flex items-center gap-3 pt-2">
+                <button
+                  class="flex-1 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-200 hover:shadow-xl hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-2 group/btn"
+                >
+                  Open Class
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="arrow-right"
+                    class="lucide lucide-arrow-right w-4 h-4 group-hover/btn:translate-x-1 transition-transform"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+                <button
+                  class="p-3 rounded-xl border border-slate-200 text-slate-400 hover:text-teal-600 hover:border-teal-200 hover:bg-white transition-all"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    data-lucide="trophy"
+                    class="lucide lucide-trophy w-5 h-5 stroke-[1.5]"
+                  >
+                    <path
+                      d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"
+                    ></path>
+                    <path
+                      d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"
+                    ></path>
+                    <path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path
+                      d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"
+                    ></path>
+                    <path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path>
+                  </svg>
+                </button>
+              </div>
+            </article>
+
+            <!-- ADD NEW PLACEHOLDER -->
+            <button
+              onclick="toggleModal('joinClassModal')"
+              class="group min-h-[400px] flex flex-col items-center justify-center rounded-[2rem] border-2 border-dashed border-slate-300/60 bg-slate-50/20 hover:bg-white hover:border-indigo-300 transition-all duration-300"
+            >
+              <div
+                class="w-24 h-24 rounded-full bg-white shadow-lg shadow-indigo-100 border border-slate-100 group-hover:scale-110 group-hover:rotate-90 transition-all duration-500 flex items-center justify-center text-slate-300 group-hover:text-indigo-500 mb-6"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  data-lucide="plus"
+                  class="lucide lucide-plus w-10 h-10 stroke-[1.5]"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </div>
+              <span
+                class="text-xl font-bold tracking-tight text-slate-400 group-hover:text-indigo-600 transition-colors"
+              >
+                Join Another Class
+              </span>
+              <span class="text-sm font-semibold text-slate-400 mt-2">
+                Enter code provided by teacher
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT: SIDE PANEL (removed - content moved to hero card) -->
+      </div>
+    </main>
+
+    <!-- MODAL: JOIN NEW CLASS -->
+    <div
+      id="joinClassModal"
+      class="modal-overlay hidden fixed inset-0 z-[100] flex items-center justify-center px-4"
+    >
+      <!-- Backdrop -->
+      <div
+        onclick="toggleModal('joinClassModal')"
+        class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+      ></div>
+
+      <!-- Content -->
+      <div
+        class="modal-content relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-white/50"
+      >
+        <!-- Modal Header -->
+        <div
+          class="p-6 text-center relative overflow-hidden bg-slate-900"
+          style="
+            background-image: url(&quot;./join-class-bg.jpg&quot;);
+            background-size: cover;
+            background-position: center top;
+          "
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/75"
+          ></div>
+          <div class="relative z-10">
+            <div
+              class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center mb-3 shadow-inner ring-1 ring-white/30"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-lucide="ticket"
+                class="lucide lucide-ticket w-8 h-8 text-white stroke-[1.5]"
+              >
+                <path
+                  d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"
+                ></path>
+                <path d="M13 5v2"></path>
+                <path d="M13 17v2"></path>
+                <path d="M13 11v2"></path>
+              </svg>
+            </div>
+            <h2 class="text-xl font-extrabold text-white">Join a Class</h2>
+            <p class="text-indigo-100 text-xs font-medium mt-1">
+              Enter your invite code to unlock a new world.
+            </p>
+          </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 md:p-8">
+          <div id="modalForm">
+            <label
+              class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1"
+            >
+              Class Link
+            </label>
+            <div class="relative mb-6">
+              <input
+                id="classCodeInput"
+                type="text"
+                placeholder="Paste class link here"
+                class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-mono text-lg font-bold text-slate-800 placeholder-slate-300 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-center tracking-widest"
+              />
+              <p
+                class="text-[10px] text-slate-400 mt-2 text-center font-medium"
+              >
+                Ask your teacher if you don't have a code.
+              </p>
+            </div>
+
+            <div class="flex gap-3">
+              <button
+                onclick="toggleModal('joinClassModal')"
+                class="flex-1 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onclick="simulateJoin()"
+                class="flex-1 py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all active:scale-95 flex items-center justify-center gap-2"
+              >
+                <span id="btnText">Join Class</span>
+                <div
+                  id="btnSpinner"
+                  class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
+                ></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Success State (Hidden initially) -->
+          <div id="modalSuccess" class="hidden text-center py-4">
+            <div
+              class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-[pop-in_0.5s_ease-out]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-lucide="check"
+                class="lucide lucide-check w-8 h-8 stroke-[3]"
+              >
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-1">You're In!</h3>
+            <p class="text-sm text-slate-500 mb-6">Successfully joined</p>
+            <button
+              onclick="
+                toggleModal('joinClassModal');
+                resetModal();
+              "
+              class="w-full py-3 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-lg"
+            >
+              Start Exploring
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer
+      class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800 mt-12 relative z-10"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  data-lucide="compass"
+                  class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight">
+                EduQuest
+              </span>
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="">
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors">
+                  Terms
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+
+      function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.toggle("hidden");
+        if (!modal.classList.contains("hidden")) {
+          setTimeout(
+            () => document.getElementById("classCodeInput").focus(),
+            100,
+          );
+        }
+      }
+
+      function simulateJoin() {
+        const btnText = document.getElementById("btnText");
+        const btnSpinner = document.getElementById("btnSpinner");
+        const form = document.getElementById("modalForm");
+        const success = document.getElementById("modalSuccess");
+        const input = document.getElementById("classCodeInput");
+
+        if (input.value.length < 3) {
+          input.classList.add("border-rose-400", "ring-2", "ring-rose-200");
+          setTimeout(
+            () =>
+              input.classList.remove(
+                "border-rose-400",
+                "ring-2",
+                "ring-rose-200",
+              ),
+            2000,
+          );
+          return;
+        }
+
+        btnText.classList.add("hidden");
+        btnSpinner.classList.remove("hidden");
+
+        setTimeout(() => {
+          form.classList.add("hidden");
+          success.classList.remove("hidden");
+        }, 1500);
+      }
+
+      function resetModal() {
+        setTimeout(() => {
+          document.getElementById("modalForm").classList.remove("hidden");
+          document.getElementById("modalSuccess").classList.add("hidden");
+          document.getElementById("btnText").classList.remove("hidden");
+          document.getElementById("btnSpinner").classList.add("hidden");
+          document.getElementById("classCodeInput").value = "";
+        }, 500);
+      }
+    </script>
+  </body>
+</html>

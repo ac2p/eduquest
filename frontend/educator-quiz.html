@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Educator Quiz Manager</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* Subtle Pastel Background */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background: radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      /* Micro pattern for texture */
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .animate-float {
+        animation: float 5s ease-in-out infinite;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      /* Drawer Slide Animation */
+      .drawer {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .drawer-open {
+        transform: translateX(0);
+      }
+      .drawer-closed {
+        transform: translateX(100%);
+      }
+      /* Focus Ring Custom */
+      .focus-ring:focus-within {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        border-color: #a5b4fc;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12 overflow-x-hidden"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION (Maintained Structure) -->
+    <nav class="fixed top-0 w-full z-40 pt-4 pb-2 px-4">
+      <div
+        class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block"
+            >EduQuest
+          </span>
+        </div>
+
+        <!-- Links (Educator Context) -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50"
+        >
+          <a
+            href="educator-dashboard.html"
+            class="hover:text-indigo-600 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Dashboard</a
+          >
+          <a
+            href="educator-class.html"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white border-slate-200/60 border rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+            >Manage Class</a
+          >
+
+          <a
+            href="educator-reports.html"
+            class="hover:text-indigo-600 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Reports</a
+          >
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold text-slate-700">Ms. Frizzle</span>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2"
+              >Educator</span
+            >
+          </div>
+          <div
+            class="cursor-pointer hover:ring-indigo-100 transition-all bg-white w-10 h-10 border-indigo-100 border-2 rounded-full ring-transparent ring-2 pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href='educator-profile.html'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT - EDUCATOR QUIZ PAGE -->
+    <main class="max-w-7xl mx-auto pt-28 pb-12 px-6 relative z-10">
+      <!-- HEADER -->
+      <header class="mb-8 animate-enter">
+        <div
+          class="relative bg-white rounded-[2rem] border border-white p-8 shadow-xl shadow-indigo-100/20 overflow-hidden group"
+        >
+          <!-- Background Decor -->
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-violet-50/80 via-white to-sky-50/80 opacity-60"
+          ></div>
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-fuchsia-100/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+          ></div>
+          <div
+            class="absolute bottom-0 left-10 w-32 h-32 bg-indigo-100/30 rounded-full blur-2xl translate-y-1/2"
+          ></div>
+
+          <div
+            class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6"
+          >
+            <div class="">
+              <div class="flex items-center gap-3 mb-2">
+                <div
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-extrabold uppercase tracking-wide"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-rocket"
+                  >
+                    <path
+                      d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                    ></path>
+                    <path
+                      d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+                    ></path>
+                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                  </svg>
+                  Class 3A · Space Explorers
+                </div>
+              </div>
+              <h1
+                class="text-3xl font-extrabold text-slate-800 tracking-tight mb-1"
+              >
+                Quizzes
+              </h1>
+              <p class="text-sm font-medium text-slate-500 max-w-lg">
+                Create, manage, and track assessments to fuel your students'
+                learning adventure.
+              </p>
+            </div>
+
+            <button
+              class="flex gap-2 shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.02] active:scale-95 transition-all text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl pt-3 pr-6 pb-3 pl-6 shadow-lg gap-x-2 gap-y-2 items-center cursor-pointer"
+              onclick="window.location.href='educator-createquiz.html'"
+              role="button"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-plus"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              Create New Quiz
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- UTILITY BAR (Search & Filters) -->
+      <div
+        class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8 animate-enter"
+        style="animation-delay: 100ms"
+      >
+        <!-- Left: Search & Filter Pills -->
+        <div
+          class="flex flex-col md:flex-row items-start md:items-center gap-4 w-full lg:w-auto"
+        >
+          <!-- Search -->
+          <div class="relative group w-full md:w-64">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search quizzes..."
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+            />
+          </div>
+
+          <!-- Filter Pills -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200 overflow-x-auto max-w-full no-scrollbar"
+          >
+            <button
+              class="px-3.5 py-1.5 rounded-lg bg-white text-indigo-700 shadow-sm border border-slate-200/50 text-xs font-bold transition-all whitespace-nowrap"
+            >
+              All
+            </button>
+            <button
+              class="px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-white/50 text-xs font-bold transition-all whitespace-nowrap"
+            >
+              Assigned
+            </button>
+            <button
+              class="px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-white/50 text-xs font-bold transition-all whitespace-nowrap"
+            >
+              Drafts
+            </button>
+            <button
+              class="px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-white/50 text-xs font-bold transition-all whitespace-nowrap"
+            >
+              Published
+            </button>
+            <button
+              class="px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-white/50 text-xs font-bold transition-all whitespace-nowrap"
+            >
+              Archived
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Sort -->
+        <div class="flex items-center gap-2 self-end lg:self-auto">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wide"
+            >Sort by:</span
+          >
+          <div class="relative">
+            <select
+              class="appearance-none pl-3 pr-8 py-2 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 cursor-pointer shadow-sm hover:bg-slate-50 transition-colors"
+            >
+              <option>Most Recent</option>
+              <option>Alphabetical (A-Z)</option>
+              <option>Highest Activity</option>
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-down absolute right-2.5 top-2.5 text-slate-400 pointer-events-none"
+            >
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ GRID -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-enter gap-x-6 gap-y-6"
+        style="animation-delay: 200ms"
+      >
+        <!-- CARD 1: CREATE NEW (Empty State Action) -->
+        <button
+          class="group flex flex-col min-h-[280px] border-dashed hover:border-indigo-400 hover:bg-indigo-50/30 transition-all duration-300 cursor-pointer bg-slate-50/50 border-slate-300 border-2 rounded-3xl items-center justify-center"
+          onclick="window.location.href='educator-createquiz.html'"
+          role="button"
+        >
+          <div
+            class="flex group-hover:text-indigo-500 group-hover:scale-110 group-hover:shadow-indigo-100 transition-all duration-300 text-slate-300 bg-white w-16 h-16 border-slate-200 border rounded-full mb-4 shadow-sm items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-plus"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+          </div>
+          <h3
+            class="text-lg font-bold text-slate-600 group-hover:text-indigo-700 transition-colors"
+          >
+            Start a new quiz
+          </h3>
+          <p class="text-xs font-medium text-slate-400 mt-1">
+            Create from scratch or template
+          </p>
+        </button>
+
+        <!-- CARD 2: PUBLISHED QUIZ (Active) -->
+        <div
+          class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+        >
+          <!-- Top Decor -->
+          <div
+            class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-t-3xl"
+          ></div>
+
+          <div class="p-6 pb-4 flex-1">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-apple"
+                  >
+                    <path
+                      d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"
+                    ></path>
+                    <path d="M10 2c1 .5 2 2 2 5"></path>
+                  </svg>
+                </div>
+                <div class="">
+                  <h3
+                    class="text-lg font-extrabold text-slate-800 leading-tight"
+                  >
+                    Gravity Basics
+                  </h3>
+                  <span class="text-xs font-bold text-slate-400"
+                    >Physics 101</span
+                  >
+                </div>
+              </div>
+              <span
+                class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wide border border-emerald-200"
+                >Published</span
+              >
+            </div>
+
+            <!-- Description -->
+            <p class="text-xs font-medium text-slate-500 mb-5 line-clamp-2">
+              Introduction to Newton's laws and gravitational forces in our
+              solar system.
+            </p>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-50">
+              <div class="text-center">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Attempts
+                </div>
+                <div class="text-sm font-black text-slate-700">24/28</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Avg Score
+                </div>
+                <div class="text-sm font-black text-emerald-500">88%</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Time
+                </div>
+                <div class="text-sm font-black text-slate-700">12m</div>
+              </div>
+            </div>
+
+            <!-- Meta -->
+            <div class="flex items-center gap-3 mt-4">
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-help-circle"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+                10 Questions
+              </span>
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-calendar"
+                >
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                  <line x1="16" x2="16" y1="2" y2="6"></line>
+                  <line x1="8" x2="8" y1="2" y2="6"></line>
+                  <line x1="3" x2="21" y1="10" y2="10"></line>
+                </svg>
+                Due Oct 25
+              </span>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div
+            class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl"
+          >
+            <button
+              class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-pencil"
+              >
+                <path
+                  d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                ></path>
+                <path d="m15 5 4 4"></path>
+              </svg>
+              Edit
+            </button>
+            <div class="flex items-center gap-2">
+              <button
+                onclick="toggleDrawer()"
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+                title="Preview"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-eye"
+                >
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+                title="Duplicate"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-copy"
+                >
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-rose-100 transition-all"
+                title="Delete"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-trash-2"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" x2="10" y1="11" y2="17"></line>
+                  <line x1="14" x2="14" y1="11" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: ASSIGNED QUIZ (Warning/Active) -->
+        <div
+          class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+        >
+          <!-- Top Decor -->
+          <div
+            class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 to-orange-400 rounded-t-3xl"
+          ></div>
+
+          <div class="p-6 pb-4 flex-1">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-flask-conical"
+                  >
+                    <path
+                      d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"
+                    ></path>
+                    <path d="M8.5 2h7"></path>
+                    <path d="M7 16h10"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-extrabold text-slate-800 leading-tight"
+                  >
+                    Chemical Bonds
+                  </h3>
+                  <span class="text-xs font-bold text-slate-400"
+                    >Chemistry 101</span
+                  >
+                </div>
+              </div>
+              <span
+                class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-extrabold uppercase tracking-wide border border-amber-200"
+                >Assigned</span
+              >
+            </div>
+
+            <p class="text-xs font-medium text-slate-500 mb-5 line-clamp-2">
+              Ionic vs Covalent bonds. Covers chapters 3-4 of the textbook.
+            </p>
+
+            <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-50">
+              <div class="text-center">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Attempts
+                </div>
+                <div class="text-sm font-black text-slate-700">5/28</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Avg Score
+                </div>
+                <div class="text-sm font-black text-amber-500">76%</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Time
+                </div>
+                <div class="text-sm font-black text-slate-700">15m</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-4">
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-help-circle"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+                15 Questions
+              </span>
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-clock"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                20 mins
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl"
+          >
+            <button
+              class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-pencil"
+              >
+                <path
+                  d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                ></path>
+                <path d="m15 5 4 4"></path>
+              </svg>
+              Edit
+            </button>
+            <div class="flex items-center gap-2">
+              <button
+                onclick="toggleDrawer()"
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-eye"
+                >
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-copy"
+                >
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-rose-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-trash-2"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" x2="10" y1="11" y2="17"></line>
+                  <line x1="14" x2="14" y1="11" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4: DRAFT QUIZ (Gray) -->
+        <div
+          class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col opacity-90 hover:opacity-100"
+        >
+          <!-- Top Decor -->
+          <div
+            class="absolute top-0 inset-x-0 h-1.5 bg-slate-200 rounded-t-3xl"
+          ></div>
+
+          <div class="p-6 pb-4 flex-1">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-microscope"
+                  >
+                    <path d="M6 18h8"></path>
+                    <path d="M3 22h18"></path>
+                    <path d="M14 22a7 7 0 1 0 0-14h-1"></path>
+                    <path d="M9 14h2"></path>
+                    <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path>
+                    <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-extrabold text-slate-800 leading-tight"
+                  >
+                    Cell Biology
+                  </h3>
+                  <span class="text-xs font-bold text-slate-400"
+                    >Biology 202</span
+                  >
+                </div>
+              </div>
+              <span
+                class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold uppercase tracking-wide border border-slate-200"
+                >Draft</span
+              >
+            </div>
+
+            <p class="text-xs font-medium text-slate-500 mb-5 line-clamp-2">
+              Understanding mitosis and meiosis processes. Draft saved 2 hours
+              ago.
+            </p>
+
+            <!-- Empty Stats for Draft -->
+            <div
+              class="py-4 border-y border-slate-50 flex items-center justify-center"
+            >
+              <p class="text-[11px] font-bold text-slate-400 italic">
+                Not yet published
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3 mt-4">
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-help-circle"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+                5 Questions
+              </span>
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-clock"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                10 mins
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl"
+          >
+            <button
+              class="flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+            >
+              Continue Editing
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-arrow-right"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </button>
+            <div class="flex items-center gap-2">
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-copy"
+                >
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-rose-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-trash-2"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" x2="10" y1="11" y2="17"></line>
+                  <line x1="14" x2="14" y1="11" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 5: CLOSED QUIZ (Muted) -->
+        <div
+          class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col opacity-80 hover:opacity-100"
+        >
+          <div
+            class="absolute top-0 inset-x-0 h-1.5 bg-slate-400 rounded-t-3xl"
+          ></div>
+          <div class="p-6 pb-4 flex-1">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center border border-slate-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-history"
+                  >
+                    <path
+                      d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                    ></path>
+                    <path d="M3 3v5h5"></path>
+                    <path d="M12 7v5l4 2"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-extrabold text-slate-800 leading-tight"
+                  >
+                    History of Space
+                  </h3>
+                  <span class="text-xs font-bold text-slate-400"
+                    >History 101</span
+                  >
+                </div>
+              </div>
+              <span
+                class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wide border border-slate-200"
+                >Closed</span
+              >
+            </div>
+            <p class="text-xs font-medium text-slate-500 mb-5 line-clamp-2">
+              Key milestones in space exploration from 1950 to 2000.
+            </p>
+            <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-50">
+              <div class="text-center">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Attempts
+                </div>
+                <div class="text-sm font-black text-slate-700">28/28</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Avg Score
+                </div>
+                <div class="text-sm font-black text-indigo-500">94%</div>
+              </div>
+              <div class="text-center border-l border-slate-50">
+                <div
+                  class="text-[10px] font-bold text-slate-400 uppercase tracking-wide"
+                >
+                  Date
+                </div>
+                <div class="text-sm font-black text-slate-700">Oct 12</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 mt-4">
+              <span
+                class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md"
+                >8 Questions</span
+              >
+            </div>
+          </div>
+          <div
+            class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl"
+          >
+            <button
+              class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-bar-chart-2"
+              >
+                <line x1="18" x2="18" y1="20" y2="10"></line>
+                <line x1="12" x2="12" y1="20" y2="4"></line>
+                <line x1="6" x2="6" y1="20" y2="14"></line>
+              </svg>
+              View Results
+            </button>
+            <div class="flex items-center gap-2">
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-copy"
+                >
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-rose-100 transition-all"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-trash-2"
+                >
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  <line x1="10" x2="10" y1="11" y2="17"></line>
+                  <line x1="14" x2="14" y1="11" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- PREVIEW SIDE PANEL (DRAWER) -->
+    <!-- Hidden by default, slides in on click -->
+    <aside
+      id="previewDrawer"
+      class="fixed inset-y-0 right-0 w-full md:w-[480px] bg-white/95 backdrop-blur-xl border-l border-slate-200 z-50 shadow-2xl drawer drawer-closed flex flex-col"
+    >
+      <!-- Close Button -->
+      <div class="absolute top-4 left-[-60px] md:left-[-60px]">
+        <button
+          onclick="toggleDrawer()"
+          class="bg-white/80 p-3 rounded-full shadow-lg text-slate-500 hover:text-indigo-600 hover:scale-105 transition-all"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-x"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div class="flex-1 overflow-y-auto p-8 relative">
+        <!-- Top gradient -->
+        <div
+          class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 to-teal-400"
+        ></div>
+
+        <div class="mb-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span
+              class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold uppercase tracking-wide border border-emerald-200"
+              >Published</span
+            >
+            <span
+              class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-extrabold uppercase tracking-wide border border-slate-200"
+              >10 Questions</span
+            >
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-800 leading-tight mb-2">
+            Gravity Basics
+          </h2>
+          <p class="text-sm text-slate-500 font-medium">
+            Previewing quiz content as it appears to students.
+          </p>
+        </div>
+
+        <!-- Preview Stats -->
+        <div
+          class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-8 flex items-center justify-between"
+        >
+          <div class="text-center">
+            <div class="text-xs font-bold text-slate-400 uppercase">
+              Avg Score
+            </div>
+            <div class="text-lg font-black text-emerald-500">88%</div>
+          </div>
+          <div class="w-px h-8 bg-slate-200"></div>
+          <div class="text-center">
+            <div class="text-xs font-bold text-slate-400 uppercase">
+              High Score
+            </div>
+            <div class="text-lg font-black text-indigo-500">100%</div>
+          </div>
+          <div class="w-px h-8 bg-slate-200"></div>
+          <div class="text-center">
+            <div class="text-xs font-bold text-slate-400 uppercase">
+              Est. Time
+            </div>
+            <div class="text-lg font-black text-slate-700">12m</div>
+          </div>
+        </div>
+
+        <!-- Questions List -->
+        <h3
+          class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-4 pl-1"
+        >
+          Questions Preview
+        </h3>
+        <div class="space-y-4">
+          <!-- Q1 -->
+          <div
+            class="p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:border-indigo-100 transition-colors"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <span
+                class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md"
+                >Q1 • Multiple Choice</span
+              >
+              <span class="text-xs font-bold text-slate-400">10 pts</span>
+            </div>
+            <p class="text-sm font-bold text-slate-700 leading-relaxed">
+              Which of the following best describes the force of gravity?
+            </p>
+            <div class="mt-3 space-y-2">
+              <div
+                class="flex items-center gap-3 p-2 rounded-lg bg-emerald-50/50 border border-emerald-100"
+              >
+                <div
+                  class="w-4 h-4 rounded-full border-2 border-emerald-400 flex items-center justify-center"
+                >
+                  <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-600"
+                  >A force of attraction between objects with mass</span
+                >
+              </div>
+              <div
+                class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-100 opacity-60"
+              >
+                <div
+                  class="w-4 h-4 rounded-full border-2 border-slate-300"
+                ></div>
+                <span class="text-xs font-bold text-slate-500"
+                  >A repulsive force generated by magnets</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div
+            class="p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:border-indigo-100 transition-colors"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <span
+                class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md"
+                >Q2 • True / False</span
+              >
+              <span class="text-xs font-bold text-slate-400">10 pts</span>
+            </div>
+            <p class="text-sm font-bold text-slate-700 leading-relaxed">
+              Gravity exists only on Earth, not in space.
+            </p>
+            <div class="mt-3 space-y-2">
+              <div
+                class="flex items-center gap-3 p-2 rounded-lg bg-white border border-slate-100 opacity-60"
+              >
+                <div
+                  class="w-4 h-4 rounded-full border-2 border-slate-300"
+                ></div>
+                <span class="text-xs font-bold text-slate-500">True</span>
+              </div>
+              <div
+                class="flex items-center gap-3 p-2 rounded-lg bg-emerald-50/50 border border-emerald-100"
+              >
+                <div
+                  class="w-4 h-4 rounded-full border-2 border-emerald-400 flex items-center justify-center"
+                >
+                  <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-600">False</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div
+            class="p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:border-indigo-100 transition-colors"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <span
+                class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md"
+                >Q3 • Short Answer</span
+              >
+              <span class="text-xs font-bold text-slate-400">20 pts</span>
+            </div>
+            <p class="text-sm font-bold text-slate-700 leading-relaxed">
+              Who formulated the law of universal gravitation?
+            </p>
+            <div
+              class="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-100 border-dashed text-xs text-slate-400 font-medium"
+            >
+              Student will type answer here...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+        <button
+          class="w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-pencil"
+          >
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+            <path d="m15 5 4 4"></path>
+          </svg>
+          Edit Quiz Content
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay for Drawer -->
+    <div
+      id="drawerOverlay"
+      onclick="toggleDrawer()"
+      class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 hidden transition-opacity opacity-0"
+    ></div>
+
+    <!-- FOOTER (Maintained) -->
+    <footer
+      class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800 mt-12"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold text-white tracking-tight"
+                >EduQuest</span
+              >
+            </div>
+            <p
+              class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Pricing</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Community</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Privacy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-indigo-400 transition-colors"
+                  >Terms</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 pt-6 flex justify-center">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+
+      // Simple Drawer Toggle Logic
+      function toggleDrawer() {
+        const drawer = document.getElementById("previewDrawer");
+        const overlay = document.getElementById("drawerOverlay");
+
+        if (drawer.classList.contains("drawer-closed")) {
+          drawer.classList.remove("drawer-closed");
+          drawer.classList.add("drawer-open");
+          overlay.classList.remove("hidden");
+          setTimeout(() => overlay.classList.remove("opacity-0"), 10);
+          document.body.style.overflow = "hidden"; // Prevent background scrolling
+        } else {
+          drawer.classList.remove("drawer-open");
+          drawer.classList.add("drawer-closed");
+          overlay.classList.add("opacity-0");
+          setTimeout(() => overlay.classList.add("hidden"), 300);
+          document.body.style.overflow = "";
+        }
+      }
+    </script>
+    <script>
+class QuizManager {
+    constructor() {
+      
+        this.apiBase = 'http://localhost:3000/api'; // Update with your API endpoint
+        this.currentClassId = this.getQueryParam('classId');
+        this.quizzes = [];
+        this.init();
+    }
+    
+    init() {
+        this.loadQuizzes();
+        this.setupEventListeners();
+    }
+    
+    getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+    
+    async loadQuizzes() {
+        try {
+            this.showLoading(true);
+            
+            if (!this.currentClassId) {
+                throw new Error('No class ID specified');
+            }
+            
+            const response = await fetch(`${this.apiBase}/quizzes?classId=${this.currentClassId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                this.quizzes = data.quizzes;
+                this.renderQuizzes(this.quizzes);
+            } else {
+                throw new Error(data.error || 'Failed to load quizzes');
+            }
+        } catch (error) {
+            console.error('Error loading quizzes:', error);
+            this.showError('Failed to load quizzes. Using sample data.');
+            this.renderSampleQuizzes();
+        } finally {
+            this.showLoading(false);
+        }
+    }
+    
+    renderQuizzes(quizzes) {
+        const container = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+        if (!container) return;
+        
+        // Clear existing content except the first "Create New Quiz" card
+        const createQuizCard = container.querySelector('button[onclick*="educator-createquiz.html"]');
+        container.innerHTML = '';
+        if (createQuizCard) {
+            container.appendChild(createQuizCard);
+        }
+        
+        if (!quizzes || quizzes.length === 0) {
+            container.innerHTML += `
+                <div class="col-span-3 text-center py-12">
+                    <div class="text-slate-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto">
+                            <path d="m9 11-6 6v3h9l3-3"></path>
+                            <path d="m22 7-4.6 4.6"></path>
+                            <path d="M18 16V7a2 2 0 0 0-2-2H4.41"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-600 mb-2">No Quizzes Yet</h3>
+                    <p class="text-slate-500 mb-4">Create your first quiz to get started!</p>
+                    <button onclick="window.location.href='educator-createquiz.html?classId=${this.currentClassId}'" 
+                            class="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all">
+                        Create Your First Quiz
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Render each quiz
+        quizzes.forEach(quiz => {
+            const quizCard = this.createQuizCard(quiz);
+            container.appendChild(quizCard);
+        });
+    }
+    
+    createQuizCard(quiz) {
+        // Map status to color
+        const statusMap = {
+            'published': { color: 'emerald', bg: 'from-emerald-400 to-teal-400', bgLight: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+            'assigned': { color: 'amber', bg: 'from-amber-400 to-orange-400', bgLight: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+            'draft': { color: 'slate', bg: 'from-slate-300 to-slate-400', bgLight: 'bg-slate-50', text: 'text-slate-500', border: 'border-slate-200' },
+            'archived': { color: 'slate', bg: 'from-slate-400 to-slate-500', bgLight: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200' }
+        };
+        
+        const statusInfo = statusMap[quiz.status] || statusMap.draft;
+        
+        return document.createRange().createContextualFragment(`
+            <div class="group relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 hover:-translate-y-1 transition-all duration-300 flex flex-col ${quiz.status === 'draft' || quiz.status === 'archived' ? 'opacity-90 hover:opacity-100' : ''}" data-quiz-id="${quiz._id}">
+                <!-- Top Decor -->
+                <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${statusInfo.bg} rounded-t-3xl"></div>
+                
+                <div class="p-6 pb-4 flex-1">
+                    <!-- Header -->
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl ${statusInfo.bgLight} ${statusInfo.text} flex items-center justify-center border ${statusInfo.border}">
+                                ${this.getSubjectIcon(quiz.subject)}
+                            </div>
+                            <div class="">
+                                <h3 class="text-lg font-extrabold text-slate-800 leading-tight">
+                                    ${quiz.title}
+                                </h3>
+                                <span class="text-xs font-bold text-slate-400">
+                                    ${quiz.subject || 'General'}
+                                </span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full ${statusInfo.bgLight} ${statusInfo.text} text-[10px] font-extrabold uppercase tracking-wide border ${statusInfo.border}">
+                            ${quiz.status.charAt(0).toUpperCase() + quiz.status.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="text-xs font-medium text-slate-500 mb-5 line-clamp-2">
+                        ${quiz.description || 'No description provided.'}
+                    </p>
+                    
+                    <!-- Stats Grid -->
+                    ${quiz.status === 'published' || quiz.status === 'assigned' ? `
+                    <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-50">
+                        <div class="text-center">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                                Attempts
+                            </div>
+                            <div class="text-sm font-black text-slate-700">
+                                ${quiz.attempts || 0}/${quiz.totalStudents || 0}
+                            </div>
+                        </div>
+                        <div class="text-center border-l border-slate-50">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                                Avg Score
+                            </div>
+                            <div class="text-sm font-black text-${statusInfo.color}-500">
+                                ${quiz.averageScore || 0}%
+                            </div>
+                        </div>
+                        <div class="text-center border-l border-slate-50">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                                ${quiz.dueDate ? 'Due' : 'Time'}
+                            </div>
+                            <div class="text-sm font-black text-slate-700">
+                                ${quiz.dueDate ? this.formatDate(quiz.dueDate) : (quiz.duration || '0m')}
+                            </div>
+                        </div>
+                    </div>
+                    ` : `
+                    <div class="py-4 border-y border-slate-50 flex items-center justify-center">
+                        <p class="text-[11px] font-bold text-slate-400 italic">
+                            ${quiz.status === 'draft' ? 'Not yet published' : 'No active attempts'}
+                        </p>
+                    </div>
+                    `}
+                    
+                    <!-- Meta -->
+                    <div class="flex items-center gap-3 mt-4">
+                        <span class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <path d="M12 17h.01"></path>
+                            </svg>
+                            ${quiz.questions?.length || 0} Questions
+                        </span>
+                        ${quiz.duration ? `
+                        <span class="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ${quiz.duration} mins
+                        </span>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <!-- Actions Footer -->
+                <div class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl">
+                    ${quiz.status === 'draft' ? `
+                    <button class="flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors edit-quiz-btn" data-quiz-id="${quiz._id}">
+                        Continue Editing
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    ` : quiz.status === 'archived' || quiz.status === 'closed' ? `
+                    <button class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors view-results-btn" data-quiz-id="${quiz._id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-2">
+                            <line x1="18" x2="18" y1="20" y2="10"></line>
+                            <line x1="12" x2="12" y1="20" y2="4"></line>
+                            <line x1="6" x2="6" y1="20" y2="14"></line>
+                        </svg>
+                        View Results
+                    </button>
+                    ` : `
+                    <button class="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors edit-quiz-btn" data-quiz-id="${quiz._id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                            <path d="m15 5 4 4"></path>
+                        </svg>
+                        Edit
+                    </button>
+                    `}
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="quizManager.toggleDrawer('${quiz._id}')" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all" title="Preview">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                        <button class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-indigo-100 transition-all duplicate-quiz-btn" title="Duplicate" data-quiz-id="${quiz._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy">
+                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                            </svg>
+                        </button>
+                        <button class="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-rose-100 transition-all delete-quiz-btn" title="Delete" data-quiz-id="${quiz._id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                <line x1="10" x2="10" y1="11" y2="17"></line>
+                                <line x1="14" x2="14" y1="11" y2="17"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).firstElementChild;
+    }
+    
+    getSubjectIcon(subject) {
+        const icons = {
+            'Physics': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"></path><path d="M10 2c1 .5 2 2 2 5"></path></svg>`,
+            'Chemistry': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flask-conical"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path><path d="M8.5 2h7"></path><path d="M7 16h10"></path></svg>`,
+            'Biology': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>`,
+            'History': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>`
+        };
+        
+        return icons[subject] || icons['Physics'];
+    }
+    
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    
+    setupEventListeners() {
+        // Search functionality
+        const searchInput = document.querySelector('input[placeholder*="Search quizzes"]');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => this.searchQuizzes(e.target.value));
+        }
+        
+        // Filter pills
+        const filterButtons = document.querySelectorAll('button[class*="px-3.5 py-1.5"]');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', (e) => this.filterByStatus(e.target.textContent.toLowerCase()));
+        });
+        
+        // Create New Quiz button
+        const createBtn = document.querySelector('button[onclick*="educator-createquiz.html"]:not(.group)');
+        if (createBtn) {
+            createBtn.onclick = () => {
+                window.location.href = `educator-createquiz.html?classId=${this.currentClassId}`;
+            };
+        }
+        
+        // Create New Quiz card
+        const createCard = document.querySelector('button.group[onclick*="educator-createquiz.html"]');
+        if (createCard) {
+            createCard.onclick = () => {
+                window.location.href = `educator-createquiz.html?classId=${this.currentClassId}`;
+            };
+        }
+        
+        // Handle dynamic event delegation for quiz actions
+        document.addEventListener('click', (e) => {
+            // Edit button
+            if (e.target.closest('.edit-quiz-btn')) {
+                const quizId = e.target.closest('.edit-quiz-btn').dataset.quizId;
+                this.editQuiz(quizId);
+            }
+            
+            // Duplicate button
+            if (e.target.closest('.duplicate-quiz-btn')) {
+                const quizId = e.target.closest('.duplicate-quiz-btn').dataset.quizId;
+                this.duplicateQuiz(quizId);
+            }
+            
+            // Delete button
+            if (e.target.closest('.delete-quiz-btn')) {
+                const quizId = e.target.closest('.delete-quiz-btn').dataset.quizId;
+                this.deleteQuiz(quizId);
+            }
+            
+            // View Results button
+            if (e.target.closest('.view-results-btn')) {
+                const quizId = e.target.closest('.view-results-btn').dataset.quizId;
+                this.viewResults(quizId);
+            }
+        });
+    }
+    
+    async searchQuizzes(searchTerm) {
+        searchTerm = searchTerm.toLowerCase();
+        
+        if (!searchTerm) {
+            this.renderQuizzes(this.quizzes);
+            return;
+        }
+        
+        const filtered = this.quizzes.filter(quiz => 
+            quiz.title.toLowerCase().includes(searchTerm) ||
+            quiz.subject?.toLowerCase().includes(searchTerm) ||
+            quiz.description?.toLowerCase().includes(searchTerm)
+        );
+        
+        this.renderQuizzes(filtered);
+    }
+    
+    filterByStatus(status) {
+        if (status === 'all') {
+            this.renderQuizzes(this.quizzes);
+            return;
+        }
+        
+        const filtered = this.quizzes.filter(quiz => 
+            quiz.status.toLowerCase() === status
+        );
+        
+        this.renderQuizzes(filtered);
+    }
+    
+    async editQuiz(quizId) {
+        // Navigate to edit page
+        window.location.href = `educator-editquiz.html?quizId=${quizId}&classId=${this.currentClassId}`;
+    }
+    
+    async duplicateQuiz(quizId) {
+        try {
+            if (!confirm('Duplicate this quiz?')) return;
+            
+            const response = await fetch(`${this.apiBase}/quizzes/${quizId}/duplicate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ classId: this.currentClassId })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('Quiz duplicated successfully!');
+                this.loadQuizzes(); // Refresh the list
+            } else {
+                throw new Error(data.error || 'Failed to duplicate quiz');
+            }
+        } catch (error) {
+            console.error('Error duplicating quiz:', error);
+            alert('Failed to duplicate quiz. Please try again.');
+        }
+    }
+    
+    async deleteQuiz(quizId) {
+        try {
+            if (!confirm('Are you sure you want to delete this quiz? This action cannot be undone.')) {
+                return;
+            }
+            
+            const response = await fetch(`${this.apiBase}/quizzes/${quizId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Remove from local array
+                this.quizzes = this.quizzes.filter(quiz => quiz._id !== quizId);
+                // Re-render
+                this.renderQuizzes(this.quizzes);
+                alert('Quiz deleted successfully!');
+            } else {
+                throw new Error(data.error || 'Failed to delete quiz');
+            }
+        } catch (error) {
+            console.error('Error deleting quiz:', error);
+            alert('Failed to delete quiz. Please try again.');
+        }
+    }
+    
+    viewResults(quizId) {
+        // Navigate to results page
+        window.location.href = `educator-results.html?quizId=${quizId}&classId=${this.currentClassId}`;
+    }
+    
+    toggleDrawer(quizId) {
+        // Implement drawer functionality
+        const drawer = document.getElementById("previewDrawer");
+        const overlay = document.getElementById("drawerOverlay");
+
+        if (drawer.classList.contains("drawer-closed")) {
+            // Load quiz data for preview
+            const quiz = this.quizzes.find(q => q._id === quizId);
+            if (quiz) {
+                this.updateDrawerContent(quiz);
+            }
+            
+            drawer.classList.remove("drawer-closed");
+            drawer.classList.add("drawer-open");
+            overlay.classList.remove("hidden");
+            setTimeout(() => overlay.classList.remove("opacity-0"), 10);
+            document.body.style.overflow = "hidden";
+        } else {
+            drawer.classList.remove("drawer-open");
+            drawer.classList.add("drawer-closed");
+            overlay.classList.add("opacity-0");
+            setTimeout(() => overlay.classList.add("hidden"), 300);
+            document.body.style.overflow = "";
+        }
+    }
+    
+    updateDrawerContent(quiz) {
+        // Update drawer content with quiz data
+        const drawer = document.getElementById("previewDrawer");
+        
+        // Update title
+        const title = drawer.querySelector('h2');
+        if (title) title.textContent = quiz.title;
+        
+        // Update stats
+        const avgScore = drawer.querySelector('.text-lg.font-black.text-emerald-500');
+        if (avgScore && quiz.averageScore) avgScore.textContent = `${quiz.averageScore}%`;
+        
+        const highScore = drawer.querySelector('.text-lg.font-black.text-indigo-500');
+        if (highScore && quiz.highScore) highScore.textContent = `${quiz.highScore}%`;
+        
+        const estTime = drawer.querySelector('.text-lg.font-black.text-slate-700');
+        if (estTime && quiz.duration) estTime.textContent = `${quiz.duration}m`;
+        
+        // Update questions preview (simplified version)
+        // You would need to implement full question rendering based on your data structure
+    }
+    
+    showLoading(show) {
+        const container = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+        if (!container) return;
+        
+        if (show) {
+            container.innerHTML = `
+                <div class="col-span-3 text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-200 border-t-indigo-600"></div>
+                    <p class="mt-4 text-slate-500">Loading quizzes...</p>
+                </div>
+            `;
+        }
+    }
+    
+    showError(message) {
+        console.error('Error:', message);
+        // You could show a toast notification here
+    }
+    
+    renderSampleQuizzes() {
+        // Fallback sample data
+        const sampleQuizzes = [
+            {
+                _id: '1',
+                title: 'Gravity Basics',
+                subject: 'Physics',
+                description: 'Introduction to Newton\'s laws and gravitational forces in our solar system.',
+                status: 'published',
+                questions: 10,
+                duration: 12,
+                attempts: 24,
+                totalStudents: 28,
+                averageScore: 88,
+                highScore: 100,
+                dueDate: '2024-10-25'
+            },
+            {
+                _id: '2',
+                title: 'Chemical Bonds',
+                subject: 'Chemistry',
+                description: 'Ionic vs Covalent bonds. Covers chapters 3-4 of the textbook.',
+                status: 'assigned',
+                questions: 15,
+                duration: 20,
+                attempts: 5,
+                totalStudents: 28,
+                averageScore: 76,
+                highScore: 95,
+                dueDate: null
+            },
+            {
+                _id: '3',
+                title: 'Cell Biology',
+                subject: 'Biology',
+                description: 'Understanding mitosis and meiosis processes. Draft saved 2 hours ago.',
+                status: 'draft',
+                questions: 5,
+                duration: 10,
+                attempts: 0,
+                totalStudents: 0,
+                averageScore: 0,
+                highScore: 0,
+                dueDate: null
+            },
+            {
+                _id: '4',
+                title: 'History of Space',
+                subject: 'History',
+                description: 'Key milestones in space exploration from 1950 to 2000.',
+                status: 'archived',
+                questions: 8,
+                duration: null,
+                attempts: 28,
+                totalStudents: 28,
+                averageScore: 94,
+                highScore: 100,
+                dueDate: '2024-10-12'
+            }
+        ];
+        
+        this.quizzes = sampleQuizzes;
+        this.renderQuizzes(sampleQuizzes);
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.quizManager = new QuizManager();
+});
+</script>
+  </body>
+</html>

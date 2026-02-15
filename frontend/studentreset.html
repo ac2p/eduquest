@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset Password</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f8fafc;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01), inset 0 0 0 1px rgba(255,255,255,0.6);
+    }
+    .input-group {
+      position: relative;
+    }
+    .input-field {
+      width: 100%;
+      padding: 1.5rem 1rem 0.5rem 3rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.75rem;
+      background: rgba(248, 250, 252, 0.5);
+      outline: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+    .input-label {
+      position: absolute;
+      left: 3rem;
+      top: 1.25rem;
+      color: #94a3b8;
+      font-size: 0.875rem;
+      pointer-events: none;
+      background-color: rgba(255,255,255,0.8);
+      padding: 0 4px;
+      border-radius: 4px;
+      transition: 0.2s;
+    }
+    .input-field:focus + .input-label,
+    .input-field:not(:placeholder-shown) + .input-label {
+      top: -0.6rem;
+      font-size: 0.75rem;
+      color: #6366f1;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+  <div class="glass-card p-8 rounded-2xl w-full max-w-md">
+    <h2 class="text-2xl font-bold text-slate-800 mb-6">Reset Your Password</h2>
+
+    <form id="resetForm" class="space-y-6">
+      
+      <!-- New Password Field -->
+      <div class="input-group">
+        <input type="password" name="password" id="password" placeholder="New password" required class="input-field peer">
+        
+      </div>
+
+      <!-- Hidden Token -->
+      <input type="hidden" name="token" value="{{token}}" />
+
+      <!-- Submit Button -->
+      <button type="submit" class="w-full py-3 rounded-xl text-white font-bold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 transition-all shadow-lg">
+        Reset Password
+      </button>
+
+    </form>
+
+    <p class="text-sm text-slate-500 mt-6 text-center">
+      Remembered your password? 
+      <a href="/student/login" class="text-indigo-600 font-bold hover:underline">Sign In</a>
+    </p>
+  </div>
+
+</body>
+<script src="/js/global.js"></script>
+<script>
+  const form = document.getElementById("resetForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const password = document.getElementById("password").value;
+    const token = "{{token}}";
+
+    try {
+      const response = await fetch(`/student/reset-password/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message);
+        window.location.href = "/student/login";
+      } else {
+        alert(data.message);
+      }
+
+    } catch (err) {
+      alert("Something went wrong ❌");
+      console.error(err);
+    }
+  });
+</script>
+</html>

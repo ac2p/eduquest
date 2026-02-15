@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 3A - EduQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="main-header">
+            <h1><i class="fas fa-graduation-cap"></i> EduQuest</h1>
+            <nav>
+                <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="classes.html"><i class="fas fa-users"></i> My Classes</a>
+                <a href="quizzes.html"><i class="fas fa-file-alt"></i> All Quizzes</a>
+                <a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+            </nav>
+            <div class="user-menu">
+                <img src="user-avatar.jpg" alt="Teacher">
+                <span>Ms. Frizzle</span>
+            </div>
+        </header>
+
+        <!-- Class Header -->
+        <div class="class-header" id="classHeader">
+            <div class="class-info">
+                <h2><i class="fas fa-rocket"></i> <span id="className">Loading...</span></h2>
+                <div class="class-meta">
+                    <span><i class="fas fa-user-graduate"></i> <span id="studentCount">21</span> Students</span>
+                    <span><i class="fas fa-file-alt"></i> <span id="quizCount">3</span> Active Quizzes</span>
+                    <span><i class="fas fa-trophy"></i> 5 Challenges</span>
+                </div>
+                <div class="teacher-info">
+                    <i class="fas fa-chalkboard-teacher"></i> Taught by <span id="teacherName">Ms. Frizzle</span>
+                </div>
+            </div>
+            <div class="class-actions">
+                <div class="access-code">
+                    <label>CLASS ACCESS CODE</label>
+                    <div class="code-display">
+                        <span id="accessCode">X4J7K2</span>
+                        <button class="btn-small" id="copyCodeBtn">
+                            <i class="fas fa-copy"></i> Copy Code
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-secondary" id="viewAllQuizzesBtn">
+                    <i class="fas fa-list"></i> View All Quizzes
+                </button>
+                <button class="btn-primary" id="createQuizBtn">
+                    <i class="fas fa-plus"></i> New Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <h3>Active Quizzes</h3>
+                    <p id="activeQuizCount">3</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <h3>Avg. Score</h3>
+                    <p id="avgScore">82%</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h3>Engagement</h3>
+                    <p id="engagementRate">85%</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-trophy"></i>
+                <div>
+                    <h3>Challenges</h3>
+                    <p id="challengeCount">5</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Quizzes Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h3><i class="fas fa-file-alt"></i> Quizzes</h3>
+                    <a href="quizzes.html?class=<%= classId %>" class="view-all">View All →</a>
+                </div>
+                <div class="quizzes-grid" id="quizzesContainer">
+                    <!-- Quizzes will be loaded here dynamically -->
+                    <div class="loading">Loading quizzes...</div>
+                </div>
+            </div>
+
+            <!-- Live Activity -->
+            <div class="section">
+                <div class="section-header">
+                    <h3><i class="fas fa-bolt"></i> Live Activity</h3>
+                </div>
+                <div class="activity-feed" id="activityFeed">
+                    <div class="activity-item">
+                        <i class="fas fa-medal success"></i>
+                        <div>
+                            <p>Liam scored 100% on Math Quiz</p>
+                            <small>2 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="fas fa-check-circle primary"></i>
+                        <div>
+                            <p>Sophia completed Daily Challenge</p>
+                            <small>15 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="fas fa-user-plus info"></i>
+                        <div>
+                            <p>New student joined: Marcus T.</p>
+                            <small>1 hour ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="class-detail.js"></script>
+</body>
+</html>

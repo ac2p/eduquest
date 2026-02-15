@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Educator Sign Up</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-family: "Nunito", sans-serif;
+      }
+      body {
+        font-family: var(--font-family);
+        -webkit-font-smoothing: antialiased;
+        background-color: #fafaf9;
+      }
+      /* Subtle Pastel Background */
+      .bg-pastel-mesh {
+        position: fixed;
+        inset: 0;
+        z-index: -50;
+        background: radial-gradient(
+            at 0% 0%,
+            rgba(224, 231, 255, 0.5) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            rgba(255, 237, 213, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(220, 252, 231, 0.4) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 100%,
+            rgba(255, 228, 230, 0.4) 0px,
+            transparent 50%
+          );
+        filter: blur(60px);
+      }
+      /* Micro pattern for texture */
+      .bg-texture {
+        position: fixed;
+        inset: 0;
+        z-index: -49;
+        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
+          0 2px 4px -1px rgba(0, 0, 0, 0.02),
+          0 20px 25px -5px rgba(0, 0, 0, 0.05),
+          0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      }
+      @keyframes slide-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-enter {
+        animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float-slow {
+        0% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-15px) rotate(2deg);
+        }
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+      }
+      .animate-float-slow {
+        animation: float-slow 8s ease-in-out infinite;
+      }
+      .delay-100 {
+        animation-delay: 100ms;
+      }
+      .delay-200 {
+        animation-delay: 200ms;
+      }
+      /* Custom Form Styles */
+      .input-group:focus-within label {
+        color: #4f46e5;
+      }
+      .input-group:focus-within svg {
+        color: #4f46e5;
+      }
+      .toggle-checkbox:checked {
+        right: 0;
+        border-color: #4f46e5;
+      }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: #4f46e5;
+      }
+      /* Disabled state simulation */
+      .form-disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        filter: grayscale(0.1);
+        user-select: none;
+      }
+      .form-enabled {
+        opacity: 1;
+        pointer-events: auto;
+        filter: none;
+        transition: all 0.5s ease;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 min-h-screen flex flex-col lg:flex-row overflow-x-hidden"
+  >
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- LEFT COLUMN: Brand & Story (Hidden on mobile/small tablets) -->
+    <div
+      class="hidden lg:flex w-5/12 relative flex-col justify-between p-12 overflow-hidden bg-white/40 border-r border-white/50 backdrop-blur-sm z-10"
+    >
+      <!-- Background Shapes -->
+      <div
+        class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-200/20 rounded-full blur-[100px] pointer-events-none"
+      ></div>
+      <div
+        class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-rose-200/20 rounded-full blur-[80px] pointer-events-none"
+      ></div>
+
+      <!-- Floating Elements -->
+      <div
+        class="absolute top-1/4 right-10 opacity-30 animate-float text-indigo-400"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-graduation-cap"
+        >
+          <path
+            d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+          ></path>
+          <path d="M22 10v6"></path>
+          <path d="M6 12.5V16a6 2 0 0 0 12 0v-3.5"></path>
+        </svg>
+      </div>
+      <div
+        class="absolute bottom-1/3 left-10 opacity-30 animate-float-slow text-rose-400 delay-100"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-sparkles"
+        >
+          <path
+            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+          ></path>
+          <path d="M5 3v4"></path>
+          <path d="M9 3v4"></path>
+          <path d="M3 5h4"></path>
+          <path d="M3 9h4"></path>
+        </svg>
+      </div>
+
+      <!-- Top Brand -->
+      <div class="relative z-10 animate-enter">
+        <div class="flex items-center gap-3 mb-8">
+          <div
+            class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-6 h-6 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span class="text-2xl font-bold tracking-tight text-slate-800"
+            >EduQuest</span
+          >
+        </div>
+
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50/80 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-6"
+        >
+          Educator Sign Up
+        </div>
+
+        <h1
+          class="text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight leading-[1.1] mb-6"
+        >
+          Join your school’s<br />
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-500"
+            >EduQuest adventure.</span
+          >
+        </h1>
+
+        <p
+          class="text-lg text-slate-500 font-medium leading-relaxed max-w-md mb-8"
+        >
+          Use the invite code from your institution to create a secure educator
+          account and start guiding your students.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <div
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/60 border border-indigo-50 text-sm font-bold text-slate-600 shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-gamepad-2 text-indigo-500"
+            >
+              <line x1="6" x2="10" y1="12" y2="12"></line>
+              <line x1="8" x2="8" y1="10" y2="14"></line>
+              <line x1="15" x2="15.01" y1="13" y2="13"></line>
+              <line x1="18" x2="18.01" y1="11" y2="11"></line>
+              <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+            </svg>
+            Gamified Classes
+          </div>
+          <div
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/60 border border-indigo-50 text-sm font-bold text-slate-600 shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-trophy text-amber-500"
+            >
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path d="M10 14.66V17"></path>
+              <path d="M14 14.66V17"></path>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+            Track Progress
+          </div>
+          <div
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/60 border border-indigo-50 text-sm font-bold text-slate-600 shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-users text-rose-500"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Student Engagement
+          </div>
+        </div>
+      </div>
+
+      <!-- Illustration Area -->
+      <div class="relative z-10 mt-8 animate-enter delay-200"></div>
+    </div>
+
+    <!-- RIGHT COLUMN: Sign Up Form -->
+    <div
+      class="w-full lg:w-7/12 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-12 relative"
+    >
+      <!-- Mobile Brand (Visible only on mobile) -->
+      <div class="lg:hidden w-full max-w-xl mb-6 flex items-center gap-2">
+        <div
+          class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-compass"
+          >
+            <path
+              d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+            ></path>
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+        </div>
+        <span class="text-lg font-bold text-slate-800">EduQuest</span>
+      </div>
+
+      <!-- Main Card -->
+      <main class="w-full max-w-xl animate-enter delay-100">
+        <div class="glass-card rounded-[2rem] p-1 sm:p-2">
+          <div
+            class="bg-white/60 rounded-[1.8rem] border border-white/50 p-6 sm:p-8 relative overflow-hidden"
+          >
+            <!-- Inner Gradient Top -->
+            <div
+              class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none"
+            ></div>
+
+            <!-- Card Header -->
+            <div class="relative flex items-start justify-between mb-8">
+              <div>
+                <h2 class="text-2xl font-black text-slate-800 tracking-tight">
+                  Create Educator Account
+                </h2>
+                <p class="text-sm font-medium text-slate-500 mt-1">
+                  Enter your invite code to connect with your institution.
+                </p>
+              </div>
+              <div
+                class="hidden sm:flex px-3 py-1 rounded-full bg-slate-100 border border-slate-200/60 text-slate-500 text-[10px] font-bold uppercase tracking-wide items-center gap-1.5 shadow-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-shield-check"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                </svg>
+                Educator Portal
+              </div>
+            </div>
+
+            <!-- STEP 1: INVITE CODE (Visual state: Empty & Ready) -->
+            <div class="space-y-4 mb-8 relative">
+              <div class="flex items-center justify-between">
+                <label
+                  class="text-xs font-bold text-slate-700 uppercase tracking-wide ml-1"
+                  >Institution Invite Code</label
+                >
+              </div>
+
+              <div class="flex gap-2">
+                <div class="relative flex-1 group input-group">
+                  <div
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-indigo-500"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-key-round"
+                    >
+                      <path
+                        d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"
+                      ></path>
+                      <circle cx="16.5" cy="7.5" r=".5"></circle>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Enter invite code"
+                    class="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold tracking-widest text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                  />
+                </div>
+                <button
+                  class="px-5 py-3 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 font-bold text-sm shadow-sm transition-all cursor-pointer"
+                >
+                  Verify
+                </button>
+              </div>
+
+              <!-- Success Chip (Hidden until verified) -->
+              <div
+                class="hidden flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100"
+              >
+                <div
+                  class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 border border-indigo-200/50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-school"
+                  >
+                    <path d="m4 6 8-4 8 4"></path>
+                    <path
+                      d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"
+                    ></path>
+                    <path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"></path>
+                    <path d="M18 5v17"></path>
+                    <path d="M6 5v17"></path>
+                    <circle cx="12" cy="9" r="2"></circle>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="text-[11px] font-bold text-slate-400 uppercase">
+                    Linked Institution
+                  </div>
+                  <div class="text-xs font-bold text-slate-700">
+                    Springfield Elementary School
+                    <span class="font-normal text-slate-400 mx-1">·</span>
+                    <span class="text-slate-500">Admin: S. Skinner</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: ACCOUNT DETAILS (Disabled State) -->
+            <div class="form-disabled space-y-5 border-t border-slate-100 pt-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Full Name -->
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Full Name</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-user"
+                      >
+                        <path
+                          d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+                        ></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="e.g. Edna Krabappel"
+                      class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
+
+                <!-- Display Name -->
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Display Name</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-smile"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" x2="9.01" y1="9" y2="9"></line>
+                        <line x1="15" x2="15.01" y1="9" y2="9"></line>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="e.g. Mrs. K"
+                      class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="space-y-1.5 input-group">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Email Address</label
+                  >
+                  <span
+                    class="text-[10px] text-indigo-500 font-bold bg-indigo-50 px-1.5 py-0.5 rounded"
+                    >Use school email</span
+                  >
+                </div>
+                <div class="relative">
+                  <div
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-mail"
+                    >
+                      <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                      <path
+                        d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                      ></path>
+                    </svg>
+                  </div>
+                  <input
+                    type="email"
+                    placeholder="name@school.edu"
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Password -->
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Password</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-lock"
+                      >
+                        <rect
+                          width="18"
+                          height="11"
+                          x="3"
+                          y="11"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Confirm Password</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-lock-keyhole"
+                      >
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <rect x="3" y="10" width="18" height="12" rx="2"></rect>
+                        <path d="M7 10V7a5 5 0 0 1 10 0v3"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dropdowns: Subject & Timezone -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Primary Subject</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-book"
+                      >
+                        <path
+                          d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+                        ></path>
+                      </svg>
+                    </div>
+                    <select
+                      class="w-full pl-10 pr-8 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 appearance-none shadow-sm cursor-pointer"
+                    >
+                      <option>Mathematics</option>
+                      <option>Science</option>
+                      <option>Literature</option>
+                      <option>History</option>
+                      <option>Computer Science</option>
+                    </select>
+                    <div
+                      class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5 input-group">
+                  <label class="text-xs font-bold text-slate-500 ml-1"
+                    >Timezone</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-globe"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" x2="22" y1="12" y2="12"></line>
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <select
+                      class="w-full pl-10 pr-8 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 appearance-none shadow-sm cursor-pointer"
+                    >
+                      <option>(GMT-05:00) Eastern Time</option>
+                      <option>(GMT-08:00) Pacific Time</option>
+                      <option>(GMT+00:00) London</option>
+                      <option>(GMT+08:00) Singapore</option>
+                    </select>
+                    <div
+                      class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Terms & Actions -->
+              <div class="pt-2">
+                <label class="flex items-start gap-3 cursor-pointer group">
+                  <div class="relative flex items-center">
+                    <input type="checkbox" class="peer sr-only" />
+                    <div
+                      class="w-5 h-5 border-2 border-slate-300 rounded-md bg-white peer-checked:bg-indigo-600 peer-checked:border-indigo-600 transition-all"
+                    ></div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-check absolute left-1 top-1 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
+                    >
+                      <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <p
+                    class="text-xs text-slate-500 font-medium pt-0.5 group-hover:text-slate-600"
+                  >
+                    I agree to the
+                    <a
+                      href="#"
+                      class="text-indigo-600 font-bold hover:underline"
+                      >Terms of Service</a
+                    >
+                    and
+                    <a
+                      href="#"
+                      class="text-indigo-600 font-bold hover:underline"
+                      >Privacy Policy</a
+                    >.
+                  </p>
+                </label>
+              </div>
+
+              <button
+                class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-sm shadow-xl shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                Create Educator Account
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </button>
+
+              <p class="text-center text-xs font-semibold text-slate-500 mt-4">
+                Already have an educator account?
+                <a href="#" class="text-indigo-600 hover:underline"
+                  >Sign in instead</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

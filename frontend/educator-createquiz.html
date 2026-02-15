@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - Create New Quiz</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        :root { --font-family: 'Nunito', sans-serif; }
+        body { font-family: var(--font-family); -webkit-font-smoothing: antialiased; background-color: #fafaf9; }
+        
+        /* Backgrounds */
+        .bg-pastel-mesh {
+            position: fixed; inset: 0; z-index: -50;
+            background:
+                radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.5) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 237, 213, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(220, 252, 231, 0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(255, 228, 230, 0.4) 0px, transparent 50%);
+            filter: blur(60px);
+        }
+        .bg-texture {
+            position: fixed; inset: 0; z-index: -49;
+            opacity: 0.3;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Glass & Card Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .hover-lift { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s; }
+        .hover-lift:hover { transform: translateY(-2px); }
+        
+        /* Animations */
+        @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-enter { animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        
+        /* Custom Inputs & Toggles */
+        .toggle-checkbox:checked { right: 0; border-color: #4f46e5; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4f46e5; }
+        .custom-range { -webkit-appearance: none; width: 100%; height: 6px; background: #e2e8f0; border-radius: 5px; outline: none; }
+        .custom-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #4f46e5; cursor: pointer; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.3); transition: transform 0.1s; }
+        .custom-range::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        
+        /* Collapse animation */
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapse-content.expanded {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="text-slate-600 selection:bg-indigo-100 selection:text-indigo-800 pb-12 overflow-x-hidden">
+    <div class="bg-pastel-mesh"></div>
+    <div class="bg-texture"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 pt-4 pb-2 px-4">
+        <div class="max-w-7xl mx-auto glass-card rounded-full px-4 py-3 flex items-center justify-between shadow-sm shadow-indigo-100/50">
+            <!-- Brand -->
+            <div class="flex items-center gap-3 pl-2">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass w-5 h-5 stroke-[1.5]">
+                        <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-slate-700 hidden sm:block">EduQuest </span>
+            </div>
+
+            <!-- Links (Educator Context) -->
+            <div class="hidden md:flex items-center gap-1 p-1 bg-slate-100/50 rounded-full border border-slate-200/50">
+                <a href="educator-dashboard.html" class="hover:text-indigo-600 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5">Dashboard</a>
+                <a href="educator-class.html" class="transition-all text-sm font-bold text-indigo-600 bg-white border-slate-200/60 border rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm">My Classes</a>
+                <a href="educator-reports.html" class="hover:text-indigo-600 hover:bg-white/60 transition-all text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5">Reports</a>
+            </div>
+
+            <!-- Profile -->
+            <div class="flex items-center gap-4 pr-2">
+                <button class="relative p-2 text-slate-400 hover:text-indigo-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+                    <span class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                </button>
+                <div class="hidden sm:flex flex-col items-end">
+                    <span class="text-xs font-bold text-slate-700">Ms. Frizzle</span>
+                    <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full pt-0.5 pr-2 pb-0.5 pl-2" style="">Educator</span>
+                </div>
+                <div class="cursor-pointer hover:ring-indigo-100 transition-all bg-white w-10 h-10 border-indigo-100 border-2 rounded-full ring-transparent ring-2 pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative" onclick="window.location.href='educator-profile.html'" role="button">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle&amp;backgroundColor=e0e7ff" alt="Profile" class="w-full h-full object-cover rounded-full">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT - QUIZ CREATOR -->
+    <main class="max-w-7xl mx-auto pt-28 pb-12 px-4 md:px-6 relative z-10" id="quiz-container">
+        <!-- TOP BAR - Quiz Header -->
+        <header class="mb-6 sticky top-24 z-30 animate-enter">
+            <div class="glass-card shadow-indigo-100/30 flex flex-col md:flex-row gap-4 border-b-indigo-500/10 rounded-[1.5rem] border-b-4 pt-4 pr-6 pb-4 pl-6 shadow-xl gap-x-4 gap-y-4 items-center justify-between">
+                <!-- Left: Title & Breadcrumb -->
+                <div class="flex flex-col gap-1 w-full md:w-auto">
+                    <a href="educator-quiz.html" class="flex items-center gap-1 hover:text-indigo-500 transition-colors text-xs font-bold text-slate-400 mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5" class=""></path></svg>
+                        Back to Quizzes
+                    </a>
+                    <div class="flex gap-3 gap-x-3 gap-y-3 items-center">
+                         <div class="text-indigo-600 bg-indigo-50 rounded-lg pt-2 pr-2 pb-2 pl-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen-tool"><path d="m12 19 7-7 3 3-7 7-3-3z"></path><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="m2 2 7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                        </div>
+                        <input type="text" value="Cellular Respiration Unit 1" class="md:text-2xl border-none focus:ring-0 focus:outline-none placeholder:text-slate-300 md:w-96 text-xl font-extrabold text-slate-800 bg-transparent w-full" placeholder="Untitled Quiz">
+                        <button class="text-slate-400 hover:text-indigo-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" class=""></path><path d="m15 5 4 4"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Actions -->
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <span class="text-xs font-bold text-slate-400 mr-2 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-upload"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m16 16-4-4-4 4"></path></svg>
+                        Saved
+                    </span>
+                    
+                    <button class="px-6 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-bold text-sm shadow-md shadow-indigo-200 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+                        Publish Quiz
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-enter" style="animation-delay: 100ms;">
+            
+            <!-- LEFT COLUMN: Question Builder -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Tabs -->
+                <div class="flex items-center border-b border-slate-200/70 pb-0 gap-6">
+                    <button class="pb-3 text-sm font-bold text-slate-400 hover:text-indigo-500 transition-colors relative group">
+                        Question Bank
+                        <span class="absolute bottom-[-1px] left-0 w-0 h-0.5 bg-indigo-500 transition-all group-hover:w-full"></span>
+                    </button>
+                    <button class="pb-3 text-sm font-bold text-indigo-600 relative">
+                        Custom Questions
+                        <span class="absolute bottom-[-1px] left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-violet-500"></span>
+                    </button>
+                </div>
+
+                <!-- Question Editor Cards -->
+                <div class="space-y-6" id="questions-container">
+                    <!-- Controls Summary -->
+                    <div class="flex items-center justify-between px-2">
+                        <span class="uppercase text-xs font-bold text-slate-400 tracking-wide" id="questions-summary">? Questions • Est: ?? mins</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="expandAllQuestions()" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-3 py-1 rounded-lg transition-colors">Expand All</button>
+                            <button onclick="collapseAllQuestions()" class="text-xs font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-100 px-3 py-1 rounded-lg transition-colors">Collapse All</button>
+                        </div>
+                    </div>
+
+                    <!-- Questions will be added here dynamically -->
+                </div>
+
+                <!-- Add Button -->
+                <button id="add-question-btn" class="w-full py-4 rounded-[1.5rem] border-2 border-dashed border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 text-slate-400 hover:text-indigo-600 font-bold text-sm transition-all flex items-center justify-center gap-2 group">
+                    <div class="p-1 rounded-full bg-slate-100 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                    </div>
+                    Add New Question
+                </button>
+            </div>
+
+            <!-- RIGHT COLUMN: Quiz Settings -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- Quiz Details -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-50/50 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="flex items-center gap-2 mb-4 relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-2 text-indigo-500"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+                        <h3 class="text-sm font-extrabold text-slate-800 uppercase tracking-wide">Quiz Details</h3>
+                    </div>
+
+                    <div class="space-y-4 relative z-10">
+                        <!-- Subject -->
+                        <!-- Subject -->
+                        <div class="">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">Subject *</label>
+                            <select id="quizSubject" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 appearance-none" required>
+                                <option value="">Select Subject</option>
+                                <option value="Biology" selected>Biology</option>
+                                <option value="Science">Science</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="History">History</option>
+                                <option value="Social Studies">Social Studies</option>
+                                <option value="English">English</option>
+                                <option value="Arts">Arts</option>
+                                <option value="General">General</option>
+                            </select>
+                            <small class="text-xs text-slate-500 mt-1 block">Quiz will be automatically assigned to the corresponding subject class</small>
+                        </div>
+                        
+                        <!-- Classes -->
+                        <div class="">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">Assign to Class</label>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 border border-indigo-100 rounded-full text-xs font-bold text-indigo-700 cursor-pointer hover:bg-indigo-100 transition-colors">
+                                    Class 3A
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                </div>
+                                <button class="flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-500 hover:border-indigo-200 hover:text-indigo-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                                    Add Class
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Module -->
+                        <div class="">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">Module / Topic</label>
+                            <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 placeholder:text-slate-400" placeholder="e.g. Unit 4: Energy">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scoring & Config -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal text-amber-500"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg>
+                        <h3 class="text-sm font-extrabold text-slate-800 uppercase tracking-wide">Scoring &amp; Rules</h3>
+                    </div>
+
+                    <div class="space-y-5">
+                        <!-- Passing Threshold -->
+                        <div class="">
+                            <div class="flex justify-between text-xs font-bold text-slate-500 mb-2">
+                                <span>Pass Grade</span>
+                                <span class="text-indigo-600">70%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="70" class="custom-range">
+                        </div>
+
+                        <!-- Toggles -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-600">Shuffle Questions</span>
+                            <div class="relative w-9 h-5">
+                                <input type="checkbox" checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-indigo-500 appearance-none cursor-pointer shadow-sm transition-all duration-300">
+                                <div class="toggle-label block overflow-hidden h-5 rounded-full bg-indigo-500 cursor-pointer"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-600">Allow Retakes</span>
+                            <div class="relative w-9 h-5">
+                                <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer shadow-sm transition-all duration-300">
+                                <div class="toggle-label block overflow-hidden h-5 rounded-full bg-slate-200 cursor-pointer"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-amber-50 rounded-xl border border-amber-100 flex gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info text-amber-500 shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                             <p class="text-[10px] font-bold text-amber-700 leading-tight">Students see correct answers immediately after submission.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduling -->
+                <div class="bg-white border-slate-100 border rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock text-rose-500"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"></path><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h5"></path><path d="M17.5 17.5 16 16.25V14"></path><path d="M22 16a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z" class=""></path></svg>
+                        <h3 class="text-sm font-extrabold text-slate-800 uppercase tracking-wide">Scheduling</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Due Date -->
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">Due Date</label>
+                            <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-slate-400"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                                <span class="text-sm font-bold text-slate-700">Oct 24, 2024</span>
+                                <span class="text-xs font-medium text-slate-400 ml-auto">5:00 PM</span>
+                            </div>
+                        </div>
+
+                         <!-- Time Limit -->
+                         <div class="">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-600">Time Limit</span>
+                                <div class="relative w-8 h-4">
+                                    <input type="checkbox" checked="" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 border-indigo-400 appearance-none cursor-pointer shadow-sm transition-all duration-300">
+                                    <div class="toggle-label block overflow-hidden h-4 rounded-full bg-indigo-200 cursor-pointer"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="number" value="15" class="w-16 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-center outline-none focus:border-indigo-300">
+                                <span class="text-xs font-bold text-slate-500">Minutes</span>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass w-5 h-5">
+                                <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-bold text-white tracking-tight">EduQuest</span>
+                    </div>
+                    <p class="text-xs leading-relaxed text-slate-400 font-medium max-w-xs">Making learning an addictive adventure for students around the world.</p>
+                </div>
+                <div class="">
+                    <h4 class="font-bold text-white mb-4 text-sm">Product</h4>
+                    <ul class="space-y-2 text-xs font-medium text-slate-400">
+                        <li class=""><a href="#" class="hover:text-indigo-400 transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+                    <ul class="space-y-2 text-xs font-medium text-slate-400">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 text-sm">Legal</h4>
+                    <ul class="space-y-2 text-xs font-medium text-slate-400">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-6 flex justify-center">
+                <p class="text-xs font-medium text-slate-500">© 2024 EduQuest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+    async function saveQuiz() {
+        const quizData = {
+            title: document.getElementById('quizTitle').value,
+            subject: document.getElementById('quizSubject').value, // NEW
+            // ... other fields
+        };
+        
+        // Save quiz - it will auto-assign to subject class
+        const response = await fetch('/api/quizzes/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quizData)
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            alert(`Quiz created! ${result.className ? 'Assigned to: ' + result.className : ''}`);
+            // Redirect to classes or quizzes page
+            window.location.href = 'educator-class.html';
+        }
+    }
+    </script>
+
+    <!-- JavaScript for dynamic question management -->
+    <script>
+        lucide.createIcons();
+        
+        // Initialize question counter
+        let questionCounter = 0;
+        let questions = [];
+
+        // ============================================
+        // CORRECT ANSWER HANDLING FUNCTIONS
+        // ============================================
+
+        // Function to set correct answer for Multiple Choice
+        function setCorrectAnswerMC(radioButton) {
+            const optionDiv = radioButton.closest('.group\\/option');
+            const allOptions = optionDiv.parentElement.children;
+            
+            // Remove correct styling from all options
+            Array.from(allOptions).forEach(opt => {
+                const innerDiv = opt.querySelector('div.flex-1');
+                const correctBadge = opt.querySelector('.text-emerald-600');
+                
+                if (innerDiv) {
+                    innerDiv.classList.remove('bg-emerald-50/50', 'border-emerald-400', 'ring-4', 'ring-emerald-50');
+                    innerDiv.classList.add('bg-white', 'border-slate-200');
+                    
+                    // Remove correct badge if exists
+                    if (correctBadge) {
+                        correctBadge.remove();
+                    }
+                }
+                
+                // Make all radios non-correct style
+                const radio = opt.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.classList.remove('text-emerald-600', 'border-emerald-300', 'accent-emerald-600');
+                    radio.classList.add('text-indigo-600', 'border-slate-300');
+                }
+            });
+            
+            // Add correct styling to selected option
+            const selectedDiv = optionDiv.querySelector('div.flex-1');
+            selectedDiv.classList.remove('bg-white', 'border-slate-200');
+            selectedDiv.classList.add('bg-emerald-50/50', 'border-emerald-400', 'ring-4', 'ring-emerald-50');
+            
+            // Update radio button styling
+            radioButton.classList.remove('text-indigo-600', 'border-slate-300');
+            radioButton.classList.add('text-emerald-600', 'border-emerald-300', 'accent-emerald-600');
+            
+            // Add or update correct answer badge
+            if (!optionDiv.querySelector('.text-emerald-600.tracking-wide')) {
+                const badge = document.createElement('span');
+                badge.className = 'text-[10px] font-extrabold uppercase text-emerald-600 tracking-wide ml-2';
+                badge.textContent = 'Correct Answer';
+                selectedDiv.appendChild(badge);
+            }
+        }
+
+        // Function to set correct answer for True/False
+        function setCorrectAnswerTF(radioButton) {
+            const optionDiv = radioButton.closest('.group\\/option');
+            const allOptions = optionDiv.parentElement.children;
+            
+            // Remove correct styling from all options
+            Array.from(allOptions).forEach(opt => {
+                const innerDiv = opt.querySelector('div.flex-1');
+                const correctBadge = opt.querySelector('.text-emerald-600');
+                
+                if (innerDiv) {
+                    innerDiv.classList.remove('bg-emerald-50/50', 'border-emerald-400', 'ring-4', 'ring-emerald-50');
+                    innerDiv.classList.add('bg-white', 'border-slate-200');
+                    
+                    // Remove correct badge if exists
+                    if (correctBadge) {
+                        correctBadge.remove();
+                    }
+                }
+                
+                // Make all radios non-correct style
+                const radio = opt.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.classList.remove('text-emerald-600', 'border-emerald-300', 'accent-emerald-600');
+                    radio.classList.add('text-indigo-600', 'border-slate-300');
+                }
+            });
+            
+            // Add correct styling to selected option
+            const selectedDiv = optionDiv.querySelector('div.flex-1');
+            selectedDiv.classList.remove('bg-white', 'border-slate-200');
+            selectedDiv.classList.add('bg-emerald-50/50', 'border-emerald-400', 'ring-4', 'ring-emerald-50');
+            
+            // Update radio button styling
+            radioButton.classList.remove('text-indigo-600', 'border-slate-300');
+            radioButton.classList.add('text-emerald-600', 'border-emerald-300', 'accent-emerald-600');
+            
+            // Add correct answer badge
+            const badge = document.createElement('span');
+            badge.className = 'text-[10px] font-extrabold uppercase text-emerald-600 tracking-wide ml-2';
+            badge.textContent = 'Correct Answer';
+            selectedDiv.appendChild(badge);
+        }
+
+        // Function to mark a match pair as correct (for Match Pairs)
+        function markMatchPairCorrect(itemInput, matchInput) {
+            // Remove correct styling from all pairs
+            const allItems = document.querySelectorAll('input[type="text"]');
+            allItems.forEach(input => {
+                input.classList.remove('bg-emerald-50', 'border-emerald-200');
+                input.classList.add('bg-slate-50', 'border-slate-200');
+            });
+            
+            // Add correct styling to selected pair
+            itemInput.classList.remove('bg-slate-50', 'border-slate-200');
+            itemInput.classList.add('bg-emerald-50', 'border-emerald-200');
+            
+            matchInput.classList.remove('bg-slate-50', 'border-slate-200');
+            matchInput.classList.add('bg-emerald-50', 'border-emerald-200');
+        }
+
+        // ============================================
+        // UPDATED QUESTION TEMPLATES WITH CORRECT ANSWER HANDLING
+        // ============================================
+
+        const questionTemplates = {
+            'Multiple Choice': {
+                type: 'Multiple Choice',
+                content: `
+                    <div class="space-y-3 mb-6">
+                        <!-- Option A -->
+                        <div class="group/option flex items-center gap-3 p-1">
+                            <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                            </div>
+                            <div class="flex-1 flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-50 transition-all shadow-sm">
+                                <input type="radio" name="q${questionCounter}_ans" class="correct-radio w-5 h-5 text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                                <input type="text" value="Protein synthesis" class="flex-1 bg-transparent border-none text-slate-700 font-medium placeholder:text-slate-300 focus:ring-0 text-sm" placeholder="Option 1">
+                            </div>
+                            <button class="text-slate-300 hover:text-rose-400 transition-colors remove-option">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                            </button>
+                        </div>
+                        <!-- Option B (Correct by default) -->
+                        <div class="group/option flex items-center gap-3 p-1">
+                            <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                            </div>
+                            <div class="flex-1 flex items-center gap-3 bg-emerald-50/50 border border-emerald-400 rounded-xl px-4 py-3 ring-4 ring-emerald-50 transition-all shadow-sm">
+                                <input type="radio" name="q${questionCounter}_ans" class="correct-radio w-5 h-5 text-emerald-600 border-emerald-300 focus:ring-emerald-500 cursor-pointer accent-emerald-600" checked>
+                                <input type="text" value="Energy production (ATP)" class="flex-1 bg-transparent border-none text-slate-800 font-bold placeholder:text-slate-300 focus:ring-0 text-sm" placeholder="Option 2">
+                                <span class="text-[10px] font-extrabold uppercase text-emerald-600 tracking-wide">Correct Answer</span>
+                            </div>
+                            <button class="text-slate-300 hover:text-rose-400 transition-colors remove-option">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                            </button>
+                        </div>
+                        <!-- Option C -->
+                        <div class="group/option flex items-center gap-3 p-1">
+                            <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                            </div>
+                            <div class="flex-1 flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-50 transition-all shadow-sm">
+                                <input type="radio" name="q${questionCounter}_ans" class="correct-radio w-5 h-5 text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                                <input type="text" value="Photosynthesis" class="flex-1 bg-transparent border-none text-slate-700 font-medium placeholder:text-slate-300 focus:ring-0 text-sm" placeholder="Option 3">
+                            </div>
+                            <button class="text-slate-300 hover:text-rose-400 transition-colors remove-option">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <button class="add-option-btn flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors px-2 py-1 rounded hover:bg-indigo-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                            Add Option
+                        </button>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400">Points:</span>
+                                <input type="number" value="5" class="points-input w-12 text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-md py-1 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none">
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-400">Feedback</span>
+                                <div class="relative w-8 h-4">
+                                    <input type="checkbox" class="toggle-checkbox feedback-toggle absolute block w-4 h-4 rounded-full bg-white border-4 border-indigo-400 appearance-none cursor-pointer shadow-sm transition-all duration-300 left-0">
+                                    <div class="toggle-label block overflow-hidden h-4 rounded-full bg-indigo-100 cursor-pointer"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="feedback-section mt-4 pt-4 border-t border-dashed border-slate-200" style="display: none;">
+                        <label class="block text-xs font-bold text-indigo-500 mb-2">Explanation (Shown after submission)</label>
+                        <textarea rows="1" class="w-full text-sm text-slate-600 bg-indigo-50/30 border border-indigo-100 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100" placeholder="e.g. Mitochondria are known as the powerhouse of the cell..."></textarea>
+                    </div>
+                `
+            },
+            
+            'Short Answer': {
+                type: 'Short Answer',
+                content: `
+                    <div class="mb-6">
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <p class="text-sm text-slate-500 mb-2">Students will type their answer in a text box.</p>
+                            <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-3 py-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-text-cursor-input text-slate-400"><path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path><path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path><path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"></path><path d="M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7"></path><path d="M9 7v10"></path></svg>
+                                <span class="text-sm text-slate-400">Short answer field will appear here</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-slate-400">Max words:</span>
+                            <input type="number" value="100" class="w-16 text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-md py-1 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400">Points:</span>
+                                <input type="number" value="5" class="points-input w-12 text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-md py-1 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none">
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-400">Feedback</span>
+                                <div class="relative w-8 h-4">
+                                    <input type="checkbox" class="toggle-checkbox feedback-toggle absolute block w-4 h-4 rounded-full bg-white border-4 border-indigo-400 appearance-none cursor-pointer shadow-sm transition-all duration-300 left-0">
+                                    <div class="toggle-label block overflow-hidden h-4 rounded-full bg-indigo-100 cursor-pointer"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="feedback-section mt-4 pt-4 border-t border-dashed border-slate-200" style="display: none;">
+                        <label class="block text-xs font-bold text-indigo-500 mb-2">Explanation (Shown after submission)</label>
+                        <textarea rows="1" class="w-full text-sm text-slate-600 bg-indigo-50/30 border border-indigo-100 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100" placeholder="e.g. Osmosis is the movement of water molecules..."></textarea>
+                    </div>
+                `
+            },
+            
+            'True / False': {
+                type: 'True / False',
+                content: `
+                    <div class="space-y-3 mb-6">
+                        <!-- True Option -->
+                        <div class="group/option flex items-center gap-3 p-1">
+                            <div class="flex-1 flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-50 transition-all shadow-sm">
+                                <input type="radio" name="q${questionCounter}_tf" class="correct-radio w-5 h-5 text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                                <input type="text" value="True" class="flex-1 bg-transparent border-none text-slate-700 font-bold placeholder:text-slate-300 focus:ring-0 text-sm" readonly>
+                            </div>
+                        </div>
+                        <!-- False Option (Correct by default) -->
+                        <div class="group/option flex items-center gap-3 p-1">
+                            <div class="flex-1 flex items-center gap-3 bg-emerald-50/50 border border-emerald-400 rounded-xl px-4 py-3 ring-4 ring-emerald-50 transition-all shadow-sm">
+                                <input type="radio" name="q${questionCounter}_tf" class="correct-radio w-5 h-5 text-emerald-600 border-emerald-300 focus:ring-emerald-500 cursor-pointer accent-emerald-600" checked>
+                                <input type="text" value="False" class="flex-1 bg-transparent border-none text-slate-800 font-bold placeholder:text-slate-300 focus:ring-0 text-sm" readonly>
+                                <span class="text-[10px] font-extrabold uppercase text-emerald-600 tracking-wide">Correct Answer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div></div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400">Points:</span>
+                                <input type="number" value="1" class="points-input w-12 text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-md py-1 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none">
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-400">Feedback</span>
+                                <div class="relative w-8 h-4">
+                                    <input type="checkbox" class="toggle-checkbox feedback-toggle absolute block w-4 h-4 rounded-full bg-white border-4 border-indigo-400 appearance-none cursor-pointer shadow-sm transition-all duration-300 left-0">
+                                    <div class="toggle-label block overflow-hidden h-4 rounded-full bg-indigo-100 cursor-pointer"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="feedback-section mt-4 pt-4 border-t border-dashed border-slate-200" style="display: none;">
+                        <label class="block text-xs font-bold text-indigo-500 mb-2">Explanation (Shown after submission)</label>
+                        <textarea rows="1" class="w-full text-sm text-slate-600 bg-indigo-50/30 border border-indigo-100 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100" placeholder="Explain why the statement is true or false..."></textarea>
+                    </div>
+                `
+            },
+            
+            'Match Pairs': {
+                type: 'Match Pairs',
+                content: `
+                    <div class="space-y-4 mb-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Left Column (Items) -->
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-600 text-center">Items</h4>
+                                <div class="group/option flex items-center gap-3 p-1">
+                                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                                    </div>
+                                    <input type="text" value="Mitochondria" class="match-item flex-1 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Item">
+                                </div>
+                                <div class="group/option flex items-center gap-3 p-1">
+                                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                                    </div>
+                                    <input type="text" value="Nucleus" class="match-item flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Item">
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column (Matches) -->
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-600 text-center">Matches</h4>
+                                <div class="group/option flex items-center gap-3 p-1">
+                                    <input type="text" value="Powerhouse of cell" class="match-pair flex-1 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Match">
+                                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                                    </div>
+                                </div>
+                                <div class="group/option flex items-center gap-3 p-1">
+                                    <input type="text" value="Contains DNA" class="match-pair flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Match">
+                                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-500 italic">
+                            <p class="mb-2">💡 <strong>How to set correct answers:</strong></p>
+                            <p>1. First pair (top row) is marked as correct by default</p>
+                            <p>2. To change, click on any item and its corresponding match</p>
+                            <p>3. Both will highlight in green to show they're paired correctly</p>
+                        </div>
+                        <button class="add-match-pair-btn w-full py-2 border border-dashed border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:text-indigo-600 hover:border-indigo-300 transition-all flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                            Add Match Pair
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div></div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-400">Points per pair:</span>
+                                <input type="number" value="2" class="points-input w-12 text-center text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-md py-1 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none">
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-400">Feedback</span>
+                                <div class="relative w-8 h-4">
+                                    <input type="checkbox" class="toggle-checkbox feedback-toggle absolute block w-4 h-4 rounded-full bg-white border-4 border-indigo-400 appearance-none cursor-pointer shadow-sm transition-all duration-300 left-0">
+                                    <div class="toggle-label block overflow-hidden h-4 rounded-full bg-indigo-100 cursor-pointer"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="feedback-section mt-4 pt-4 border-t border-dashed border-slate-200" style="display: none;">
+                        <label class="block text-xs font-bold text-indigo-500 mb-2">Explanation (Shown after submission)</label>
+                        <textarea rows="1" class="w-full text-sm text-slate-600 bg-indigo-50/30 border border-indigo-100 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100" placeholder="e.g. Match the cell organelles with their functions..."></textarea>
+                    </div>
+                `
+            }
+        };
+
+        // ============================================
+        // UPDATED FUNCTIONS WITH CORRECT ANSWER HANDLING
+        // ============================================
+
+        // Function to create a new question
+        
+        function createQuestion(type = 'Multiple Choice', questionNumber = null) {
+            if (questionNumber === null) {
+                questionCounter++;
+                questionNumber = questionCounter;
+            } else {
+                // If we're explicitly setting a number (like for initial questions),
+                // make sure questionCounter is at least that high
+                if (questionNumber > questionCounter) {
+                    questionCounter = questionNumber;
+                }
+            }
+            
+            const template = questionTemplates[type];
+            const questionId = `question-${questionNumber}`;
+
+            const templateContent = template.content.replace(/\${questionNumber\}/g, questionNumber);
+            
+            const questionHTML = `
+                <div id="${questionId}" class="question-card bg-white rounded-[1.5rem] border border-indigo-100 shadow-sm shadow-indigo-50/50 p-6 relative group">
+                    <div class="absolute -left-3 top-6 w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 shadow-sm cursor-grab hover:text-indigo-500 hover:border-indigo-200 z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    </div>
+                    
+                    <!-- Header: Number & Type -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold text-sm shadow-md shadow-indigo-200">${questionNumber}</span>
+                            <h3 class="question-type text-sm font-bold text-slate-400 uppercase tracking-wider">${type}</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select class="question-type-select bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 outline-none transition-all">
+                                <option value="Multiple Choice" ${type === 'Multiple Choice' ? 'selected' : ''}>Multiple Choice</option>
+                                <option value="True / False" ${type === 'True / False' ? 'selected' : ''}>True / False</option>
+                                <option value="Short Answer" ${type === 'Short Answer' ? 'selected' : ''}>Short Answer</option>
+                                <option value="Match Pairs" ${type === 'Match Pairs' ? 'selected' : ''}>Match Pairs</option>
+                            </select>
+                            <div class="w-px h-6 bg-slate-100 mx-1"></div>
+                            <div class="flex items-center gap-1">
+                                <button class="duplicate-question p-2 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors" title="Duplicate">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                                </button>
+                                <button class="delete-question p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" class=""></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question Input -->
+                    <div class="mb-6 relative">
+                        <textarea rows="2" class="question-text w-full text-lg font-bold text-slate-800 placeholder:text-slate-300 bg-slate-50 border-0 border-b-2 border-slate-200 focus:border-indigo-500 focus:ring-0 focus:bg-white rounded-t-lg px-4 py-3 resize-none transition-all" placeholder="Enter your question here...">${type === 'Multiple Choice' ? 'What is the primary function of the mitochondria in a cell?' : type === 'Short Answer' ? 'Explain the concept of osmosis in your own words.' : type === 'True / False' ? 'Mitochondria are known as the powerhouse of the cell.' : 'Match the cell organelles with their functions:'}</textarea>
+                        <div class="absolute right-3 top-3 flex gap-2">
+                            <button class="p-1.5 bg-white rounded-md text-slate-400 hover:text-indigo-600 shadow-sm border border-slate-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+                            </button>
+                            <button class="p-1.5 bg-white rounded-md text-slate-400 hover:text-indigo-600 shadow-sm border border-slate-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sigma"><path d="M18 7c0-1.1-.9-2-2-2H6.41L13 12l-6.59 7H16c1.1 0 2-.9 2-2"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Content based on question type -->
+                    <div class="question-content">
+                        ${template.content}
+                    </div>
+                </div>
+            `;
+            
+            questions.push({
+                id: questionId,
+                number: questionNumber,
+                type: type,
+                points: 5
+            });
+            
+            return questionHTML;
+        }
+
+        // Function to update question summary
+        function updateQuestionSummary() {
+            const totalQuestions = questions.length;
+            const totalPoints = questions.reduce((sum, q) => sum + (parseInt(document.querySelector(`#${q.id} .points-input`)?.value) || 0), 0);
+            const estimatedTime = Math.ceil(totalQuestions * 1.5); // 1.5 minutes per question
+            
+            document.getElementById('questions-summary').textContent = 
+                `${totalQuestions} Questions • Est: ${estimatedTime} mins • ${totalPoints} pts`;
+        }
+
+        // Function to change question type
+        function changeQuestionType(selectElement, questionId) {
+            const newType = selectElement.value;
+            const questionCard = document.getElementById(questionId);
+            const questionNumber = questions.find(q => q.id === questionId).number;
+            
+            // Update question type display
+            questionCard.querySelector('.question-type').textContent = newType;
+            
+            // Update question content
+            const newContent = questionTemplates[newType].content;
+            questionCard.querySelector('.question-content').innerHTML = newContent;
+            
+            // Update question text based on type
+            const questionText = questionCard.querySelector('.question-text');
+            switch(newType) {
+                case 'Multiple Choice':
+                    questionText.value = 'What is the primary function of the mitochondria in a cell?';
+                    break;
+                case 'Short Answer':
+                    questionText.value = 'Explain the concept of osmosis in your own words.';
+                    break;
+                case 'True / False':
+                    questionText.value = 'Mitochondria are known as the powerhouse of the cell.';
+                    break;
+                case 'Match Pairs':
+                    questionText.value = 'Match the cell organelles with their functions:';
+                    break;
+            }
+            
+            // Update questions array
+            const questionIndex = questions.findIndex(q => q.id === questionId);
+            if (questionIndex !== -1) {
+                questions[questionIndex].type = newType;
+            }
+            
+            // Reattach event listeners
+            attachQuestionEventListeners(questionCard);
+            
+            // Update summary
+            updateQuestionSummary();
+        }
+
+        // Function to add option to multiple choice question
+        function addOption(button) {
+            const questionCard = button.closest('.question-card');
+            const optionsContainer = questionCard.querySelector('.space-y-3.mb-6');
+            
+            const optionNumber = optionsContainer.children.length + 1;
+            const optionLetter = String.fromCharCode(64 + optionNumber); // A, B, C, etc.
+            
+            const optionHTML = `
+                <div class="group/option flex items-center gap-3 p-1">
+                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    </div>
+                    <div class="flex-1 flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-50 transition-all shadow-sm">
+                        <input type="radio" name="${questionCard.id}_ans" class="correct-radio w-5 h-5 text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer">
+                        <input type="text" value="Option ${optionNumber}" class="flex-1 bg-transparent border-none text-slate-700 font-medium placeholder:text-slate-300 focus:ring-0 text-sm" placeholder="Option ${optionNumber}">
+                    </div>
+                    <button class="text-slate-300 hover:text-rose-400 transition-colors remove-option">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                    </button>
+                </div>
+            `;
+            
+            optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
+            
+            // Attach remove event to new option
+            const newOption = optionsContainer.lastElementChild;
+            newOption.querySelector('.remove-option').addEventListener('click', function() {
+                this.closest('.group\\/option').remove();
+            });
+            
+            // Attach correct answer event to new radio button
+            const newRadio = newOption.querySelector('.correct-radio');
+            newRadio.addEventListener('click', function() {
+                setCorrectAnswerMC(this);
+            });
+        }
+
+        // Function to add match pair
+        function addMatchPair(button) {
+            const questionCard = button.closest('.question-card');
+            const itemsContainer = questionCard.querySelector('.grid.grid-cols-2.gap-4 div:first-child .space-y-3');
+            const matchesContainer = questionCard.querySelector('.grid.grid-cols-2.gap-4 div:last-child .space-y-3');
+            
+            const pairNumber = itemsContainer.children.length + 1;
+            
+            // Add item
+            const itemHTML = `
+                <div class="group/option flex items-center gap-3 p-1">
+                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    </div>
+                    <input type="text" value="Item ${pairNumber}" class="match-item flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Item">
+                </div>
+            `;
+            
+            // Add match
+            const matchHTML = `
+                <div class="group/option flex items-center gap-3 p-1">
+                    <input type="text" value="Match ${pairNumber}" class="match-pair flex-1 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-indigo-300" placeholder="Match">
+                    <div class="cursor-grab text-slate-300 hover:text-indigo-400 opacity-0 group-hover/option:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>
+                    </div>
+                </div>
+            `;
+            
+            itemsContainer.insertAdjacentHTML('beforeend', itemHTML);
+            matchesContainer.insertAdjacentHTML('beforeend', matchHTML);
+            
+            // Attach click events to new match pair
+            const newItem = itemsContainer.lastElementChild.querySelector('.match-item');
+            const newMatch = matchesContainer.lastElementChild.querySelector('.match-pair');
+            
+            newItem.addEventListener('click', function() {
+                const index = Array.from(itemsContainer.children).indexOf(this.closest('.group\\/option'));
+                const correspondingMatch = matchesContainer.children[index]?.querySelector('.match-pair');
+                if (correspondingMatch) {
+                    markMatchPairCorrect(this, correspondingMatch);
+                }
+            });
+            
+            newMatch.addEventListener('click', function() {
+                const index = Array.from(matchesContainer.children).indexOf(this.closest('.group\\/option'));
+                const correspondingItem = itemsContainer.children[index]?.querySelector('.match-item');
+                if (correspondingItem) {
+                    markMatchPairCorrect(correspondingItem, this);
+                }
+            });
+        }
+
+        // Function to attach event listeners to a question card
+        function attachQuestionEventListeners(questionCard) {
+            // Type change
+            const typeSelect = questionCard.querySelector('.question-type-select');
+            if (typeSelect) {
+                typeSelect.addEventListener('change', function() {
+                    changeQuestionType(this, questionCard.id);
+                });
+            }
+            
+            // Delete question
+            const deleteBtn = questionCard.querySelector('.delete-question');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function() {
+                    const questionId = questionCard.id;
+                    const questionIndex = questions.findIndex(q => q.id === questionId);
+                    
+                    if (questionIndex !== -1) {
+                        questions.splice(questionIndex, 1);
+                    }
+                    
+                    questionCard.remove();
+                    renumberQuestions();
+                    updateQuestionSummary();
+                });
+            }
+            
+            // Duplicate question
+            const duplicateBtn = questionCard.querySelector('.duplicate-question');
+            if (duplicateBtn) {
+                duplicateBtn.addEventListener('click', function() {
+                    const questionIndex = questions.findIndex(q => q.id === questionCard.id);
+                    if (questionIndex !== -1) {
+                        const originalQuestion = questions[questionIndex];
+                        const newQuestionHTML = createQuestion(originalQuestion.type);
+                        
+                        // Insert after current question
+                        questionCard.insertAdjacentHTML('afterend', newQuestionHTML);
+                        
+                        // Get the new question card
+                        const newQuestionCard = questionCard.nextElementSibling;
+                        
+                        // Attach event listeners to new question
+                        attachQuestionEventListeners(newQuestionCard);
+                        
+                        // Update summary
+                        updateQuestionSummary();
+                    }
+                });
+            }
+            
+            // Add option button (for multiple choice)
+            const addOptionBtn = questionCard.querySelector('.add-option-btn');
+            if (addOptionBtn) {
+                addOptionBtn.addEventListener('click', function() {
+                    addOption(this);
+                });
+            }
+            
+            // Add match pair button
+            const addMatchPairBtn = questionCard.querySelector('.add-match-pair-btn');
+            if (addMatchPairBtn) {
+                addMatchPairBtn.addEventListener('click', function() {
+                    addMatchPair(this);
+                });
+            }
+            
+            // Remove option buttons
+            const removeOptionBtns = questionCard.querySelectorAll('.remove-option');
+            removeOptionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.group\\/option').remove();
+                });
+            });
+            
+            // Feedback toggle
+            const feedbackToggle = questionCard.querySelector('.feedback-toggle');
+            const feedbackSection = questionCard.querySelector('.feedback-section');
+            if (feedbackToggle && feedbackSection) {
+                feedbackToggle.addEventListener('change', function() {
+                    feedbackSection.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+            
+            // Points input change
+            const pointsInput = questionCard.querySelector('.points-input');
+            if (pointsInput) {
+                pointsInput.addEventListener('input', function() {
+                    updateQuestionSummary();
+                });
+            }
+            
+            // ============================================
+            // CORRECT ANSWER EVENT LISTENERS
+            // ============================================
+            
+            // Correct answer radio buttons for MC and TF
+            const correctRadios = questionCard.querySelectorAll('.correct-radio');
+            correctRadios.forEach(radio => {
+                radio.addEventListener('click', function() {
+                    const questionType = questionCard.querySelector('.question-type').textContent.trim();
+                    
+                    if (questionType === 'Multiple Choice') {
+                        setCorrectAnswerMC(this);
+                    } else if (questionType === 'True / False') {
+                        setCorrectAnswerTF(this);
+                    }
+                });
+            });
+            
+            // Match pair selection
+            if (questionCard.querySelector('.match-item')) {
+                const matchItems = questionCard.querySelectorAll('.match-item');
+                const matchPairs = questionCard.querySelectorAll('.match-pair');
+                
+                matchItems.forEach((item, index) => {
+                    item.addEventListener('click', function() {
+                        const correspondingMatch = matchPairs[index];
+                        if (correspondingMatch) {
+                            markMatchPairCorrect(this, correspondingMatch);
+                        }
+                    });
+                });
+                
+                matchPairs.forEach((match, index) => {
+                    match.addEventListener('click', function() {
+                        const correspondingItem = matchItems[index];
+                        if (correspondingItem) {
+                            markMatchPairCorrect(correspondingItem, this);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Function to renumber questions after deletion
+        function renumberQuestions() {
+            const questionCards = document.querySelectorAll('.question-card');
+            questionCards.forEach((card, index) => {
+                const questionNumber = index + 1;
+                const numberSpan = card.querySelector('span.bg-indigo-600');
+                if (numberSpan) {
+                    numberSpan.textContent = questionNumber;
+                }
+                
+                // Update question number in questions array
+                const questionId = card.id;
+                const questionIndex = questions.findIndex(q => q.id === questionId);
+                if (questionIndex !== -1) {
+                    questions[questionIndex].number = questionNumber;
+                }
+            });
+        }
+
+        // Function to expand all questions
+        function expandAllQuestions() {
+            // Implementation depends on your collapse/expand logic
+            console.log('Expand all questions');
+        }
+
+        // Function to collapse all questions
+        function collapseAllQuestions() {
+            // Implementation depends on your collapse/expand logic
+            console.log('Collapse all questions');
+        }
+
+        // Initialize with sample questions
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionsContainer = document.getElementById('questions-container');
+            
+            // Add first question (Multiple Choice)
+            questionsContainer.insertAdjacentHTML('beforeend', createQuestion('Multiple Choice', 1));
+            
+            // Add second question (Short Answer)
+            questionsContainer.insertAdjacentHTML('beforeend', createQuestion('Short Answer', 2));
+            
+            // Attach event listeners to initial questions
+            document.querySelectorAll('.question-card').forEach(card => {
+                attachQuestionEventListeners(card);
+            });
+            
+            // Update summary
+            updateQuestionSummary();
+            
+            // Add new question button event
+            document.getElementById('add-question-btn').addEventListener('click', function() {
+                const newQuestionHTML = createQuestion('Multiple Choice');
+                questionsContainer.insertAdjacentHTML('beforeend', newQuestionHTML);
+                
+                // Attach event listeners to new question
+                const newQuestionCard = questionsContainer.lastElementChild;
+                attachQuestionEventListeners(newQuestionCard);
+                
+                // Update summary
+                updateQuestionSummary();
+            });
+        });
+    </script>
+    <!-- Add this right before </body> -->
+<script src="../js/quiz-saver.js"></script>
+<script>
+// Test API connection
+async function testAPIConnection() {
+    try {
+        const response = await fetch('http://localhost:5500');
+        const data = await response.json();
+        console.log('✅ API is working:', data);
+        return true;
+    } catch (error) {
+        console.warn('⚠️ API not reachable:', error);
+        return false;
+    }
+}
+
+// Run test when page loads
+setTimeout(testAPIConnection, 2000);
+</script>
+<!-- AI Assistant Floating Button & Interface -->
+<div id="ai-assistant" class="fixed bottom-6 right-6 z-50">
+  <!-- Floating Button -->
+  <button id="ai-assistant-btn" class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-indigo-700 text-white shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center group">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles">
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+      <path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path>
+    </svg>
+    <span class="absolute -top-2 -right-2 w-6 h-6 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-pulse">AI</span>
+  </button>
+
+  <!-- Chat Interface (Hidden by default) -->
+  <div id="ai-chat-interface" class="hidden absolute bottom-20 right-0 w-96 h-[600px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 text-white">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1 1.275-1.275L12 3Z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">EduQuest AI Assistant</h3>
+            <p class="text-sm text-purple-200">Beta • Online</p>
+          </div>
+        </div>
+        <button id="ai-close-btn" class="text-white/80 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="p-3 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-slate-200">
+      <div class="flex gap-2 overflow-x-auto pb-2">
+        <button class="ai-quick-action whitespace-nowrap px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:border-purple-300 transition-colors" data-action="generate_question">
+          ✨ Generate Question
+        </button>
+        <button class="ai-quick-action whitespace-nowrap px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:border-purple-300 transition-colors" data-action="improve_question">
+          🔧 Improve Question
+        </button>
+        <button class="ai-quick-action whitespace-nowrap px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:border-purple-300 transition-colors" data-action="suggest_answers">
+          💡 Suggest Answers
+        </button>
+        <button class="ai-quick-action whitespace-nowrap px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-purple-50 hover:border-purple-300 transition-colors" data-action="check_difficulty">
+          📊 Check Difficulty
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Messages Container -->
+    <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+      <!-- Welcome Message -->
+      <div class="ai-message ai-assistant">
+        <div class="inline-block bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%]">
+          <p class="text-slate-800 font-medium">Hello! I'm your EduQuest AI Assistant. I can help you:</p>
+          <ul class="mt-2 space-y-1 text-sm text-slate-600">
+            <li>• Generate new quiz questions</li>
+            <li>• Improve existing questions</li>
+            <li>• Suggest answers & distractors</li>
+            <li>• Check question difficulty</li>
+            <li>• Explain concepts for quizzes</li>
+          </ul>
+          <p class="mt-3 text-sm text-slate-500">Try a quick action above or type your request below!</p>
+        </div>
+        <div class="text-xs text-slate-400 mt-1 ml-2">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-4 border-t border-slate-200 bg-white">
+      <div class="flex gap-2">
+        <div class="flex-1 relative">
+          <textarea 
+            id="ai-message-input" 
+            rows="1" 
+            placeholder="Ask me to generate a question about cellular respiration..." 
+            class="w-full text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-400"
+            style="min-height: 44px; max-height: 120px;"
+          ></textarea>
+          <div class="absolute left-3 top-3.5 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+        </div>
+        <button id="ai-send-btn" class="self-end px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+        </button>
+      </div>
+      <div class="mt-2 text-xs text-slate-400 text-center">
+        Press <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300">Enter</kbd> to send • <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300">Shift+Enter</kbd> for new line
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add to your existing styles -->
+<style>
+  /* AI Assistant Styles */
+  #ai-chat-messages::-webkit-scrollbar {
+    width: 6px;
+  }
+  #ai-chat-messages::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  #ai-chat-messages::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 3px;
+  }
+  
+  .ai-message.user {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .ai-message.ai-assistant {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+  }
+  
+  .typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: #8b5cf6;
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+  }
+  
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-8px); }
+  }
+  
+  /* Slide-in animation for chat */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  #ai-chat-interface {
+    animation: slideInUp 0.3s ease-out;
+  }
+</style>
+
+
+
+
+<!-- Add this right before the closing </body> tag -->
+<script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Gemini API Configuration
+    const GEMINI_API_KEY = 'AIzaSyBlT2MXWhvzCDUbyaj_AycLV6XgNWZUJgE'; // Replace with your actual key
+    const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+    // AI Assistant Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const aiButton = document.getElementById('ai-assistant-btn');
+        const aiChat = document.getElementById('ai-chat-interface');
+        const aiClose = document.getElementById('ai-close-btn');
+        const aiSend = document.getElementById('ai-send-btn');
+        const aiInput = document.getElementById('ai-message-input');
+        const aiMessages = document.getElementById('ai-chat-messages');
+        const quickActions = document.querySelectorAll('.ai-quick-action');
+
+        // Conversation history for context
+        let conversationHistory = [
+            {
+                role: 'system',
+                content: `You are an expert educational AI assistant helping teachers create quiz questions. 
+                Focus on:
+                - Creating pedagogically sound questions
+                - Providing clear explanations
+                - Suggesting appropriate difficulty levels
+                - Offering constructive feedback on existing questions
+                - Helping with various question types (multiple choice, true/false, short answer, matching)
+                
+                Current subject: Biology - Cellular Respiration
+                Be concise but thorough in your responses.`
+            }
+        ];
+
+        // Toggle chat interface
+        aiButton.addEventListener('click', function() {
+            aiChat.classList.toggle('hidden');
+            if (!aiChat.classList.contains('hidden')) {
+                aiInput.focus();
+            }
+        });
+
+        // Close chat
+        aiClose.addEventListener('click', function() {
+            aiChat.classList.add('hidden');
+        });
+
+        // Quick action buttons
+        quickActions.forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                let message = '';
+                
+                switch(action) {
+                    case 'generate_question':
+                        message = 'Generate a multiple choice question about the electron transport chain in cellular respiration';
+                        break;
+                    case 'improve_question':
+                        message = 'Help me improve this question: "What is mitochondria?" Make it more engaging and test deeper understanding.';
+                        break;
+                    case 'suggest_answers':
+                        message = 'Suggest 4 answer options (1 correct, 3 distractors) for a question about the Krebs cycle';
+                        break;
+                    case 'check_difficulty':
+                        message = 'Analyze the difficulty level of my current questions about cellular respiration and suggest how to balance them.';
+                        break;
+                }
+                
+                aiInput.value = message;
+                sendMessage();
+            });
+        });
+
+        // Call Gemini API
+        async function callGemini(prompt) {
+            try {
+                // Add user message to history
+                conversationHistory.push({ role: 'user', content: prompt });
+
+                // Prepare the conversation context
+                const contextPrompt = conversationHistory
+                    .map(msg => `${msg.role === 'system' ? 'System' : msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
+                    .join('\n\n');
+
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: contextPrompt + '\n\nAssistant:'
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 800,
+                            topP: 0.8,
+                            topK: 40
+                        },
+                        safetySettings: [
+                            {
+                                category: "HARM_CATEGORY_HARASSMENT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_HATE_SPEECH",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Extract the response text
+                const aiResponse = data.candidates[0].content.parts[0].text;
+                
+                // Add AI response to history
+                conversationHistory.push({ role: 'assistant', content: aiResponse });
+                
+                // Keep history manageable (last 10 messages)
+                if (conversationHistory.length > 10) {
+                    conversationHistory = [
+                        conversationHistory[0], // Keep system prompt
+                        ...conversationHistory.slice(-9) // Keep last 9 messages
+                    ];
+                }
+                
+                return aiResponse;
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                return `I'm having trouble connecting to my AI brain. Here's a sample response instead:
+
+**Sample Question:** What is the primary function of the mitochondria?
+
+A) Protein synthesis
+B) ATP production ✓
+C) Lipid storage
+D) DNA replication
+
+**Explanation:** Mitochondria are known as the "powerhouses" of the cell because they generate most of the cell's supply of ATP, which is used as a source of chemical energy.
+
+*Note: Please check your Gemini API connection for full functionality.*`;
+            }
+        }
+
+        // Send message function
+        async function sendMessage() {
+            const message = aiInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            aiInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Call Gemini API
+                const response = await callGemini(message);
+                removeTypingIndicator();
+                addMessage(response, 'ai-assistant');
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Sorry, I encountered an error. Please try again.', 'ai-assistant');
+            }
+
+            // Reset textarea height
+            aiInput.style.height = 'auto';
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = sender === 'user' 
+                ? 'inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl rounded-tr-none px-4 py-3 max-w-[85%]' 
+                : 'inline-block bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%]';
+            
+            // Handle line breaks and markdown-like formatting
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>')
+                .replace(/•/g, '•');
+            
+            contentDiv.innerHTML = formattedText;
+            
+            messageDiv.appendChild(contentDiv);
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'text-xs text-slate-400 mt-1 ' + (sender === 'user' ? 'text-right mr-2' : 'ml-2');
+            timeDiv.textContent = 'Just now';
+            
+            messageDiv.appendChild(timeDiv);
+            aiMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'ai-message ai-assistant';
+            typingDiv.innerHTML = `
+                <div class="inline-block bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl rounded-tl-none px-4 py-3">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            aiMessages.appendChild(typingDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) {
+                typing.remove();
+            }
+        }
+
+        // Send message on button click
+        aiSend.addEventListener('click', sendMessage);
+
+        // Send message on Enter (but allow Shift+Enter for new line)
+        aiInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        aiInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Test API connection on load
+        async function testGeminiConnection() {
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: 'Say "Gemini connected successfully!" if you can read this.'
+                            }]
+                        }]
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Gemini API connected successfully');
+                } else {
+                    console.warn('⚠️ Gemini API connection failed');
+                }
+            } catch (error) {
+                console.warn('⚠️ Gemini API not reachable');
+            }
+        }
+
+        // Test connection (optional)
+        // testGeminiConnection();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduQuest - Class Hub</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-body: "Nunito", sans-serif;
+        --font-heading: "Plus Jakarta Sans", sans-serif;
+      }
+      body {
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+        background-color: #f8fafc;
+        overflow-x: hidden;
+      }
+      /* ANIMATED BACKGROUND */
+      .cinematic-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -50;
+        background: radial-gradient(
+            circle at 15% 15%,
+            rgba(224, 231, 255, 0.4) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 10%,
+            rgba(255, 228, 230, 0.4) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(240, 249, 255, 0.5) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 90%,
+            rgba(220, 252, 231, 0.3) 0%,
+            transparent 40%
+          );
+        background-size: 150% 150%;
+        animation: breathe 15s ease-in-out infinite alternate;
+      }
+      .cinematic-grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -49;
+        background-image: radial-gradient(#6366f1 0.7px, transparent 0.7px);
+        background-size: 24px 24px;
+        opacity: 0.08;
+        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      }
+      /* GLASSMORPHISM UTILITIES */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.05),
+          0 10px 40px -10px rgba(99, 102, 241, 0.05);
+      }
+      .glass-card-hover {
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .glass-card-hover:hover {
+        transform: translateY(-4px) scale(1.005);
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.1);
+        border-color: rgba(255, 255, 255, 1);
+      }
+      /* KEYFRAMES */
+      @keyframes breathe {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.05);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-3deg);
+        }
+        75% {
+          transform: rotate(3deg);
+        }
+      }
+      @keyframes slide-up-fade {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes progress-fill {
+        from {
+          stroke-dashoffset: 283;
+        }
+        to {
+          stroke-dashoffset: 70;
+        } /* 75% fill */
+      }
+      /* UTILITY CLASSES */
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      .animate-float-delayed {
+        animation: float 8s ease-in-out 1s infinite;
+      }
+      .animate-enter {
+        animation: slide-up-fade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        opacity: 0;
+      }
+      .delay-100 {
+        animation-delay: 100ms;
+      }
+      .delay-200 {
+        animation-delay: 200ms;
+      }
+      .delay-300 {
+        animation-delay: 300ms;
+      }
+      .font-heading {
+        font-family: var(--font-heading);
+      }
+      /* Toggle Switch */
+      .toggle-checkbox:checked {
+        right: 0;
+        border-color: #6366f1;
+      }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: #6366f1;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.5);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(148, 163, 184, 0.8);
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist">
+      .font-geist {
+        font-family: "Geist", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-roboto"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-roboto">
+      .font-roboto {
+        font-family: "Roboto", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-montserrat"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-montserrat">
+      .font-montserrat {
+        font-family: "Montserrat", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-poppins"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-poppins">
+      .font-poppins {
+        font-family: "Poppins", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-playfair"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-playfair">
+      .font-playfair {
+        font-family: "Playfair Display", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-instrument-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-instrument-serif">
+      .font-instrument-serif {
+        font-family: "Instrument Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-merriweather"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-merriweather">
+      .font-merriweather {
+        font-family: "Merriweather", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-bricolage"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-bricolage">
+      .font-bricolage {
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-jakarta"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-jakarta">
+      .font-jakarta {
+        font-family: "Plus Jakarta Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-manrope"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-manrope">
+      .font-manrope {
+        font-family: "Manrope", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-grotesk"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-grotesk">
+      .font-space-grotesk {
+        font-family: "Space Grotesk", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-work-sans"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-work-sans">
+      .font-work-sans {
+        font-family: "Work Sans", sans-serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-pt-serif"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-pt-serif">
+      .font-pt-serif {
+        font-family: "PT Serif", serif !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-geist-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-geist-mono">
+      .font-geist-mono {
+        font-family: "Geist Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-space-mono"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-space-mono">
+      .font-space-mono {
+        font-family: "Space Mono", monospace !important;
+      }
+    </style>
+    <link
+      id="all-fonts-link-font-quicksand"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
+    />
+    <style id="all-fonts-style-font-quicksand">
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif !important;
+      }
+    </style>
+  </head>
+  <body
+    class="selection:bg-indigo-200 selection:text-indigo-900 pb-20 text-slate-600"
+  >
+    <!-- GLOBAL ATMOSPHERE -->
+    <div class="cinematic-bg"></div>
+    <div class="cinematic-grid"></div>
+
+    <!-- NAVIGATION (Maintained) -->
+    <nav
+      class="fixed top-0 w-full z-40 pt-4 pb-2 px-4 transition-all duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto glass-panel rounded-full px-4 py-3 flex items-center justify-between"
+      >
+        <!-- Brand -->
+        <div class="flex items-center gap-3 pl-2">
+          <div
+            class="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 bg-indigo-600 text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-compass w-5 h-5 stroke-[1.5]"
+            >
+              <path
+                d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+              ></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </div>
+          <span
+            class="hidden sm:block text-lg font-bold tracking-tight font-heading text-slate-800"
+            >EduQuest</span
+          >
+        </div>
+
+        <!-- Links (Educator Context) -->
+        <div
+          class="hidden md:flex items-center gap-1 p-1 rounded-full border bg-slate-100/50 border-slate-200/50"
+        >
+          <a
+            href="educator-dashboard.html"
+            class="transition-all hover:text-indigo-600 hover:bg-white/60 text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Dashboard</a
+          >
+          <a
+            href="educator-class.html"
+            class="transition-all text-sm font-bold text-indigo-600 bg-white border-slate-200/60 border rounded-full pt-2 pr-5 pb-2 pl-5 shadow-sm"
+            >My Classes</a
+          >
+          <a
+            href="educator-reports.html"
+            class="transition-all hover:text-indigo-600 hover:bg-white/60 text-sm font-semibold text-slate-500 rounded-full pt-2 pr-5 pb-2 pl-5"
+            >Reports</a
+          >
+        </div>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-4 pr-2">
+          <button
+            class="relative p-2 hover:text-indigo-500 transition-colors text-slate-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell"
+            >
+              <path
+                d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"
+                class=""
+              ></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span
+              class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"
+            ></span>
+          </button>
+          <div class="hidden sm:flex flex-col items-end">
+            <span class="text-xs font-bold font-heading text-slate-700"
+              >Ms. Frizzle</span
+            >
+            <span
+              class="text-[10px] font-bold text-indigo-500 rounded-full pt-0.5 pr-2 pb-0.5 pl-2 bg-indigo-50"
+              >Educator</span
+            >
+          </div>
+          <div
+            class="cursor-pointer transition-all hover:ring-indigo-100 bg-white w-10 h-10 border-indigo-100 border-2 ring-transparent ring-2 rounded-full pt-0.5 pr-0.5 pb-0.5 pl-0.5 relative"
+            onclick="window.location.href='educator-profile.html'"
+            role="button"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Frizzle&amp;backgroundColor=e0e7ff"
+              alt="Profile"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto pt-28 px-6 relative z-10">
+      <!-- 2. HERO SECTION - CINEMATIC -->
+      <header class="mb-12 animate-enter">
+        <div class="relative w-full rounded-[2.5rem] overflow-hidden group">
+          <!-- Hero Background Layers -->
+          <div
+            class="absolute inset-0 bg-gradient-to-br opacity-90 from-indigo-50 via-white to-sky-50"
+          ></div>
+          <div
+            class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"
+          ></div>
+
+          <!-- Floating Orbs -->
+          <div
+            class="absolute -top-20 -right-20 w-96 h-96 bg-gradient-to-br rounded-full blur-[80px] opacity-40 animate-float from-indigo-300 to-purple-200"
+          ></div>
+          <div
+            class="absolute -bottom-32 -left-20 w-80 h-80 bg-gradient-to-tr rounded-full blur-[60px] opacity-30 animate-float-delayed from-sky-300 to-teal-200"
+          ></div>
+
+          <!-- Floating 3D Elements (Icons) -->
+          <div
+            class="absolute top-10 right-[25%] opacity-20 transform rotate-12 animate-float pointer-events-none hidden lg:block text-indigo-900"
+          >
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="lucide lucide-star"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+          </div>
+          <div
+            class="absolute bottom-10 left-[40%] opacity-20 transform -rotate-12 animate-float-delayed pointer-events-none hidden lg:block text-rose-400"
+          >
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="lucide lucide-heart"
+            >
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+              ></path>
+            </svg>
+          </div>
+
+          <!-- Content Container -->
+          <div
+            class="relative z-10 px-8 py-10 md:px-12 md:py-14 flex flex-col md:flex-row md:items-center justify-between gap-8"
+          >
+            <!-- Left: Text Info -->
+            <div class="space-y-6 max-w-2xl">
+              <div class="space-y-2">
+                <div
+                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm border text-[11px] font-extrabold uppercase tracking-wider shadow-sm bg-white/60 border-white text-indigo-600"
+                >
+                  <span class="relative flex h-2 w-2">
+                    <span
+                      class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-indigo-400"
+                    ></span>
+                    <span
+                      class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"
+                    ></span>
+                  </span>
+                  Math • Term 2
+                </div>
+                <h1
+                  class="text-4xl md:text-5xl font-extrabold tracking-tight font-heading leading-[1.1] text-slate-800"
+                >
+                  <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600"
+                    >Class 3A</span
+                  >
+                  <span class="block text-3xl md:text-4xl mt-1 text-slate-700"
+                    >Space Explorers</span
+                  >
+                </h1>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="flex -space-x-3">
+                  <img
+                    class="w-10 h-10 rounded-full border-2 shadow-sm border-white"
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex"
+                    alt=""
+                  />
+                  <img
+                    class="w-10 h-10 rounded-full border-2 shadow-sm border-white"
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Maria"
+                    alt=""
+                  />
+                  <img
+                    class="w-10 h-10 rounded-full border-2 shadow-sm border-white"
+                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Sam"
+                    alt=""
+                  />
+                  <div
+                    class="w-10 h-10 rounded-full border-2 flex items-center justify-center text-xs font-bold text-slate-500 shadow-sm border-white bg-slate-100"
+                  >
+                    +21
+                  </div>
+                </div>
+                <p class="text-sm font-semibold text-slate-500">
+                  Taught by
+                  <span
+                    class="font-bold underline decoration-2 underline-offset-2 text-slate-800 decoration-indigo-300"
+                    >Ms. Frizzle</span
+                  >
+                </p>
+              </div>
+
+              <!-- Action Pills -->
+              <div class="flex flex-wrap gap-3 pt-2">
+                <button
+                  class="group hover:scale-105 transition-transform px-4 py-2.5 rounded-2xl border text-sm font-bold shadow-sm hover:shadow-md flex items-center gap-2 bg-white/50 border-white/60 text-slate-700 hover:bg-white"
+                >
+                  <div
+                    class="p-1 rounded group-hover:rotate-12 transition-transform bg-indigo-100 text-indigo-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-flask-conical"
+                    >
+                      <path
+                        d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"
+                      ></path>
+                      <path d="M8.5 2h7"></path>
+                      <path d="M7 16h10"></path>
+                    </svg>
+                  </div>
+                  3 Active Quizzes
+                </button>
+                <button
+                  class="group hover:scale-105 transition-transform px-4 py-2.5 rounded-2xl border text-sm font-bold shadow-sm hover:shadow-md flex items-center gap-2 bg-white/50 border-white/60 text-slate-700 hover:bg-white"
+                >
+                  <div
+                    class="p-1 rounded group-hover:rotate-12 transition-transform bg-amber-100 text-amber-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-swords"
+                    >
+                      <polyline
+                        points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"
+                      ></polyline>
+                      <line x1="13" x2="19" y1="19" y2="13"></line>
+                      <line x1="16" x2="20" y1="16" y2="20"></line>
+                      <line x1="19" x2="21" y1="21" y2="19"></line>
+                    </svg>
+                  </div>
+                  5 Challenges
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Class Code Card -->
+            <div class="relative group">
+              <div
+                class="absolute inset-0 bg-indigo-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity"
+              ></div>
+              <div
+                class="relative glass-panel rounded-3xl p-6 w-full md:w-72 flex flex-col items-center text-center shadow-2xl border shadow-indigo-200/50 border-white/80"
+              >
+                <span
+                  class="text-[11px] font-extrabold uppercase tracking-widest mb-3 text-slate-400"
+                  >Class Access Code</span
+                >
+                <div
+                  class="text-4xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-br mb-4 tracking-widest from-indigo-600 to-violet-600"
+                >
+                  X4J7K2
+                </div>
+
+                <button
+                  class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border font-bold text-xs transition-colors mb-4 group/btn bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-600 hover:text-indigo-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-copy group-hover/btn:scale-110 transition-transform"
+                  >
+                    <rect
+                      width="14"
+                      height="14"
+                      x="8"
+                      y="8"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path
+                      d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                    ></path>
+                  </svg>
+                  Copy Code
+                </button>
+
+                <div
+                  class="w-full pt-4 border-t flex items-center justify-between border-slate-100"
+                >
+                  <span class="text-xs font-bold text-slate-500"
+                    >Public Visibility</span
+                  >
+                  <div
+                    class="relative inline-block w-9 h-5 align-middle select-none"
+                  >
+                    <input
+                      type="checkbox"
+                      name="toggle"
+                      id="toggle"
+                      class="toggle-checkbox absolute block w-5 h-5 rounded-full border-2 appearance-none cursor-pointer transition-all duration-300 shadow-sm bg-white border-indigo-100"
+                      checked=""
+                    />
+                    <label
+                      for="toggle"
+                      class="toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors bg-indigo-100"
+                    ></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 3. MAIN GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <!-- LEFT COLUMN (Wider) -->
+        <div class="lg:col-span-2 space-y-12">
+          <!-- 4. INSIGHTS STRIP - GLASS CARDS -->
+          <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-5 animate-enter delay-100"
+          >
+            <!-- Stat 1 -->
+            <div
+              class="glass-panel rounded-2xl p-5 hover-lift flex flex-col gap-3 relative overflow-hidden group"
+            >
+              <div
+                class="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform duration-500"
+              ></div>
+              <div
+                class="w-10 h-10 rounded-full flex items-center justify-center border bg-indigo-100/50 text-indigo-600 border-indigo-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-bar-chart-2 w-[18px] h-[18px]"
+                  style="color: rgb(79, 70, 229); width: 18px; height: 18px"
+                  data-icon-replaced="true"
+                >
+                  <line x1="18" x2="18" y1="20" y2="10" class=""></line>
+                  <line x1="12" x2="12" y1="20" y2="4" class=""></line>
+                  <line x1="6" x2="6" y1="20" y2="14"></line>
+                </svg>
+              </div>
+              <div class="">
+                <span
+                  class="block text-3xl font-heading font-extrabold text-slate-700"
+                  >78%</span
+                >
+                <span
+                  class="text-xs font-bold uppercase tracking-wide text-slate-400"
+                  >Avg Quiz Score</span
+                >
+              </div>
+            </div>
+            <!-- Stat 2 -->
+            <div
+              class="glass-panel rounded-2xl p-5 hover-lift flex flex-col gap-3 relative overflow-hidden group"
+            >
+              <div
+                class="w-10 h-10 rounded-full flex items-center justify-center border bg-emerald-100/50 text-emerald-600 border-emerald-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-check-circle-2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+              </div>
+              <div>
+                <span
+                  class="block text-3xl font-heading font-extrabold text-slate-700"
+                  >92%</span
+                >
+                <span
+                  class="text-xs font-bold uppercase tracking-wide text-slate-400"
+                  >Completion</span
+                >
+              </div>
+            </div>
+            <!-- Stat 3 -->
+            <div
+              class="glass-panel rounded-2xl p-5 hover-lift flex flex-col gap-3 relative overflow-hidden group"
+            >
+              <div
+                class="w-10 h-10 rounded-full flex items-center justify-center border bg-amber-100/50 text-amber-600 border-amber-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-zap"
+                >
+                  <polygon
+                    points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                  ></polygon>
+                </svg>
+              </div>
+              <div class="">
+                <span
+                  class="block text-3xl font-heading font-extrabold text-slate-700"
+                  >12.4k</span
+                >
+                <span
+                  class="text-xs font-bold uppercase tracking-wide text-slate-400"
+                  >Class XP</span
+                >
+              </div>
+            </div>
+            <!-- Stat 4 -->
+            <div
+              class="glass-panel rounded-2xl p-5 hover-lift flex flex-col gap-3 relative overflow-hidden group"
+            >
+              <div
+                class="w-10 h-10 rounded-full flex items-center justify-center border bg-rose-100/50 text-rose-600 border-rose-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-users"
+                >
+                  <path
+                    d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                    class=""
+                  ></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" class=""></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div class="">
+                <span
+                  class="block text-3xl font-heading font-extrabold text-slate-700"
+                  >22<span class="text-lg font-bold text-slate-400"
+                    >/24</span
+                  ></span
+                >
+                <span
+                  class="text-xs font-bold uppercase tracking-wide text-slate-400"
+                  >Active Now</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. QUIZZES SECTION -->
+          <section class="animate-enter delay-200">
+            <div class="flex mb-6 items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-indigo-100 text-indigo-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-book-open"
+                  >
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  </svg>
+                </div>
+                <h2 class="text-2xl font-heading font-bold text-slate-800">
+                  Quizzes
+                </h2>
+              </div>
+              <button
+                class="flex transition-all hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm group text-xs font-bold text-slate-600 bg-white border-slate-200 border rounded-xl pt-2 pr-4 pb-2 pl-4 gap-x-2 gap-y-2 items-center"
+                onclick="window.location.href='educator-quiz.html'"
+                role="button"
+              >
+                View All
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right group-hover:translate-x-0.5 transition-transform"
+                >
+                  <path d="M5 12h14" class=""></path>
+                  <path d="m12 5 7 7-7 7" class=""></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Quiz Card 1: Active -->
+              <div
+                class="glass-card-hover glass-panel rounded-2xl p-0 relative overflow-hidden group"
+              >
+                <!-- Gradient Sidebar -->
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b to-violet-500 from-indigo-400"
+                ></div>
+
+                <div
+                  class="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                >
+                  <!-- Info -->
+                  <div class="flex-1 pl-2">
+                    <div class="flex items-center gap-3 mb-2">
+                      <h3 class="text-xl font-bold font-heading text-slate-800">
+                        Fractions &amp; Decimals
+                      </h3>
+                      <span
+                        class="px-2.5 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wide border backdrop-blur-sm shadow-sm flex items-center gap-1 bg-emerald-100/80 text-emerald-700 border-emerald-200"
+                      >
+                        <span
+                          class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+                        ></span>
+                        Published
+                      </span>
+                    </div>
+                    <p class="text-sm font-medium text-slate-500 mb-5 max-w-lg">
+                      Review of Week 5 material regarding converting fractions
+                      to decimals.
+                    </p>
+
+                    <!-- Rich Meta Tags -->
+                    <div
+                      class="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-500"
+                    >
+                      <div
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-slate-100/50 border-slate-200/50"
+                      >
+                        <svg
+                          class="text-indigo-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                          <path d="M12 17h.01"></path>
+                        </svg>
+                        10 Qs
+                      </div>
+                      <div
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-rose-50/50 border-rose-100"
+                      >
+                        <svg
+                          class="text-rose-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"
+                          ></path>
+                          <path d="M16 2v4"></path>
+                          <path d="M8 2v4"></path>
+                          <path d="M3 10h5"></path>
+                          <path d="M17.5 17.5 16 16.25V14"></path>
+                          <path
+                            d="M22 16a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"
+                          ></path>
+                        </svg>
+                        Due Today, 5 PM
+                      </div>
+                      <div
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-emerald-50/50 border-emerald-100"
+                      >
+                        <svg
+                          class="text-emerald-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline
+                            points="22 7 13.5 15.5 8.5 10.5 2 17"
+                          ></polyline>
+                          <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                        Avg: 82%
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex gap-3 gap-x-3 gap-y-3 items-center">
+                    <button
+                      class="hover:shadow-md transition-all hover:text-indigo-600 hover:border-indigo-200 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                      onclick="window.location.href='educator-editquiz.html'"
+                      role="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil"
+                      >
+                        <path
+                          d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                          class=""
+                        ></path>
+                        <path d="m15 5 4 4"></path>
+                      </svg>
+                    </button>
+                    <button
+                      class="transition-all hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-trash-2"
+                      >
+                        <path d="M3 6h18"></path>
+                        <path
+                          d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                          class=""
+                        ></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        <line x1="10" x2="10" y1="11" y2="17" class=""></line>
+                        <line x1="14" x2="14" y1="11" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Card 2: Draft -->
+              <div
+                class="glass-card-hover glass-panel rounded-2xl p-0 relative overflow-hidden group opacity-80 hover:opacity-100"
+              >
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-1.5 bg-slate-300"
+                ></div>
+                <div
+                  class="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                >
+                  <div class="flex-1 pl-2">
+                    <div class="flex items-center gap-3 mb-2">
+                      <h3 class="text-xl font-bold font-heading text-slate-800">
+                        Geometry Basics
+                      </h3>
+                      <span
+                        class="px-2.5 py-1 rounded-md text-slate-500 text-[10px] font-extrabold uppercase tracking-wide border bg-slate-100 border-slate-200"
+                        >Draft</span
+                      >
+                    </div>
+                    <p class="text-sm font-medium text-slate-500 mb-5">
+                      Shape identification and basic properties.
+                    </p>
+                    <div
+                      class="flex items-center gap-4 text-xs font-bold text-slate-500"
+                    >
+                      <span class="flex items-center gap-1.5">
+                        <svg
+                          class="text-slate-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                          <path d="M12 17h.01"></path>
+                        </svg>
+                        8 Questions
+                      </span>
+                      <span
+                        class="flex items-center gap-1.5 italic text-slate-400"
+                      >
+                        No due date set
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex gap-3 gap-x-3 gap-y-3 items-center">
+                    <button
+                      class="hover:shadow-md transition-all hover:text-indigo-600 hover:border-indigo-200 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                      onclick="window.location.href='educator-editquiz.html'"
+                      role="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil"
+                      >
+                        <path
+                          d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                          class=""
+                        ></path>
+                        <path d="m15 5 4 4"></path>
+                      </svg>
+                    </button>
+                    <button
+                      class="transition-all hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-trash-2"
+                      >
+                        <path d="M3 6h18" class=""></path>
+                        <path
+                          d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                          class=""
+                        ></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        <line x1="10" x2="10" y1="11" y2="17"></line>
+                        <line x1="14" x2="14" y1="11" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. CHALLENGES SECTION -->
+          <section class="animate-enter delay-300">
+            <div class="flex mb-6 items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-amber-100 text-amber-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-trophy"
+                  >
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17"></path>
+                    <path d="M14 14.66V17"></path>
+                    <path
+                      d="M18 2h-3a5 5 0 0 0-5 5v2.4a6 6 0 0 0 5.5 5.6 12.5 12.5 0 0 1-5.5 4.04A12.5 12.5 0 0 1 3.5 15a6 6 0 0 0 5.5-5.6V7a5 5 0 0 0-5-5H2"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-2xl font-heading font-bold text-slate-800">
+                  Challenges
+                </h2>
+              </div>
+
+              <button
+                class="flex transition-all hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm group text-xs font-bold text-slate-600 bg-white border-slate-200 border rounded-xl pt-2 pr-4 pb-2 pl-4 gap-x-2 gap-y-2 items-center"
+                onclick="window.location.href='educator-createchalllenge.html'"
+                role="button"
+              >
+                Create New Challenge
+              </button>
+            </div>
+
+            <!-- Modern Tabs -->
+            <div
+              class="inline-flex p-1 rounded-xl mb-6 border bg-slate-200/50 border-white/50"
+            >
+              <button
+                class="px-4 py-1.5 rounded-lg font-bold text-xs shadow-sm bg-white text-slate-800"
+              >
+                All
+              </button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-slate-500 font-bold text-xs transition-all hover:text-slate-700"
+              >
+                Daily
+              </button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-slate-500 font-bold text-xs transition-all hover:text-slate-700"
+              >
+                Weekly
+              </button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-slate-500 font-bold text-xs transition-all hover:text-slate-700"
+              >
+                Monthly
+              </button>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Challenge Card 1: Weekly -->
+              <div
+                class="glass-card-hover glass-panel rounded-2xl p-6 relative overflow-hidden group"
+              >
+                <!-- Decorative background sheen -->
+                <div
+                  class="absolute inset-0 bg-gradient-to-r via-transparent to-transparent opacity-50 from-amber-50/50"
+                ></div>
+
+                <div
+                  class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10"
+                >
+                  <div class="flex items-start gap-4 flex-1">
+                    <div
+                      class="w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center border shadow-inner group-hover:scale-110 transition-transform duration-300 from-amber-100 to-orange-100 text-amber-600 border-amber-200"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-crown"
+                      >
+                        <path
+                          d="m2 4 3 12h14l3-12-6 7-4-3-4 3-6-7zm0 0v16h20V4"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 mb-1">
+                        <h3
+                          class="text-lg font-bold font-heading text-slate-800"
+                        >
+                          Math Marathon
+                        </h3>
+                        <span
+                          class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-amber-100 text-amber-700"
+                          >Weekly</span
+                        >
+                      </div>
+                      <div
+                        class="flex items-center gap-3 text-xs font-semibold text-slate-500 mb-3"
+                      >
+                        <span
+                          class="flex items-center gap-1 px-2 py-0.5 rounded border text-indigo-600 bg-indigo-50 border-indigo-100"
+                        >
+                          <svg
+                            class="w-3 h-3"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polygon
+                              points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                            ></polygon>
+                          </svg>
+                          500 XP
+                        </span>
+                        <span
+                          class="flex items-center gap-1 px-2 py-0.5 rounded border text-amber-600 bg-amber-50 border-amber-100"
+                        >
+                          <svg
+                            class="w-3 h-3"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <circle cx="8" cy="8" r="6"></circle>
+                            <path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path>
+                            <path d="M7 6h1v4"></path>
+                            <path d="m16.71 13.88.7 .71-2.82 2.82"></path>
+                          </svg>
+                          50 Coins
+                        </span>
+                      </div>
+                      <div
+                        class="w-full rounded-full h-1.5 w-32 overflow-hidden bg-slate-100"
+                      >
+                        <div
+                          class="h-1.5 rounded-full bg-amber-400"
+                          style="width: 60%"
+                        ></div>
+                      </div>
+                      <p class="text-[10px] font-bold mt-1 text-slate-400">
+                        14/24 Students Completed
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex gap-3 gap-x-3 gap-y-3 items-center">
+                    <button
+                      class="hover:shadow-md transition-all hover:text-indigo-600 hover:border-indigo-200 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                      onclick="window.location.href='educator-editchallenge.html'"
+                      role="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil"
+                      >
+                        <path
+                          d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                          class=""
+                        ></path>
+                        <path d="m15 5 4 4" class=""></path>
+                      </svg>
+                    </button>
+                    <button
+                      class="transition-all hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-trash-2"
+                      >
+                        <path d="M3 6h18" class=""></path>
+                        <path
+                          d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                          class=""
+                        ></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        <line x1="10" x2="10" y1="11" y2="17"></line>
+                        <line x1="14" x2="14" y1="11" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Challenge Card 2: Daily -->
+              <div
+                class="glass-card-hover glass-panel rounded-2xl p-6 relative overflow-hidden group"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r via-transparent to-transparent opacity-50 from-sky-50/50"
+                ></div>
+                <div
+                  class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10"
+                >
+                  <div class="flex items-start gap-4 flex-1">
+                    <div
+                      class="w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center border shadow-inner group-hover:scale-110 transition-transform duration-300 from-sky-100 to-blue-100 text-sky-600 border-sky-200"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-timer"
+                      >
+                        <line x1="10" x2="14" y1="2" y2="2"></line>
+                        <line x1="12" x2="15" y1="14" y2="11"></line>
+                        <circle cx="12" cy="14" r="8"></circle>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 mb-1">
+                        <h3
+                          class="text-lg font-bold font-heading text-slate-800"
+                        >
+                          Mental Math Sprint
+                        </h3>
+                        <span
+                          class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-sky-100 text-sky-700"
+                          >Daily</span
+                        >
+                      </div>
+                      <div
+                        class="flex items-center gap-3 text-xs font-semibold text-slate-500 mb-3"
+                      >
+                        <span
+                          class="flex items-center gap-1 px-2 py-0.5 rounded border text-indigo-600 bg-indigo-50 border-indigo-100"
+                        >
+                          <svg
+                            class="w-3 h-3"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polygon
+                              points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                            ></polygon>
+                          </svg>
+                          100 XP
+                        </span>
+                      </div>
+                      <div
+                        class="w-full rounded-full h-1.5 w-32 overflow-hidden bg-slate-100"
+                      >
+                        <div
+                          class="h-1.5 rounded-full bg-sky-400"
+                          style="width: 85%"
+                        ></div>
+                      </div>
+                      <p class="text-[10px] font-bold mt-1 text-slate-400">
+                        20/24 Students Completed
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex gap-3 gap-x-3 gap-y-3 items-center">
+                    <button
+                      class="hover:shadow-md transition-all hover:text-indigo-600 hover:border-indigo-200 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                      onclick="window.location.href='educator-editquiz.html'"
+                      role="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil"
+                      >
+                        <path
+                          d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                          class=""
+                        ></path>
+                        <path d="m15 5 4 4"></path>
+                      </svg>
+                    </button>
+                    <button
+                      class="transition-all hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 text-slate-400 bg-white border-slate-200 border rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-2.5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-trash-2"
+                      >
+                        <path d="M3 6h18" class=""></path>
+                        <path
+                          d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                          class=""
+                        ></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        <line x1="10" x2="10" y1="11" y2="17"></line>
+                        <line x1="14" x2="14" y1="11" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN (Control Tower) -->
+        <div class="lg:col-span-1 space-y-8 animate-enter delay-300">
+          <!-- 7. QUICK ACTIONS TILES -->
+          <div class="glass-panel rounded-3xl p-6 relative overflow-hidden">
+            <div
+              class="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 bg-indigo-100"
+            ></div>
+            <h3
+              class="uppercase z-10 flex items-center gap-2 text-xs font-extrabold text-slate-400 tracking-widest mb-4 relative"
+            >
+              <svg
+                class="w-3 h-3"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" x2="12" y1="8" y2="12"></line>
+                <line x1="12" x2="12.01" y1="16" y2="16"></line>
+              </svg>
+              Quick Panel
+            </h3>
+            <div class="grid grid-cols-2 gap-3 relative z-10">
+              <!-- Tile 1 -->
+              <button
+                class="flex flex-col hover:shadow-lg hover:shadow-indigo-500/10 transition-all group hover:bg-white hover:border-indigo-100 bg-white/50 border-white/60 border rounded-2xl pt-4 pr-4 pb-4 pl-4 gap-x-2 gap-y-2 items-center justify-center"
+                onclick="window.location.href='educator-createquiz.html'"
+                role="button"
+              >
+                <div
+                  class="w-10 h-10 rounded-full text-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform bg-indigo-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-plus"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5v14" class=""></path>
+                  </svg>
+                </div>
+                <span class="text-[11px] font-bold text-slate-600"
+                  >New Quiz</span
+                >
+              </button>
+              <!-- Tile 2 -->
+
+              <!-- Tile 3 -->
+              <button
+                class="flex flex-col hover:shadow-lg hover:shadow-slate-500/10 transition-all group hover:bg-white hover:border-slate-200 cursor-pointer bg-white/50 border-white/60 border rounded-2xl pt-4 pr-4 pb-4 pl-4 gap-x-2 gap-y-2 items-center justify-center"
+                onclick="window.location.href='educator-leaderboard.html'"
+                role="button"
+              >
+                <div
+                  class="flex group-hover:scale-110 transition-transform bg-amber-50 w-10 h-10 rounded-full items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-medal w-[20px] h-[20px]"
+                    style="width: 20px; height: 20px; color: rgb(245, 158, 11)"
+                    data-icon-replaced="true"
+                  >
+                    <path
+                      d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"
+                      class=""
+                    ></path>
+                    <path d="M11 12 5.12 2.2" class=""></path>
+                    <path d="m13 12 5.88-9.8"></path>
+                    <path d="M8 7h8" class=""></path>
+                    <circle cx="12" cy="17" r="5" class=""></circle>
+                    <path d="M12 18v-2h-.5" class=""></path>
+                  </svg>
+                </div>
+                <span class="text-[11px] font-bold text-slate-600"
+                  >Leaderboard</span
+                >
+              </button>
+              <!-- Tile 4 -->
+            </div>
+          </div>
+
+          <!-- 8. ENGAGEMENT HEALTH (CONTROL TOWER) -->
+
+          <!-- 9. ACTIVITY STREAM -->
+          <div class="glass-panel rounded-3xl p-6 relative overflow-hidden">
+            <h3
+              class="text-xs font-extrabold uppercase tracking-widest mb-4 text-slate-400"
+            >
+              Live Activity
+            </h3>
+            <div class="space-y-4">
+              <!-- Item 1 -->
+              <div class="flex gap-3 items-start group">
+                <div
+                  class="mt-1 w-2 h-2 rounded-full ring-4 group-hover:ring-emerald-200 transition-all bg-emerald-400 ring-emerald-100"
+                ></div>
+                <div class="flex-1 pb-4 border-b border-slate-100">
+                  <p class="text-xs font-bold text-slate-700">
+                    Liam scored 100% on
+                    <span class="text-indigo-600">Math Quiz</span>
+                  </p>
+                  <span class="text-[10px] font-semibold text-slate-400"
+                    >2 mins ago</span
+                  >
+                </div>
+              </div>
+              <!-- Item 2 -->
+              <div class="flex gap-3 items-start group">
+                <div
+                  class="mt-1 w-2 h-2 rounded-full ring-4 group-hover:ring-amber-200 transition-all bg-amber-400 ring-amber-100"
+                ></div>
+                <div class="flex-1 pb-4 border-b border-slate-100">
+                  <p class="text-xs font-bold text-slate-700">
+                    Sophia completed
+                    <span class="text-amber-600">Daily Challenge</span>
+                  </p>
+                  <span class="text-[10px] font-semibold text-slate-400"
+                    >15 mins ago</span
+                  >
+                </div>
+              </div>
+              <!-- Item 3 -->
+              <div class="flex gap-3 items-start group">
+                <div
+                  class="mt-1 w-2 h-2 rounded-full ring-4 group-hover:ring-indigo-200 transition-all bg-indigo-400 ring-indigo-100"
+                ></div>
+                <div class="flex-1">
+                  <p class="text-xs font-bold text-slate-700">
+                    New student joined:
+                    <span class="text-slate-900">Marcus T.</span>
+                  </p>
+                  <span class="text-[10px] font-semibold text-slate-400"
+                    >1 hour ago</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER (Maintained) -->
+    <footer
+      class="py-12 border-t mt-20 relative z-10 bg-slate-900 text-slate-300 border-slate-800"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-600 text-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-compass w-5 h-5"
+                >
+                  <path
+                    d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"
+                  ></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </div>
+              <span class="text-lg font-bold tracking-tight text-white"
+                >EduQuest</span
+              >
+            </div>
+            <p
+              class="text-xs leading-relaxed font-medium max-w-xs text-slate-400"
+            >
+              Making learning an addictive adventure for students around the
+              world.
+            </p>
+          </div>
+          <div class="">
+            <h4 class="font-bold mb-4 text-sm text-white">Product</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li class="">
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Pricing</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-4 text-sm text-white">Resources</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Community</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-4 text-sm text-white">Legal</h4>
+            <ul class="space-y-2 text-xs font-medium text-slate-400">
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Privacy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="transition-colors hover:text-indigo-400"
+                  >Terms</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t pt-6 flex justify-center border-slate-800">
+          <p class="text-xs font-medium text-slate-500">
+            © 2024 EduQuest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
